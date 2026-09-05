@@ -193,12 +193,13 @@
       body.ads-enabled.anchor-closed{padding-bottom:0}
     }
 
-    /* Sticky ad rail: only when there is genuine room beside the 1040px column.\n       The 1440px threshold avoids squeezing the calculator merely to make room for advertising.
+    /* Sticky ad rail: only when there is genuine room beside the 1040px column.
+       The 1440px threshold avoids squeezing the calculator merely to make room for advertising.
        align-self:stretch makes the rail span the full page height — REQUIRED for
        position:sticky to keep the unit pinned while the user scrolls. */
     @media (min-width:1440px){
-      .shell{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:48px}
-      .rail{display:block;align-self:stretch}
+      body.ads-enabled .shell{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:48px}
+      body.ads-enabled .rail{display:block;align-self:stretch}
       .rail-sticky{position:sticky;top:20px}
       /* Primary unit: 300×250. To run a half-page 300×600 instead,
          change height here AND in your ad server's slot size. */
@@ -285,7 +286,8 @@
     .foot-brand{display:inline-flex;align-items:center;gap:8px;font:600 1.05rem var(--font-display)}
     .foot-note{margin:6px 0 0;font-size:.85rem;color:var(--ink-soft);max-width:46ch}
     .foot-nav{display:flex;gap:22px;flex-wrap:wrap;align-items:flex-start}
-    .foot-column{display:grid;gap:2px;min-width:132px}\n    .foot-nav .foot-group{font:700 .68rem var(--font-body);letter-spacing:.14em;text-transform:uppercase;color:var(--ink-soft);opacity:.75}
+    .foot-column{display:grid;gap:2px;min-width:132px}
+    .foot-nav .foot-group{font:700 .68rem var(--font-body);letter-spacing:.14em;text-transform:uppercase;color:var(--ink-soft);opacity:.75}
     .foot-nav a{display:flex;align-items:center;min-height:40px;color:var(--ink-soft);text-decoration:none;font-size:.9rem;font-weight:500}
     .foot-nav a:hover{color:var(--accent-ink);text-decoration:underline;text-underline-offset:4px}
     .foot-copy{flex-basis:100%;font-size:.8rem;color:var(--ink-soft)}
