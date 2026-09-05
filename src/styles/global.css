@@ -187,9 +187,9 @@
       /* Mobile in-flow slots: 300×250 */
       .ad-leaderboard .ad-slot{width:300px;height:250px}
       .ad-native .ad-slot{width:300px;height:280px}
-      /* Reserve room for the sticky anchor (24px bar + 50px creative + iOS home bar)
+      /* Reserve room for the sticky anchor (1px border + 24px bar + 50px creative + iOS home bar)
          so it never covers page content. Removed when the user closes the ad. */
-      body{padding-bottom:calc(74px + env(safe-area-inset-bottom))}
+      body{padding-bottom:calc(75px + env(safe-area-inset-bottom))}
       body.anchor-closed{padding-bottom:0}
     }
 
