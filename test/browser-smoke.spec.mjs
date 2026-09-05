@@ -243,3 +243,54 @@ test('core paper, receipt, and display-type visual identity remains intact', asy
   expect(identity.hasTableDiagram).toBe(true);
   expect(identity.hasTornReceipt).toBe(true);
 });
+
+
+test('default calculator stays simple and optional rows stay hidden until used', async ({ page }) => {
+  await page.goto(base + '/');
+  await expect(page.locator('.more-options')).not.toHaveAttribute('open', '');
+  await expect(page.locator('#rTaxRow')).toBeHidden();
+  await expect(page.locator('#rOtherFeeRow')).toBeHidden();
+});
+
+test('mobile money inputs keep decimal keyboards and 16px minimum text without anchor overlap', async ({ browser }) => {
+  const context = await browser.newContext({ viewport: { width: 320, height: 700 } });
+  const page = await context.newPage();
+  await page.goto(base + '/');
+  const bill = page.locator('#bill');
+  expect(await bill.getAttribute('inputmode')).toBe('decimal');
+  const fontSize = await bill.evaluate((element) => parseFloat(getComputedStyle(element).fontSize));
+  expect(fontSize).toBeGreaterThanOrEqual(16);
+
+  const anchor = page.locator('#ad-anchor');
+  await expect(anchor).toBeVisible();
+  const bodyPaddingBottom = await page.evaluate(() => parseFloat(getComputedStyle(document.body).paddingBottom));
+  const anchorHeight = await anchor.evaluate((element) => element.getBoundingClientRect().height);
+  expect(bodyPaddingBottom).toBeGreaterThanOrEqual(anchorHeight);
+
+  await page.locator('.more-options summary').click();
+  const otherFee = page.locator('#otherFee');
+  await otherFee.scrollIntoViewIfNeeded();
+  await otherFee.focus();
+  const fieldBox = await otherFee.boundingBox();
+  const anchorBox = await anchor.boundingBox();
+  expect(fieldBox).not.toBeNull();
+  expect(anchorBox).not.toBeNull();
+  expect(fieldBox.y + fieldBox.height).toBeLessThanOrEqual(anchorBox.y + 1);
+
+  await page.locator('#anchorClose').click();
+  await expect(anchor).toBeHidden();
+  expect(await page.evaluate(() => parseFloat(getComputedStyle(document.body).paddingBottom))).toBe(0);
+  await context.close();
+});
+
+test('important rendered routes contain no duplicate ids', async ({ page }) => {
+  for (const route of routes) {
+    await page.goto(base + route);
+    const duplicates = await page.evaluate(() => {
+      const counts = new Map();
+      document.querySelectorAll('[id]').forEach((element) => counts.set(element.id, (counts.get(element.id) || 0) + 1));
+      return Array.from(counts.entries()).filter(([, count]) => count > 1);
+    });
+    expect(duplicates).toEqual([]);
+  }
+});
