@@ -1,0 +1,50 @@
+name: Phase 1 QA
+
+on:
+  push:
+    branches:
+      - phase-1/calculator-correctness
+  workflow_dispatch:
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Use Node 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Unit tests
+        run: npm test
+
+      - name: Astro build
+        run: npm run build
+
+      - name: Install browser QA runner
+        run: |
+          npm install --no-save --package-lock=false @playwright/test@1.55.0
+          npx playwright install --with-deps chromium
+
+      - name: Start built preview
+        run: |
+          npm run preview -- --host 127.0.0.1 --port 4321 > /tmp/rtc-preview.log 2>&1 &
+          for i in {1..30}; do
+            if curl -fsS http://127.0.0.1:4321/ > /dev/null; then
+              exit 0
+            fi
+            sleep 1
+          done
+          cat /tmp/rtc-preview.log
+          exit 1
+
+      - name: Browser, responsive, accessibility, and console QA
+        run: npx playwright test test/browser-smoke.spec.mjs --reporter=line
