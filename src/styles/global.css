@@ -307,3 +307,61 @@
       html{scroll-behavior:auto}
       *,*::before,*::after{transition:none!important;animation:none!important}
     }
+
+
+    /* ============ PHASE 1: CALCULATOR CORRECTNESS + ACCESSIBILITY ============ */
+    .label-note{font-weight:500;text-transform:none;letter-spacing:0;color:var(--ink-soft)}
+    .tip-fieldset{border:0;padding:0;margin:0 0 26px}
+    .money-input{
+      width:100%;height:64px;padding:0 18px 0 43px;
+      border:1.5px solid var(--line);border-radius:12px;background:var(--card);
+      font:600 16px/1 var(--font-mono);color:var(--ink);caret-color:var(--accent);
+      font-variant-numeric:tabular-nums;
+    }
+    #bill.money-input{font-size:clamp(1.5rem,3.5vw,1.8rem)}
+    .money-input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 4px rgba(181,67,42,.14)}
+    .money-input::placeholder{color:#C9BFA9}
+    .money-input[aria-invalid="true"],#customPct[aria-invalid="true"],#customTip[aria-invalid="true"]{border-color:var(--accent-ink)}
+    .field-error{margin:7px 0 0;font-size:.84rem;line-height:1.4;color:var(--accent-ink);font-weight:600}
+    .field-error[hidden]{display:none}
+    .custom-chip{min-width:0}
+    .chip-face.custom{min-width:118px;justify-content:center}
+    #customPct{width:70px}
+    #customTip{width:78px;border:0;background:transparent;padding:0;font:600 16px var(--font-mono);color:var(--ink);caret-color:var(--accent);text-align:left}
+    #customTip:focus{outline:none}
+    #customTip::placeholder{color:#B4AA93;font-family:var(--font-body)}
+    .custom-dollar{gap:5px;padding-inline:14px}
+    .custom-cur{font:600 .95rem var(--font-mono);color:var(--ink-soft)}
+    .custom-dollar.is-active .custom-cur{color:var(--accent-ink)}
+    .more-options{margin-top:2px;border-top:1.5px dashed var(--line);border-bottom:1.5px dashed var(--line)}
+    .more-options summary{
+      list-style:none;cursor:pointer;display:flex;align-items:center;justify-content:space-between;
+      min-height:50px;padding:10px 2px;font-weight:600;font-size:.93rem;color:var(--ink-soft)
+    }
+    .more-options summary::-webkit-details-marker{display:none}
+    .more-options summary::after{content:"+";font:400 1.25rem/1 var(--font-mono);color:var(--accent-ink);transition:rotate .18s}
+    .more-options[open] summary::after{rotate:45deg}
+    .more-options-body{padding:4px 2px 18px}
+    .option-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+    .option-field .lbl{font-size:.68rem;margin-bottom:8px;line-height:1.25}
+    .money-wrap-small .money-input{height:50px;font-size:16px;padding-left:38px}
+    .money-wrap-small .cur{left:15px;font-size:1.05rem}
+    .toggle-row-compact{margin-top:18px;padding-top:16px}
+    .option-help{margin:8px 0 0;font-size:.82rem;line-height:1.45;color:var(--ink-soft)}
+    .noscript-note{display:block;margin-top:10px;padding:10px 12px;border-left:3px solid var(--accent);background:var(--accent-tint)}
+    .more-options + .toggle-row{border-top:0;margin-top:18px;padding-top:0}
+    .r-row[hidden]{display:none}
+    #rEach{white-space:nowrap;font-size:clamp(1.45rem,4.2vw,2.05rem)}
+    .r-note{line-height:1.45}
+    @media (max-width:520px){
+      .chips{gap:8px}
+      .chip-face{padding-inline:14px}
+      .chip-face.custom{min-width:108px;padding-inline:12px}
+      #customPct{width:62px}
+      #customTip{width:70px}
+      .option-grid{grid-template-columns:1fr}
+      .more-options summary{min-height:52px}
+      .r-row{gap:14px}
+      .r-val{text-align:right}
+      #rEach{font-size:clamp(1.3rem,6vw,1.8rem)}
+    }
