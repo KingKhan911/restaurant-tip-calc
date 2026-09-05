@@ -29,8 +29,30 @@ test.describe('all routes and representative widths', () => {
         const response = await page.goto(base + route, { waitUntil: 'networkidle' });
         expect(response?.ok()).toBeTruthy();
         await expect(page.locator('#main-content')).toBeVisible();
-        const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
-        expect(overflow).toBeLessThanOrEqual(1);
+        const overflowState = await page.evaluate(() => {
+          const viewportWidth = document.documentElement.clientWidth;
+          const overflow = document.documentElement.scrollWidth - viewportWidth;
+          const offenders = Array.from(document.querySelectorAll('body *'))
+            .map((element) => {
+              const rect = element.getBoundingClientRect();
+              return {
+                tag: element.tagName.toLowerCase(),
+                id: element.id || '',
+                className: typeof element.className === 'string' ? element.className : '',
+                text: (element.textContent || '').trim().replace(/\\s+/g, ' ').slice(0, 80),
+                left: Math.round(rect.left),
+                right: Math.round(rect.right),
+                width: Math.round(rect.width),
+              };
+            })
+            .filter((item) => item.right > viewportWidth + 1 || item.left < -1)
+            .slice(0, 12);
+          return { overflow, offenders };
+        });
+        expect(
+          overflowState.overflow,
+          'Horizontal overflow offenders: ' + JSON.stringify(overflowState.offenders),
+        ).toBeLessThanOrEqual(1);
         expect(errors).toEqual([]);
         await context.close();
       });
@@ -167,7 +189,9 @@ test('noscript fallback is visible and static page content remains readable', as
   const context = await browser.newContext({ javaScriptEnabled: false, viewport: { width: 390, height: 900 } });
   const page = await context.newPage();
   await page.goto(base + '/');
-  await expect(page.getByText('The interactive calculator requires JavaScript.')).toBeVisible();
+  const fallback = page.locator('.noscript-note');
+  await expect(fallback).toBeVisible();
+  await expect(fallback).toContainText('The interactive calculator requires JavaScript.');
   await expect(page.locator('h1')).toContainText('Restaurant Tip Calculator');
   await page.goto(base + '/buffet-tipping-guide/');
   await expect(page.locator('h1')).toBeVisible();
