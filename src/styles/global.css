@@ -365,3 +365,16 @@
       .r-val{text-align:right}
       #rEach{font-size:clamp(1.3rem,6vw,1.8rem)}
     }
+
+
+    /* Phase 1 narrow-screen containment: preserve the design without page-level overflow. */
+    @media (max-width:340px){
+      .site-head{flex-direction:column;align-items:flex-start;gap:10px;padding-block:16px}
+      .brand{font-size:1.16rem;min-width:0}
+      .site-nav{display:flex;flex-wrap:wrap;gap:6px 14px}
+      .site-nav a{margin-left:0}
+      .guide-grid > *,.menu,.menu-row,.menu-name{min-width:0}
+      .menu-val{white-space:normal;max-width:55%;text-align:right;line-height:1.35}
+      .ad-native .ad-slot{width:100%;max-width:300px}
+      .worked{display:block;width:100%;max-width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch}
+    }
