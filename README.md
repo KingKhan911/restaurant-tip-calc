@@ -11,6 +11,7 @@ npm ci
 npm run dev
 npm test
 npm run build
+npm run test:dist
 npm run preview
 ```
 
@@ -45,4 +46,4 @@ Before enabling a real ad or analytics vendor, update `/privacy/` and add any co
 
 Phase-2 factual content and research rules are documented on `/methodology/`. Calculator values are computed in the browser. A small set of calculator preferences is stored in localStorage; bill history is not intentionally persisted.
 
-The current build loads Fraunces and Spline Sans Mono from Google Fonts. This is disclosed on `/privacy/`; there are no live analytics or advertising scripts in Phase 3.
+The current build retains Fraunces and Spline Sans Mono from Google Fonts rather than introducing new local font binaries during the launch-readiness phase. This preserves the already-certified visual metrics while the shared layout reduces connection setup with preconnect hints and the Google Fonts request uses `display=swap`. The external font requests are disclosed on `/privacy/`; there are no live analytics or advertising scripts in Phase 3. If the fonts are self-hosted later, use authoritative WOFF2 files, keep only the weights/styles actually used, and re-run the responsive visual QA because font metrics can change wrapping and layout shift.
