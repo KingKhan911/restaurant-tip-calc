@@ -31,6 +31,9 @@ jobs:
       - name: Astro production build
         run: npm run build
 
+      - name: Audit built output
+        run: npm run test:dist
+
       - name: Install browser QA runner
         run: |
           npm install --no-save --package-lock=false @playwright/test@1.55.0
@@ -39,6 +42,7 @@ jobs:
       - name: Start built preview
         run: |
           npm run preview -- --host 127.0.0.1 --port 4321 > /tmp/rtc-preview.log 2>&1 &
+          echo $! > /tmp/rtc-preview.pid
           for i in {1..30}; do
             if curl -fsS http://127.0.0.1:4321/ > /dev/null; then
               exit 0
@@ -63,7 +67,8 @@ jobs:
           if-no-files-found: error
 
       - name: Stop default preview
-        run: npx astro preview stop
+        if: always()
+        run: kill "$(cat /tmp/rtc-preview.pid)" 2>/dev/null || true
 
       - name: Build ad-enabled simulation
         run: PUBLIC_ADS_ENABLED=true npm run build
@@ -71,6 +76,7 @@ jobs:
       - name: Start ad-enabled preview
         run: |
           npm run preview -- --host 127.0.0.1 --port 4322 > /tmp/rtc-ad-preview.log 2>&1 &
+          echo $! > /tmp/rtc-ad-preview.pid
           for i in {1..30}; do
             if curl -fsS http://127.0.0.1:4322/ > /dev/null; then
               exit 0
@@ -84,3 +90,7 @@ jobs:
         env:
           RTC_BASE_URL: http://127.0.0.1:4322
         run: npx playwright test test/ad-enabled.spec.mjs --reporter=line
+
+      - name: Stop ad-enabled preview
+        if: always()
+        run: kill "$(cat /tmp/rtc-ad-preview.pid)" 2>/dev/null || true
