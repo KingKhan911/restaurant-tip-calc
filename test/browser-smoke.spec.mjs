@@ -183,3 +183,39 @@ test('reduced-motion preference is honored while results stay correct', async ({
   await expect(page.locator('#rTotal')).toHaveText('$72.00');
   await context.close();
 });
+
+
+test('debounced live region announces exact split reconciliation', async ({ page }) => {
+  await page.goto(base + '/');
+  await page.locator('#bill').fill('10');
+  await page.locator('#customTip').fill('0');
+  await page.locator('#ppl').fill('3');
+  await expect(page.locator('#announce')).toContainText(
+    '1 person pays $3.34 and 2 people pay $3.33',
+    { timeout: 2500 },
+  );
+});
+
+test('core paper, receipt, and display-type visual identity remains intact', async ({ page }) => {
+  await page.goto(base + '/');
+  const identity = await page.evaluate(() => {
+    const body = getComputedStyle(document.body);
+    const receipt = getComputedStyle(document.querySelector('.receipt'));
+    const heading = getComputedStyle(document.querySelector('h1'));
+    const money = getComputedStyle(document.querySelector('#rTotal'));
+    return {
+      bodyBackground: body.backgroundColor,
+      receiptBackground: receipt.backgroundColor,
+      headingFamily: heading.fontFamily,
+      moneyFamily: money.fontFamily,
+      hasTableDiagram: Boolean(document.querySelector('#diagWrap ellipse')),
+      hasTornReceipt: Boolean(document.querySelector('.tear')),
+    };
+  });
+  expect(identity.bodyBackground).toBe('rgb(246, 241, 231)');
+  expect(identity.receiptBackground).toBe('rgb(255, 253, 248)');
+  expect(identity.headingFamily).toContain('Fraunces');
+  expect(identity.moneyFamily).toContain('Spline Sans Mono');
+  expect(identity.hasTableDiagram).toBe(true);
+  expect(identity.hasTornReceipt).toBe(true);
+});
