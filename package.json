@@ -10,7 +10,8 @@
     "build": "astro build",
     "preview": "astro preview",
     "test": "node --test test/*.test.mjs",
-    "astro": "astro"
+    "astro": "astro",
+    "test:dist": "node scripts/audit-dist.mjs"
   },
   "dependencies": {
     "astro": "^7.3.1"
