@@ -1,9 +1,10 @@
-name: Phase 1 QA
+name: Calculator and Content QA
 
 on:
   push:
     branches:
       - phase-1/calculator-correctness
+      - phase-2/content-truth-seo
   workflow_dispatch:
 
 jobs:
@@ -23,7 +24,7 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Unit tests
+      - name: Unit and content tests
         run: npm test
 
       - name: Astro build
