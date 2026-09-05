@@ -1,6 +1,4 @@
 ---
-import { calcTotals } from '../lib/tip.js';
-
 interface Props {
   mode?: 'dinein' | 'delivery';
 }
@@ -10,68 +8,91 @@ const delivery = mode === 'delivery';
 const amountLabel = delivery ? 'Order subtotal' : 'Bill amount';
 ---
 
-<section class="calc" id="calculator" aria-label="Tip calculator" data-mode={mode}>
+<section class="calc" id="calculator" aria-label="Tip calculator" data-tip-calculator data-mode={mode}>
   <form id="calcForm" autocomplete="off" novalidate>
     <div class="field">
       <label class="lbl" for="bill">{amountLabel}</label>
       <div class="money-wrap">
         <span class="cur" aria-hidden="true">$</span>
         <input
+          class="money-input"
           id="bill"
           type="text"
           inputmode="decimal"
           enterkeyhint="done"
           placeholder="0.00"
-          maxlength="12"
+          maxlength="16"
           spellcheck="false"
+          aria-describedby="billError"
         />
       </div>
+      <p class="field-error" id="billError" hidden></p>
     </div>
 
     {
       delivery && (
         <div class="field">
-          <label class="lbl" for="fee">
-            Delivery fee <span style="text-transform:none;letter-spacing:0">(not tipped)</span>
+          <label class="lbl" for="deliveryFee">
+            Delivery fee <span class="label-note">(not tipped)</span>
           </label>
           <div class="money-wrap">
             <span class="cur" aria-hidden="true">$</span>
             <input
-              id="fee"
+              class="money-input"
+              id="deliveryFee"
               type="text"
               inputmode="decimal"
               enterkeyhint="done"
               placeholder="0.00"
-              maxlength="12"
+              maxlength="16"
               spellcheck="false"
+              aria-describedby="deliveryFeeError"
             />
           </div>
+          <p class="field-error" id="deliveryFeeError" hidden></p>
         </div>
       )
     }
 
-    <fieldset class="field" style="border:0;padding:0;margin:0 0 26px">
-      <legend class="lbl">Tip percentage</legend>
+    <fieldset class="field tip-fieldset">
+      <legend class="lbl">Tip</legend>
       <div class="chips">
-        <label class="chip"><input type="radio" name="tip" value="15" /><span class="chip-face">15%</span></label>
-        <label class="chip"><input type="radio" name="tip" value="18" /><span class="chip-face">18%</span></label>
-        <label class="chip"><input type="radio" name="tip" value="20" checked /><span class="chip-face">20%</span></label>
-        <label class="chip"><input type="radio" name="tip" value="22" /><span class="chip-face">22%</span></label>
-        <label class="chip">
-          <span class="chip-face custom" id="customFace">
+        <label class="chip"><input type="radio" name="tipPreset" value="15" /><span class="chip-face">15%</span></label>
+        <label class="chip"><input type="radio" name="tipPreset" value="18" /><span class="chip-face">18%</span></label>
+        <label class="chip"><input type="radio" name="tipPreset" value="20" checked /><span class="chip-face">20%</span></label>
+        <label class="chip"><input type="radio" name="tipPreset" value="22" /><span class="chip-face">22%</span></label>
+        <span class="chip custom-chip">
+          <span class="chip-face custom" id="customPctFace">
             <input
               id="customPct"
               type="text"
               inputmode="decimal"
               enterkeyhint="done"
               placeholder="Custom"
-              maxlength="5"
+              maxlength="6"
               aria-label="Custom tip percentage"
+              aria-describedby="tipError"
             />
             <span class="pct" aria-hidden="true">%</span>
           </span>
-        </label>
+        </span>
+        <span class="chip custom-chip">
+          <span class="chip-face custom custom-dollar" id="customTipFace">
+            <span class="custom-cur" aria-hidden="true">$</span>
+            <input
+              id="customTip"
+              type="text"
+              inputmode="decimal"
+              enterkeyhint="done"
+              placeholder="Custom"
+              maxlength="16"
+              aria-label="Custom tip amount in dollars"
+              aria-describedby="tipError"
+            />
+          </span>
+        </span>
       </div>
+      <p class="field-error" id="tipError" hidden></p>
     </fieldset>
 
     <div class="field split-row">
@@ -81,8 +102,65 @@ const amountLabel = delivery ? 'Order subtotal' : 'Bill amount';
         <input id="ppl" type="text" inputmode="numeric" value="1" maxlength="2" aria-labelledby="splitLabel" aria-describedby="splitUnit" />
         <button type="button" id="pplPlus" aria-label="One person more">+</button>
       </div>
-      <span class="sr-only" id="splitUnit">people</span>
+      <span class="sr-only" id="splitUnit">people, from 1 to 99</span>
     </div>
+
+    <details class="more-options">
+      <summary>More options</summary>
+      <div class="more-options-body">
+        <div class="option-grid">
+          <div class="option-field">
+            <label class="lbl" for="tax">Sales tax</label>
+            <div class="money-wrap money-wrap-small">
+              <span class="cur" aria-hidden="true">$</span>
+              <input
+                class="money-input"
+                id="tax"
+                type="text"
+                inputmode="decimal"
+                enterkeyhint="done"
+                placeholder="0.00"
+                maxlength="16"
+                spellcheck="false"
+                aria-describedby="taxError"
+              />
+            </div>
+            <p class="field-error" id="taxError" hidden></p>
+          </div>
+          <div class="option-field">
+            <label class="lbl" for="otherFee">Other fees / service charge</label>
+            <div class="money-wrap money-wrap-small">
+              <span class="cur" aria-hidden="true">$</span>
+              <input
+                class="money-input"
+                id="otherFee"
+                type="text"
+                inputmode="decimal"
+                enterkeyhint="done"
+                placeholder="0.00"
+                maxlength="16"
+                spellcheck="false"
+                aria-describedby="otherFeeError feeHelp"
+              />
+            </div>
+            <p class="field-error" id="otherFeeError" hidden></p>
+          </div>
+        </div>
+
+        <label class="toggle-row toggle-row-compact">
+          <span class="switch">
+            <input type="checkbox" id="includeTax" />
+            <span class="track" aria-hidden="true"></span>
+          </span>
+          <span class="toggle-text">Include tax in tip calculation</span>
+        </label>
+        <p class="option-help">Off by default. Percentage tips use the bill or food subtotal only; this setting does not change a custom dollar tip.</p>
+        <p class="option-help" id="feeHelp">
+          Other fees are added to the payable total. They are not automatically treated as a gratuity or subtracted from your selected tip; check the restaurant bill or policy if you are unsure.
+        </p>
+        {delivery && <p class="option-help">Delivery fees and other fees stay outside the percentage tip basis.</p>}
+      </div>
+    </details>
 
     <label class="toggle-row">
       <span class="switch">
@@ -95,13 +173,15 @@ const amountLabel = delivery ? 'Order subtotal' : 'Bill amount';
     <p class="hint" id="formHint">
       {
         delivery
-          ? 'Start with the order subtotal — tip, fees, and total fill in as you type.'
-          : 'Start with the bill amount — tip, total, and split fill in as you type.'
+          ? 'Start with the order subtotal — the calculator only includes tax or other fees when you enter them.'
+          : 'Start with the bill amount — the calculator only includes tax or other fees when you enter them.'
       }
     </p>
-    <p class="hint" id="noJsNote" hidden>
-      This calculator needs JavaScript. The worked example below shows the same math step by step.
-    </p>
+    <noscript>
+      <p class="hint noscript-note">
+        The interactive calculator requires JavaScript. The surrounding page still contains worked examples and formulas you can use.
+      </p>
+    </noscript>
   </form>
 
   <div>
@@ -114,14 +194,9 @@ const amountLabel = delivery ? 'Order subtotal' : 'Bill amount';
           <span class="r-lab">{delivery ? 'Subtotal' : 'Bill'}</span>
           <span class="r-val" id="rBill">—</span>
         </div>
-        {
-          delivery && (
-            <div class="r-row">
-              <span class="r-lab">Delivery fee</span>
-              <span class="r-val" id="rFee">—</span>
-            </div>
-          )
-        }
+        {delivery && <div class="r-row" id="rDeliveryFeeRow" hidden><span class="r-lab">Delivery fee</span><span class="r-val" id="rDeliveryFee">—</span></div>}
+        <div class="r-row" id="rTaxRow" hidden><span class="r-lab">Tax</span><span class="r-val" id="rTax">—</span></div>
+        <div class="r-row" id="rOtherFeeRow" hidden><span class="r-lab">Other fees</span><span class="r-val" id="rOtherFee">—</span></div>
         <div class="r-row">
           <span class="r-lab">Tip <em id="rPct">@ 20%</em></span>
           <span class="r-val" id="rTip">—</span>
@@ -133,13 +208,12 @@ const amountLabel = delivery ? 'Order subtotal' : 'Bill amount';
 
         <div class="r-rule" aria-hidden="true"></div>
         <div class="r-row r-each">
-          <span class="r-lab">Each person</span>
+          <span class="r-lab" id="rEachLabel">Each person</span>
           <span class="r-val" id="rEach">—</span>
         </div>
         <p class="r-note" id="rNote" hidden></p>
         {delivery && <p class="r-note" id="dNote" hidden></p>}
       </div>
-      <!-- torn bottom edge, tile pattern -->
       <svg class="tear" width="100%" height="10" aria-hidden="true" focusable="false">
         <defs>
           <pattern id="teeth" width="14" height="10" patternUnits="userSpaceOnUse">
@@ -158,59 +232,59 @@ const amountLabel = delivery ? 'Order subtotal' : 'Bill amount';
 </section>
 
 <script>
-  import { calcTotals } from '../lib/tip.js';
+  import { calcTotals, parsePercentInput } from '../lib/tip.js';
+  import { formatMoneyInput, moneyErrorMessage, parseMoneyInput } from '../lib/money.js';
 
   (function () {
     'use strict';
-    var root = document.querySelector('[data-mode]');
-    var delivery = root && root.getAttribute('data-mode') === 'delivery';
-    var $ = function (id) {
-      return document.getElementById(id);
-    };
+    var root = document.querySelector('[data-tip-calculator]');
+    if (!root) return;
+    var delivery = root.getAttribute('data-mode') === 'delivery';
+    var byId = function (id) { return root.querySelector('#' + id) || document.getElementById(id); };
     var reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
     var dash = '—';
     var fmt2 = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' });
     var fmt0 = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 });
 
-    var billEl = $('bill'),
-      feeEl = $('fee'),
-      customEl = $('customPct'),
-      customFace = $('customFace'),
-      pplEl = $('ppl'),
-      roundEl = $('roundUp'),
-      rBill = $('rBill'),
-      rFee = $('rFee'),
-      rTip = $('rTip'),
-      rPct = $('rPct'),
-      rTotal = $('rTotal'),
-      rEach = $('rEach'),
-      rNote = $('rNote'),
-      dNote = $('dNote'),
-      tableFor = $('tableFor'),
-      receiptDate = $('receiptDate'),
-      diagWrap = $('diagWrap'),
-      diagCap = $('diagCap'),
-      hint = $('formHint'),
-      announceEl = $('announce');
-    if (!billEl || !rEach) return;
+    var billEl = byId('bill');
+    var deliveryFeeEl = byId('deliveryFee');
+    var taxEl = byId('tax');
+    var otherFeeEl = byId('otherFee');
+    var customPctEl = byId('customPct');
+    var customTipEl = byId('customTip');
+    var customPctFace = byId('customPctFace');
+    var customTipFace = byId('customTipFace');
+    var pplEl = byId('ppl');
+    var roundEl = byId('roundUp');
+    var includeTaxEl = byId('includeTax');
+    var rBill = byId('rBill');
+    var rDeliveryFee = byId('rDeliveryFee');
+    var rTax = byId('rTax');
+    var rOtherFee = byId('rOtherFee');
+    var rTip = byId('rTip');
+    var rPct = byId('rPct');
+    var rTotal = byId('rTotal');
+    var rEach = byId('rEach');
+    var rEachLabel = byId('rEachLabel');
+    var rNote = byId('rNote');
+    var dNote = byId('dNote');
+    var tableFor = byId('tableFor');
+    var receiptDate = byId('receiptDate');
+    var diagWrap = byId('diagWrap');
+    var diagCap = byId('diagCap');
+    var hint = byId('formHint');
+    var announceEl = document.getElementById('announce');
+    if (!billEl || !rEach || !pplEl || !roundEl || !includeTaxEl) return;
 
-    var PRESETS = Array.prototype.slice.call(document.querySelectorAll('input[name="tip"]'));
-    var lastPreset = PRESETS.filter(function (r) {
-      return r.checked;
-    })[0] || PRESETS[2];
+    var PRESETS = Array.prototype.slice.call(root.querySelectorAll('input[name="tipPreset"]'));
+    var lastPreset = PRESETS.filter(function (radio) { return radio.checked; })[0] || PRESETS[2];
 
     var store = {
-      get: function (k) {
-        try {
-          return JSON.parse(localStorage.getItem(k));
-        } catch (e) {
-          return null;
-        }
+      get: function (key) {
+        try { return JSON.parse(localStorage.getItem(key)); } catch (e) { return null; }
       },
-      set: function (k, v) {
-        try {
-          localStorage.setItem(k, JSON.stringify(v));
-        } catch (e) {}
+      set: function (key, value) {
+        try { localStorage.setItem(key, JSON.stringify(value)); } catch (e) {}
       },
     };
 
@@ -218,373 +292,366 @@ const amountLabel = delivery ? 'Order subtotal' : 'Bill amount';
       receiptDate.textContent = new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric' }).toUpperCase();
     }
 
-    /* ---------- number tweening (skipped under reduced motion) ---------- */
     var anims = new WeakMap();
-    function tweenText(el, to, fmt) {
-      var st = anims.get(el) || {};
-      if (st.raf) cancelAnimationFrame(st.raf);
+    function tweenMoney(el, cents) {
+      if (!el) return;
+      var to = cents / 100;
+      var state = anims.get(el) || {};
+      if (state.raf) cancelAnimationFrame(state.raf);
       var from = typeof el._v === 'number' ? el._v : to;
       el._v = to;
       if (reduce.matches || from === to || !isFinite(from)) {
-        el.textContent = fmt(to);
+        el.textContent = fmt2.format(to);
         return;
       }
-      var t0 = performance.now(),
-        dur = 240;
-      var step = function (t) {
-        var p = Math.min(1, (t - t0) / dur),
-          e = 1 - Math.pow(1 - p, 3);
-        el.textContent = fmt(from + (to - from) * e);
-        if (p < 1) {
-          st.raf = requestAnimationFrame(step);
-          anims.set(el, st);
+      var start = performance.now();
+      var step = function (time) {
+        var progress = Math.min(1, (time - start) / 240);
+        var eased = 1 - Math.pow(1 - progress, 3);
+        el.textContent = fmt2.format(from + (to - from) * eased);
+        if (progress < 1) {
+          state.raf = requestAnimationFrame(step);
+          anims.set(el, state);
         }
       };
-      st.raf = requestAnimationFrame(step);
-      anims.set(el, st);
+      state.raf = requestAnimationFrame(step);
+      anims.set(el, state);
     }
-    function resetText(el) {
+
+    function setText(el, text) {
       if (!el) return;
-      var st = anims.get(el);
-      if (st && st.raf) cancelAnimationFrame(st.raf);
+      var state = anims.get(el);
+      if (state && state.raf) cancelAnimationFrame(state.raf);
       el._v = null;
-      el.textContent = dash;
+      el.textContent = text;
     }
 
-    /* "each person" writes to both the receipt and the diagram, in lockstep */
-    var eachRaf = 0,
-      eachShown = null,
-      diagEachEl = null;
-    function writeEach(v, fmt) {
-      rEach.textContent = fmt.format(v);
-      if (diagEachEl) diagEachEl.textContent = fmt.format(v);
-    }
-    function renderEach(v, round) {
-      var fmt = round ? fmt0 : fmt2;
-      if (eachRaf) cancelAnimationFrame(eachRaf);
-      if (eachShown === null || reduce.matches || eachShown === v) {
-        eachShown = v;
-        writeEach(v, fmt);
-        return;
-      }
-      var from = eachShown;
-      eachShown = v;
-      var t0 = performance.now(),
-        dur = 240;
-      var step = function (t) {
-        var p = Math.min(1, (t - t0) / dur),
-          e = 1 - Math.pow(1 - p, 3);
-        writeEach(from + (v - from) * e, fmt);
-        if (p < 1) eachRaf = requestAnimationFrame(step);
-      };
-      eachRaf = requestAnimationFrame(step);
-    }
-    function resetEach() {
-      if (eachRaf) cancelAnimationFrame(eachRaf);
-      eachShown = null;
-      rEach.textContent = dash;
-      if (diagEachEl) diagEachEl.textContent = dash;
+    function setError(el, errorEl, message) {
+      if (!el || !errorEl) return;
+      var hasError = Boolean(message);
+      el.setAttribute('aria-invalid', hasError ? 'true' : 'false');
+      errorEl.textContent = message || '';
+      errorEl.hidden = !hasError;
     }
 
-    /* ---------- tip state ---------- */
-    /* Any non-empty numeric value counts — including 0% */
-    function customActive() {
-      return customEl.value !== '' && isFinite(parseFloat(customEl.value));
-    }
-    function setCustomClass() {
-      customFace.classList.toggle('is-active', customActive());
-    }
-    /* Label is derived from the clamped pct, so display and math can never diverge */
-    function getTip() {
-      if (customActive()) {
-        var p = Math.min(999, Math.max(0, parseFloat(customEl.value)));
-        return { pct: p, label: p + '%' };
+    function readMoney(el, errorId) {
+      if (!el) return { valid: true, cents: 0, entered: false };
+      var raw = el.value.trim();
+      var errorEl = byId(errorId);
+      if (raw === '') {
+        setError(el, errorEl, '');
+        return { valid: true, cents: 0, entered: false };
       }
-      var sel = PRESETS.filter(function (r) {
-        return r.checked;
-      })[0];
-      if (sel) return { pct: +sel.value, label: sel.value + '%' };
-      return { pct: +lastPreset.value, label: lastPreset.value + '%' };
-    }
-    function savePct() {
-      if (customActive()) {
-        store.set('rtc:tip', { t: 'c', v: customEl.value });
-        return;
+      var parsed = parseMoneyInput(raw, { allowIncomplete: true });
+      if (!parsed.ok) {
+        setError(el, errorEl, moneyErrorMessage(parsed.reason));
+        return { valid: false, cents: 0, entered: true };
       }
-      var sel = PRESETS.filter(function (r) {
-        return r.checked;
-      })[0];
-      if (sel) store.set('rtc:tip', { t: 'p', v: sel.value });
+      setError(el, errorEl, '');
+      return { valid: true, cents: parsed.cents, entered: true, incomplete: parsed.incomplete };
     }
 
-    /* ---------- announcements (debounced) ---------- */
-    var aTimer = 0;
+    function normalizeMoney(el, errorId) {
+      if (!el || el.value.trim() === '') return;
+      var parsed = parseMoneyInput(el.value, { allowIncomplete: true });
+      if (!parsed.ok) return;
+      el.value = formatMoneyInput(parsed.cents);
+      setError(el, byId(errorId), '');
+    }
+
+    function formatPercent(hundredths) {
+      var whole = Math.floor(hundredths / 100);
+      var fraction = hundredths % 100;
+      if (!fraction) return String(whole);
+      return whole + '.' + String(fraction).padStart(2, '0').replace(/0$/, '');
+    }
+
+    function clearTipError() {
+      setError(customPctEl, byId('tipError'), '');
+      if (customTipEl) customTipEl.setAttribute('aria-invalid', 'false');
+    }
+
+    function tipState() {
+      var pctRaw = customPctEl ? customPctEl.value.trim() : '';
+      var amountRaw = customTipEl ? customTipEl.value.trim() : '';
+      if (customPctFace) customPctFace.classList.toggle('is-active', pctRaw !== '');
+      if (customTipFace) customTipFace.classList.toggle('is-active', amountRaw !== '');
+
+      if (amountRaw !== '') {
+        var amount = parseMoneyInput(amountRaw, { allowIncomplete: true });
+        if (!amount.ok) {
+          setError(customTipEl, byId('tipError'), moneyErrorMessage(amount.reason));
+          return { valid: false };
+        }
+        clearTipError();
+        return { valid: true, method: 'amount', customTipCents: amount.cents, label: 'CUSTOM' };
+      }
+
+      if (pctRaw !== '') {
+        var pct = parsePercentInput(pctRaw, { allowIncomplete: true });
+        if (!pct.ok) {
+          setError(customPctEl, byId('tipError'), 'Enter a percentage from 0 to 999 with up to two decimal places.');
+          return { valid: false };
+        }
+        clearTipError();
+        return { valid: true, method: 'percentage', hundredths: pct.hundredths, label: '@ ' + formatPercent(pct.hundredths) + '%' };
+      }
+
+      clearTipError();
+      var selected = PRESETS.filter(function (radio) { return radio.checked; })[0] || lastPreset;
+      var hundredths = Number(selected.value) * 100;
+      return { valid: true, method: 'percentage', hundredths: hundredths, label: '@ ' + selected.value + '%' };
+    }
+
+    var announceTimer = 0;
     function announce(text) {
       if (!announceEl) return;
-      clearTimeout(aTimer);
-      aTimer = setTimeout(function () {
-        announceEl.textContent = text;
-      }, 900);
+      clearTimeout(announceTimer);
+      announceTimer = setTimeout(function () { announceEl.textContent = text; }, 900);
     }
 
-    /* ---------- party size: hold the last valid count while the field is transiently empty ---------- */
-    var lastN = 1;
-    function readN() {
-      var n = parseInt(pplEl.value, 10);
-      if (isFinite(n) && n >= 1) lastN = Math.min(99, n);
-      return lastN;
-    }
-
-    /* ---------- money input: reject minus, accept comma decimals ("12,50") ---------- */
-    function sanitizeMoney(el, prev) {
-      var raw = el.value;
-      if (/-/.test(raw)) {
-        el.value = prev; // never coerce negatives into positives
-        return prev;
+    var lastPeople = 1;
+    function readPeople() {
+      var raw = pplEl.value.trim();
+      if (/^\d{1,2}$/.test(raw)) {
+        var n = Number(raw);
+        if (n >= 1 && n <= 99) lastPeople = n;
       }
-      var v = raw;
-      if (v.indexOf('.') === -1) {
-        var parts = v.split(',');
-        if (parts.length === 2 && parts[1].length >= 1 && parts[1].length <= 2) v = parts[0] + '.' + parts[1];
-      }
-      v = v.replace(/,/g, '').replace(/[^\d.]/g, '');
-      var d = v.indexOf('.');
-      if (d > -1) v = v.slice(0, d + 1) + v.slice(d + 1).replace(/\./g, '').slice(0, 2);
-      var ip = v.split('.')[0];
-      if (ip.length > 9) v = ip.slice(0, 9) + v.slice(ip.length);
-      el.value = v;
-      return v;
-    }
-    function toCents(v) {
-      var f = parseFloat(v);
-      return v !== '' && isFinite(f) && f > 0 ? Math.round(f * 100) : 0;
+      return lastPeople;
     }
 
-    /* ---------- round-table diagram ---------- */
-    function buildDiagram(n, each, round) {
-      var W = 320,
-        H = 180,
-        cx = 160,
-        cy = 90,
-        rx = 98,
-        ry = 56;
+    function resetReceipt(n) {
+      tableFor.textContent = 'TABLE FOR ' + n;
+      [rBill, rDeliveryFee, rTax, rOtherFee, rTip, rTotal, rEach].forEach(function (el) { if (el) setText(el, dash); });
+      ['rDeliveryFeeRow', 'rTaxRow', 'rOtherFeeRow'].forEach(function (id) { var row = byId(id); if (row) row.hidden = true; });
+      if (rNote) rNote.hidden = true;
+      if (dNote) dNote.hidden = true;
+      if (rEachLabel) rEachLabel.textContent = 'Each person';
+      buildDiagram(n, dash, 'No amount entered yet');
+    }
+
+    function splitDisplay(result) {
+      if (result.roundUp.enabled) {
+        return {
+          main: fmt0.format(result.roundUp.roundedShareCents / 100),
+          note: 'Collecting ' + fmt2.format(result.roundUp.roundedCollectedCents / 100) + ' · ' + fmt2.format(result.roundUp.extraCents / 100) + ' extra from rounding up',
+          accessible: 'rounded share ' + fmt2.format(result.roundUp.roundedShareCents / 100) + ' per person, collecting ' + fmt2.format(result.roundUp.roundedCollectedCents / 100) + ', ' + fmt2.format(result.roundUp.extraCents / 100) + ' extra from rounding',
+        };
+      }
+      var split = result.split;
+      if (split.highShareCount === 0) {
+        return {
+          main: fmt2.format(split.lowShareCents / 100),
+          note: '',
+          accessible: result.people + (result.people === 1 ? ' person pays ' : ' people each pay ') + fmt2.format(split.lowShareCents / 100),
+        };
+      }
+      var low = fmt2.format(split.lowShareCents / 100);
+      var high = fmt2.format(split.highShareCents / 100);
+      var highVerb = split.highShareCount === 1 ? 'pays' : 'pay';
+      var lowVerb = split.lowShareCount === 1 ? 'pays' : 'pay';
+      return {
+        main: low + '–' + high,
+        note: split.highShareCount + ' ' + highVerb + ' ' + high + ' · ' + split.lowShareCount + ' ' + lowVerb + ' ' + low,
+        accessible: split.highShareCount + (split.highShareCount === 1 ? ' person pays ' : ' people pay ') + high + ' and ' + split.lowShareCount + (split.lowShareCount === 1 ? ' person pays ' : ' people pay ') + low,
+      };
+    }
+
+    function buildDiagram(n, centerText, accessibleSplit) {
+      if (!diagWrap || !diagCap) return;
+      var W = 320, H = 180, cx = 160, cy = 90, rx = 98, ry = 56;
       var seats = Math.min(n, 12);
-      var r = seats <= 3 ? 15 : seats <= 4 ? 14 : seats <= 6 ? 12.5 : seats <= 8 ? 11.5 : seats <= 10 ? 10.5 : 9.5;
+      var radius = seats <= 3 ? 15 : seats <= 4 ? 14 : seats <= 6 ? 12.5 : seats <= 8 ? 11.5 : seats <= 10 ? 10.5 : 9.5;
       var showNums = n <= 12;
-      var fmt = round ? fmt0 : fmt2;
-      var eachStr = each === null ? dash : fmt.format(each);
-      var fs = eachStr.length > 11 ? 13 : eachStr.length > 8 ? 16 : 21;
-      var s =
-        '<svg viewBox="0 0 ' +
-        W +
-        ' ' +
-        H +
-        '" role="img" aria-label="Table diagram: ' +
-        n +
-        (n === 1 ? ' person' : ' people') +
-        (each !== null ? ', each paying ' + eachStr : '') +
-        '">';
-      s += '<ellipse cx="' + cx + '" cy="' + cy + '" rx="' + rx + '" ry="' + ry + '" fill="var(--table)" stroke="#BCB09A" stroke-width="1.5"/>';
-      s += '<ellipse cx="' + cx + '" cy="' + cy + '" rx="' + (rx - 10) + '" ry="' + (ry - 9) + '" fill="none" stroke="rgba(25,21,18,.09)" stroke-width="1"/>';
+      var fontSize = centerText.length > 14 ? 12 : centerText.length > 10 ? 15 : 21;
+      var svg = '<svg viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="Table diagram: ' + n + (n === 1 ? ' person. ' : ' people. ') + accessibleSplit.replace(/"/g, '&quot;') + '">';
+      svg += '<ellipse cx="' + cx + '" cy="' + cy + '" rx="' + rx + '" ry="' + ry + '" fill="var(--table)" stroke="#BCB09A" stroke-width="1.5"/>';
+      svg += '<ellipse cx="' + cx + '" cy="' + cy + '" rx="' + (rx - 10) + '" ry="' + (ry - 9) + '" fill="none" stroke="rgba(25,21,18,.09)" stroke-width="1"/>';
       for (var i = 0; i < seats; i++) {
-        var a = -Math.PI / 2 + (i * 2 * Math.PI) / seats;
-        var x = cx + Math.cos(a) * (rx + 17),
-          y = cy + Math.sin(a) * (ry + 13);
-        s += '<circle cx="' + x.toFixed(1) + '" cy="' + y.toFixed(1) + '" r="' + r + '" fill="var(--card)" stroke="#191512" stroke-width="1.5"/>';
+        var angle = -Math.PI / 2 + (i * 2 * Math.PI) / seats;
+        var x = cx + Math.cos(angle) * (rx + 17);
+        var y = cy + Math.sin(angle) * (ry + 13);
+        svg += '<circle cx="' + x.toFixed(1) + '" cy="' + y.toFixed(1) + '" r="' + radius + '" fill="var(--card)" stroke="#191512" stroke-width="1.5"/>';
         if (showNums) {
-          s +=
-            '<text x="' +
-            x.toFixed(1) +
-            '" y="' +
-            (y + 0.5).toFixed(1) +
-            '" text-anchor="middle" dy=".35em" ' +
-            'font-size="' +
-            Math.max(9.5, r * 0.82).toFixed(1) +
-            '" font-weight="600" fill="#191512">' +
-            (i + 1) +
-            '</text>';
+          svg += '<text x="' + x.toFixed(1) + '" y="' + (y + 0.5).toFixed(1) + '" text-anchor="middle" dy=".35em" font-size="' + Math.max(9.5, radius * 0.82).toFixed(1) + '" font-weight="600" fill="#191512">' + (i + 1) + '</text>';
         }
       }
-      s += '<text x="' + cx + '" y="' + (cy - 8) + '" text-anchor="middle" class="d-amount" style="font-size:' + fs + 'px">' + eachStr + '</text>';
-      s += '<text x="' + cx + '" y="' + (cy + 16) + '" text-anchor="middle" class="d-cap">EACH</text>';
-      s += '</svg>';
-      diagWrap.innerHTML = s;
-      diagEachEl = diagWrap.querySelector('.d-amount');
-      diagWrap.classList.toggle('is-empty', each === null);
-      diagCap.textContent =
-        n > 12 ? 'Splitting ' + n + ' ways · showing 12 seats' : n === 1 ? 'The whole check is yours' : 'Splitting between ' + n + ' people';
+      svg += '<text x="' + cx + '" y="' + (cy - 8) + '" text-anchor="middle" class="d-amount" style="font-size:' + fontSize + 'px">' + centerText + '</text>';
+      svg += '<text x="' + cx + '" y="' + (cy + 16) + '" text-anchor="middle" class="d-cap">EACH</text></svg>';
+      diagWrap.innerHTML = svg;
+      diagCap.textContent = n > 12 ? 'Splitting ' + n + ' ways · showing 12 seats' : n === 1 ? 'The whole check is yours' : 'Splitting between ' + n + ' people';
     }
 
-    /* ---------- the one recalculation ---------- */
     function recalc() {
-      var tip = getTip();
-      var n = readN();
-      var round = roundEl.checked;
-      var billC = toCents(billEl.value);
-      var feeC = delivery && feeEl ? toCents(feeEl.value) : 0;
-      var has = billC > 0;
+      var people = readPeople();
+      tableFor.textContent = 'TABLE FOR ' + people;
 
-      tableFor.textContent = 'TABLE FOR ' + n;
-      rPct.textContent = '@ ' + tip.label;
-      hint.hidden = has;
+      var bill = readMoney(billEl, 'billError');
+      var deliveryFee = readMoney(deliveryFeeEl, 'deliveryFeeError');
+      var tax = readMoney(taxEl, 'taxError');
+      var otherFee = readMoney(otherFeeEl, 'otherFeeError');
+      var tip = tipState();
+      var valid = bill.valid && deliveryFee.valid && tax.valid && otherFee.valid && tip.valid;
+      var hasBill = bill.entered;
+      hint.hidden = hasBill;
 
-      if (!has) {
-        resetText(rBill);
-        resetText(rFee);
-        resetText(rTip);
-        resetText(rTotal);
-        resetEach();
-        rNote.hidden = true;
-        if (dNote) dNote.hidden = true;
-        buildDiagram(n, null, round);
+      if (!hasBill || !valid) {
+        resetReceipt(people);
+        if (tip.valid && rPct) rPct.textContent = tip.label;
         announce('');
         return;
       }
 
-      var t = calcTotals({ billCents: billC, feeCents: feeC, pct: tip.pct, people: n, roundUp: round });
-      var tipD = t.tipCents / 100,
-        totalD = t.totalCents / 100,
-        eachD = t.eachCents / 100;
+      var args = {
+        billCents: bill.cents,
+        taxCents: tax.cents,
+        otherFeeCents: otherFee.cents,
+        deliveryFeeCents: delivery ? deliveryFee.cents : 0,
+        includeTaxInTipBasis: includeTaxEl.checked,
+        people: people,
+        roundUp: roundEl.checked,
+      };
+      if (tip.method === 'amount') args.customTipCents = tip.customTipCents;
+      else args.tipPercentHundredths = tip.hundredths;
 
-      tweenText(rBill, billC / 100, fmt2.format);
-      if (delivery && rFee) tweenText(rFee, feeC / 100, fmt2.format);
-      tweenText(rTip, tipD, fmt2.format);
-      tweenText(rTotal, totalD, fmt2.format);
-      buildDiagram(n, eachD, round);
-      renderEach(eachD, round);
+      var result = calcTotals(args);
+      tweenMoney(rBill, result.billCents);
+      tweenMoney(rTip, result.tipCents);
+      tweenMoney(rTotal, result.totalCents);
+      if (rPct) rPct.textContent = tip.label;
 
-      if (t.extraCents > 0.5) {
-        rNote.hidden = false;
-        rNote.textContent = '+' + fmt2.format(t.extraCents / 100) + ' extra from rounding up';
-      } else {
-        rNote.hidden = true;
+      var deliveryRow = byId('rDeliveryFeeRow');
+      if (deliveryRow) deliveryRow.hidden = result.deliveryFeeCents === 0;
+      if (result.deliveryFeeCents > 0) tweenMoney(rDeliveryFee, result.deliveryFeeCents);
+      var taxRow = byId('rTaxRow');
+      if (taxRow) taxRow.hidden = result.taxCents === 0;
+      if (result.taxCents > 0) tweenMoney(rTax, result.taxCents);
+      var otherFeeRow = byId('rOtherFeeRow');
+      if (otherFeeRow) otherFeeRow.hidden = result.otherFeeCents === 0;
+      if (result.otherFeeCents > 0) tweenMoney(rOtherFee, result.otherFeeCents);
+
+      var split = splitDisplay(result);
+      if (rEachLabel) rEachLabel.textContent = result.roundUp.enabled ? 'Rounded share' : 'Each person';
+      setText(rEach, split.main);
+      if (rNote) {
+        rNote.textContent = split.note;
+        rNote.hidden = split.note === '';
       }
+
       if (delivery && dNote) {
-        if (t.tipCents > 0 && t.tipCents < 300) {
+        if (result.tipCents > 0 && result.tipCents < 300) {
           dNote.hidden = false;
-          dNote.textContent = 'Drivers usually get at least $3 — consider bumping it up';
+          dNote.textContent = 'A small-order percentage can produce a very small tip; use the custom $ option if you want to set a specific amount.';
         } else {
           dNote.hidden = true;
         }
       }
 
-      announce(
-        tip.label +
-          ' tip on ' +
-          fmt2.format(billC / 100) +
-          ': tip ' +
-          fmt2.format(tipD) +
-          ', total ' +
-          fmt2.format(totalD) +
-          (n > 1 ? ', split ' + n + ' ways, ' : ', ') +
-          (round ? fmt0.format(eachD) : fmt2.format(eachD)) +
-          ' each.'
-      );
+      buildDiagram(people, split.main, split.accessible);
+      var tipAnnouncement = tip.method === 'amount'
+        ? 'Custom tip ' + fmt2.format(result.tipCents / 100)
+        : formatPercent(tip.hundredths) + '% tip on ' + fmt2.format(result.tipBasisCents / 100) + ', tip ' + fmt2.format(result.tipCents / 100);
+      announce(tipAnnouncement + ', total ' + fmt2.format(result.totalCents / 100) + '. ' + split.accessible + '.');
     }
 
-    /* ---------- bill + fee inputs ---------- */
-    var prevBill = '';
-    billEl.addEventListener('input', function () {
-      prevBill = sanitizeMoney(billEl, prevBill);
-      recalc();
-    });
-    var prevFee = '';
-    if (delivery && feeEl) {
-      feeEl.addEventListener('input', function () {
-        prevFee = sanitizeMoney(feeEl, prevFee);
+    function connectMoneyInput(el, errorId) {
+      if (!el) return;
+      el.addEventListener('input', recalc);
+      el.addEventListener('blur', function () { normalizeMoney(el, errorId); recalc(); });
+    }
+    connectMoneyInput(billEl, 'billError');
+    connectMoneyInput(deliveryFeeEl, 'deliveryFeeError');
+    connectMoneyInput(taxEl, 'taxError');
+    connectMoneyInput(otherFeeEl, 'otherFeeError');
+
+    if (customTipEl) {
+      customTipEl.addEventListener('input', function () {
+        if (customTipEl.value.trim() !== '') {
+          customPctEl.value = '';
+          PRESETS.forEach(function (radio) { radio.checked = false; });
+        } else {
+          lastPreset.checked = true;
+        }
+        store.set('rtc:tip', customTipEl.value.trim() === '' ? { t: 'p', v: lastPreset.value } : { t: 'amt', v: customTipEl.value });
+        recalc();
+      });
+      customTipEl.addEventListener('blur', function () {
+        if (customTipEl.value.trim() !== '') normalizeMoney(customTipEl, 'tipError');
+        if (customTipEl.value.trim() !== '') store.set('rtc:tip', { t: 'amt', v: customTipEl.value });
         recalc();
       });
     }
 
-    /* ---------- custom percentage: sanitizes AND clamps ---------- */
-    customEl.addEventListener('input', function () {
-      var v = customEl.value.replace(/[^\d.]/g, '');
-      var d = v.indexOf('.');
-      if (d > -1) v = v.slice(0, d + 1) + v.slice(d + 1).replace(/\./g, '').slice(0, 2);
-      if (v.length > 5) v = v.slice(0, 5);
-      if (v !== '' && parseFloat(v) > 999) v = '999';
-      if (v !== customEl.value) customEl.value = v;
-      if (customActive()) {
-        PRESETS.forEach(function (r) {
-          r.checked = false;
-        });
-      } else {
-        lastPreset.checked = true;
-      }
-      setCustomClass();
-      savePct();
-      recalc();
-    });
+    if (customPctEl) {
+      customPctEl.addEventListener('input', function () {
+        if (customPctEl.value.trim() !== '') {
+          customTipEl.value = '';
+          PRESETS.forEach(function (radio) { radio.checked = false; });
+        } else {
+          lastPreset.checked = true;
+        }
+        store.set('rtc:tip', customPctEl.value.trim() === '' ? { t: 'p', v: lastPreset.value } : { t: 'pct', v: customPctEl.value });
+        recalc();
+      });
+      customPctEl.addEventListener('blur', function () {
+        var parsed = parsePercentInput(customPctEl.value, { allowIncomplete: true });
+        if (parsed.ok && customPctEl.value.trim() !== '') customPctEl.value = parsed.normalized;
+        if (customPctEl.value.trim() !== '') store.set('rtc:tip', { t: 'pct', v: customPctEl.value });
+        recalc();
+      });
+    }
 
-    /* ---------- preset radios ---------- */
-    PRESETS.forEach(function (r) {
-      r.addEventListener('change', function () {
-        if (!r.checked) return;
-        lastPreset = r;
-        customEl.value = '';
-        setCustomClass();
-        savePct();
+    PRESETS.forEach(function (radio) {
+      radio.addEventListener('change', function () {
+        if (!radio.checked) return;
+        lastPreset = radio;
+        customPctEl.value = '';
+        customTipEl.value = '';
+        clearTipError();
+        store.set('rtc:tip', { t: 'p', v: radio.value });
         recalc();
       });
     });
 
-    /* ---------- party size events ---------- */
-    pplEl.addEventListener('input', function () {
-      pplEl.value = pplEl.value.replace(/\D/g, '').slice(0, 2);
-      recalc();
-    });
-    pplEl.addEventListener('blur', function () {
-      pplEl.value = String(readN());
-      recalc();
-    });
-    function bump(d) {
-      pplEl.value = String(Math.min(99, Math.max(1, readN() + d)));
+    pplEl.addEventListener('input', recalc);
+    pplEl.addEventListener('blur', function () { pplEl.value = String(readPeople()); recalc(); });
+    function bump(delta) {
+      pplEl.value = String(Math.min(99, Math.max(1, readPeople() + delta)));
+      lastPeople = Number(pplEl.value);
       recalc();
     }
-    $('pplMinus').addEventListener('click', function () {
-      bump(-1);
-    });
-    $('pplPlus').addEventListener('click', function () {
-      bump(1);
-    });
+    byId('pplMinus').addEventListener('click', function () { bump(-1); });
+    byId('pplPlus').addEventListener('click', function () { bump(1); });
 
-    /* ---------- round-up toggle ---------- */
-    roundEl.addEventListener('change', function () {
-      store.set('rtc:round', roundEl.checked);
-      recalc();
-    });
+    roundEl.addEventListener('change', function () { store.set('rtc:round', roundEl.checked); recalc(); });
+    includeTaxEl.addEventListener('change', function () { store.set('rtc:includeTax', includeTaxEl.checked); recalc(); });
 
-    /* ---------- Enter blurs ---------- */
-    $('calcForm').addEventListener('submit', function (e) {
-      e.preventDefault();
+    byId('calcForm').addEventListener('submit', function (event) {
+      event.preventDefault();
       if (document.activeElement && document.activeElement.blur) document.activeElement.blur();
     });
 
-    /* ---------- restore last session ---------- */
     (function restore() {
-      var rr = store.get('rtc:round');
-      if (rr) roundEl.checked = !!rr;
-      var s = store.get('rtc:tip');
-      if (!s) return;
-      if (s.t === 'p') {
-        var r = PRESETS.filter(function (x) {
-          return x.value === String(s.v);
-        })[0];
-        if (r) {
-          r.checked = true;
-          lastPreset = r;
+      roundEl.checked = store.get('rtc:round') === true;
+      includeTaxEl.checked = store.get('rtc:includeTax') === true;
+      var saved = store.get('rtc:tip');
+      if (!saved) return;
+      if (saved.t === 'p') {
+        var radio = PRESETS.filter(function (item) { return item.value === String(saved.v); })[0];
+        if (radio) { radio.checked = true; lastPreset = radio; }
+      } else if (saved.t === 'pct' && typeof saved.v === 'string') {
+        var pct = parsePercentInput(saved.v, { allowIncomplete: false });
+        if (pct.ok) {
+          customPctEl.value = pct.normalized;
+          PRESETS.forEach(function (radio) { radio.checked = false; });
         }
-      } else if (s.t === 'c') {
-        var cv = String(s.v),
-          c = parseFloat(cv);
-        if (!isFinite(c) || c < 0) return;
-        if (c > 999) cv = '999';
-        customEl.value = cv;
-        PRESETS.forEach(function (x) {
-          x.checked = false;
-        });
+      } else if (saved.t === 'amt' && typeof saved.v === 'string') {
+        var amount = parseMoneyInput(saved.v, { allowIncomplete: false });
+        if (amount.ok) {
+          customTipEl.value = formatMoneyInput(amount.cents);
+          PRESETS.forEach(function (radio) { radio.checked = false; });
+        }
       }
-      setCustomClass();
     })();
 
     recalc();
