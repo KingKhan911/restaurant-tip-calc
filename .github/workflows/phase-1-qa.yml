@@ -51,6 +51,20 @@ jobs:
       - name: Browser, responsive, accessibility, metadata, and console QA
         run: npx playwright test test/browser-smoke.spec.mjs --reporter=line
 
+      - name: Capture visual QA set and performance metrics
+        run: node test/visual-capture.mjs
+
+      - name: Upload visual QA artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: phase-3-visual-qa-${{ github.sha }}
+          path: visual-qa/
+          retention-days: 1
+          if-no-files-found: error
+
+      - name: Stop default preview
+        run: npx astro preview stop
+
       - name: Build ad-enabled simulation
         run: PUBLIC_ADS_ENABLED=true npm run build
 

@@ -417,3 +417,71 @@ test('development-only design reference is not exposed as a production route', a
   const response = await request.get(base + '/design_inspo.html');
   expect(response.status()).toBe(404);
 });
+
+
+test('head metadata stays singular and URL-consistent on every indexable route', async ({ page }) => {
+  for (const route of routes) {
+    await page.goto(base + route);
+    const expected = new URL(route, canonicalBase).href;
+
+    await expect(page.locator('title')).toHaveCount(1);
+    await expect(page.locator('meta[name="description"]')).toHaveCount(1);
+    await expect(page.locator('meta[name="robots"]')).toHaveCount(1);
+    await expect(page.locator('link[rel="canonical"]')).toHaveCount(1);
+    await expect(page.locator('meta[property="og:title"]')).toHaveCount(1);
+    await expect(page.locator('meta[property="og:description"]')).toHaveCount(1);
+    await expect(page.locator('meta[property="og:url"]')).toHaveCount(1);
+    await expect(page.locator('meta[property="og:image"]')).toHaveCount(1);
+
+    expect(await page.locator('link[rel="canonical"]').getAttribute('href')).toBe(expected);
+    expect(await page.locator('meta[property="og:url"]').getAttribute('content')).toBe(expected);
+
+    const schemaText = (await page.locator('script[type="application/ld+json"]').allTextContents()).join('\n');
+    expect(schemaText).toContain(expected);
+    expect(schemaText).not.toContain('localhost');
+  }
+});
+
+test('default network surface has no unexpected third-party requests or external calculation APIs', async ({ browser }) => {
+  for (const route of ['/', '/about/', '/privacy/']) {
+    const context = await browser.newContext({ viewport: { width: 390, height: 900 } });
+    const page = await context.newPage();
+    const requests = [];
+    page.on('request', (request) => requests.push({
+      url: request.url(),
+      resourceType: request.resourceType(),
+    }));
+    await page.goto(base + route, { waitUntil: 'networkidle' });
+
+    const externalHosts = [...new Set(
+      requests
+        .map(({ url }) => new URL(url))
+        .filter((url) => url.origin !== base)
+        .map((url) => url.hostname),
+    )].sort();
+
+    for (const host of externalHosts) {
+      expect(['fonts.googleapis.com', 'fonts.gstatic.com']).toContain(host);
+    }
+
+    const apiRequests = requests.filter(({ resourceType }) => ['xhr', 'fetch'].includes(resourceType));
+    expect(apiRequests, `Unexpected API requests on ${route}: ${JSON.stringify(apiRequests)}`).toEqual([]);
+
+    if (route !== '/') {
+      const scripts = requests.filter(({ resourceType }) => resourceType === 'script');
+      expect(scripts, `Static trust page unexpectedly loaded JavaScript: ${JSON.stringify(scripts)}`).toEqual([]);
+    }
+    await context.close();
+  }
+});
+
+test('social preview raster has the declared 1200 by 630 dimensions', async ({ page }) => {
+  await page.goto(base + '/');
+  const dimensions = await page.evaluate((src) => new Promise((resolve, reject) => {
+    const image = new Image();
+    image.onload = () => resolve([image.naturalWidth, image.naturalHeight]);
+    image.onerror = reject;
+    image.src = src;
+  }), '/social/restaurant-tip-calculator-og.png');
+  expect(dimensions).toEqual([1200, 630]);
+});

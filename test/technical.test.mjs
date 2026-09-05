@@ -81,3 +81,26 @@ test('tracking parameters and javascript URLs are absent from site source', asyn
   assert.equal(combined.includes('utm_source=chatgpt'), false);
   assert.equal(combined.includes('javascript:'), false);
 });
+
+
+test('source avoids unsafe user-input HTML sinks and unprotected target-blank links', async () => {
+  const paths = [
+    'src/layouts/Layout.astro',
+    'src/components/Calculator.astro',
+    'src/components/Related.astro',
+    'src/pages/index.astro',
+    'src/pages/average-restaurant-tip.astro',
+    'src/pages/how-much-tip-waitress-waiter.astro',
+    'src/pages/buffet-tipping-guide.astro',
+    'src/pages/food-delivery-tip-calculator.astro',
+    'src/pages/service-charge-on-restaurant-bill.astro',
+    'src/pages/methodology.astro',
+    'src/pages/about.astro',
+    'src/pages/privacy.astro',
+  ];
+  const combined = (await Promise.all(paths.map(read))).join('\n');
+  assert.equal(/\.innerHTML\s*=/.test(combined), false, 'Direct innerHTML assignment found');
+  for (const match of combined.matchAll(/<a\b[^>]*target=["']_blank["'][^>]*>/gi)) {
+    assert.match(match[0], /rel=["'][^"']*(?:noopener|noreferrer)[^"']*["']/i, `Unprotected target=_blank link: ${match[0]}`);
+  }
+});
