@@ -1,83 +1,35 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import Related from '../components/Related.astro';
+import { RESEARCH_REVIEW_DATE, SOURCES } from '../lib/editorial.js';
 
-const title = 'Buffet Tip: How Much Should You Tip at a Buffet? (10–20%)';
+const title = 'Buffet Tipping Guide: How Service Level Changes the Tip';
 const description =
-  'Tip 10% minimum at a full-service buffet, 15–20% when staff refill your drinks and clear plates, and $1–2 at a self-serve counter. The complete buffet tipping guide.';
+  'Buffet tipping etiquette by service level, from self-service and tip jars to drink refills, plate clearing and server-assisted meals.';
 
 const nav = [
   { href: '#guide', label: 'Guide' },
+  { href: '#scenarios', label: 'Scenarios' },
   { href: '#faq', label: 'FAQ' },
+  { href: '#sources', label: 'Sources' },
 ];
 
 const jsonLd = JSON.stringify({
   '@context': 'https://schema.org',
-  '@graph': [
+  '@type': 'BreadcrumbList',
+  '@id': 'https://restauranttipcalculator.com/buffet-tipping-guide/#breadcrumb',
+  itemListElement: [
     {
-      '@type': 'BreadcrumbList',
-      '@id': 'https://restauranttipcalculator.com/buffet-tipping-guide/#breadcrumb',
-      itemListElement: [
-        {
-          '@type': 'ListItem',
-          position: 1,
-          name: 'Restaurant Tip Calculator',
-          item: 'https://restauranttipcalculator.com/',
-        },
-        {
-          '@type': 'ListItem',
-          position: 2,
-          name: 'Buffet Tipping Guide',
-          item: 'https://restauranttipcalculator.com/buffet-tipping-guide/',
-        },
-      ],
+      '@type': 'ListItem',
+      position: 1,
+      name: 'Restaurant Tip Calculator',
+      item: 'https://restauranttipcalculator.com/',
     },
     {
-      '@type': 'FAQPage',
-      '@id': 'https://restauranttipcalculator.com/buffet-tipping-guide/#faq',
-      url: 'https://restauranttipcalculator.com/buffet-tipping-guide/#faq',
-      mainEntity: [
-        {
-          '@type': 'Question',
-          name: 'How much should you tip at a buffet?',
-          acceptedAnswer: {
-            '@type': 'Answer',
-            text: 'Tip at least 10% at a buffet where staff keep drinks filled and clear plates, rising to 15–20% at a full-service buffet where a server looks after your table. At a pure self-serve counter with no table service, $1–2 in the tip jar is plenty.',
-          },
-        },
-        {
-          '@type': 'Question',
-          name: 'Do you tip at a buffet if you serve yourself?',
-          acceptedAnswer: {
-            '@type': 'Answer',
-            text: 'Yes — even self-serve buffets have staff setting up the food line, restocking dishes, and cleaning tables. 10% is the usual minimum; you can skip the percentage and leave a couple of dollars for a quick cafeteria-style stop.',
-          },
-        },
-        {
-          '@type': 'Question',
-          name: 'Why does a buffet tip start at 10% instead of 15%?',
-          acceptedAnswer: {
-            '@type': 'Answer',
-            text: 'Because a buffet server does less per guest than a full-service waiter — no taking orders, no delivering courses. 10% reflects lighter work, and 15–20% is reserved for buffets where staff refill drinks, clear plates throughout the meal, and provide table service.',
-          },
-        },
-        {
-          '@type': 'Question',
-          name: 'How much should you tip at an all-you-can-eat restaurant like Golden Corral or a casino buffet?',
-          acceptedAnswer: {
-            '@type': 'Answer',
-            text: 'At chain buffets and casino buffets with drink refills and plate clearing, 10–15% is standard, with most regulars landing around 10–12%. The percentage should also cover any server who carries your plates or brings drinks.',
-          },
-        },
-        {
-          '@type': 'Question',
-          name: 'Do you tip more at a fancy, expensive buffet?',
-          acceptedAnswer: {
-            '@type': 'Answer',
-            text: 'Yes — high-end seafood and brunch buffets with carving stations, cocktail service, and busier table maintenance earn 15–20%. The percentage matters more than the check total, since large-plate dining means fewer, bigger sittings per server.',
-          },
-        },
-      ],
+      '@type': 'ListItem',
+      position: 2,
+      name: 'Buffet Tipping Guide',
+      item: 'https://restauranttipcalculator.com/buffet-tipping-guide/',
     },
   ],
 });
@@ -86,142 +38,148 @@ const jsonLd = JSON.stringify({
 <Layout title={title} description={description} path="/buffet-tipping-guide/" jsonLd={jsonLd} nav={nav}>
   <section class="hero">
     <p class="guide-intro"><a href="/">Restaurant tip calculator</a> / Buffet tipping guide</p>
-    <h1>Buffet Tip: How Much Should You Tip at a Buffet?</h1>
+    <h1>Buffet Tipping Guide: How Service Level Changes the Tip</h1>
     <p class="lede">
-      The short answer: <strong>10% minimum</strong>, 15–20% when staff actually wait on you, and <strong>$1–2 at a
-      self-serve counter</strong>. Here's when each number applies.
+      Buffet tipping is mainly an <strong>etiquette question, not a nationally measured average</strong>. Emily Post's
+      current guide recommends <strong>10% of the pre-tax bill for buffet wait service</strong>. When staff provide
+      something closer to full sit-down service, the amount you choose can reasonably reflect that higher level of
+      service.
+    </p>
+    <p class="menu-src">
+      Research last reviewed: {RESEARCH_REVIEW_DATE}. <a href="/methodology/">See our methodology.</a>
     </p>
   </section>
 
-  <!-- ============ GUIDE ============ -->
   <section class="section" id="guide">
-    <h2>The buffet tip scale</h2>
+    <h2>What current etiquette guidance says</h2>
     <div class="guide-grid">
       <div>
         <p class="guide-intro">
-          Buffet tipping is about how much the staff actually does for you:
+          The numbers below are <strong>recommendations</strong>, not statistics showing what most buffet diners
+          actually leave.
         </p>
         <div class="menu">
           <div class="menu-row">
-            <span class="menu-name">Self-serve counter, tip jar</span><span class="dots" aria-hidden="true"
-            ></span><span class="menu-val">$1–2</span>
+            <span class="menu-name">Buffet wait service</span><span class="dots" aria-hidden="true"></span><span class="menu-val">10% pre-tax</span>
           </div>
           <div class="menu-row">
-            <span class="menu-name">Standard buffet, basic table care</span><span class="dots" aria-hidden="true"
-            ></span><span class="menu-val">10%</span>
+            <span class="menu-name">Sit-down wait service reference</span><span class="dots" aria-hidden="true"></span><span class="menu-val">15–20% pre-tax</span>
           </div>
           <div class="menu-row">
-            <span class="menu-name">Drink refills + plate clearing</span><span class="dots" aria-hidden="true"
-            ></span><span class="menu-val">10–15%</span>
-          </div>
-          <div class="menu-row">
-            <span class="menu-name">Full-service buffet (server assigned)</span><span class="dots" aria-hidden="true"
-            ></span><span class="menu-val">15–20%</span>
-          </div>
-          <div class="menu-row">
-            <span class="menu-name">Casino / upscale brunch buffet</span><span class="dots" aria-hidden="true"
-            ></span><span class="menu-val">15–20%</span>
+            <span class="menu-name">Tip jar with no table service</span><span class="dots" aria-hidden="true"></span><span class="menu-val">No obligation in Emily Post guide</span>
           </div>
         </div>
         <p class="menu-src">
-          If a server carried your first plate or refilled your drinks, tip like a normal table — 15–20%. The
-          <a href="/">restaurant tip calculator</a> does the math for any check size.
+          Source: <a href={SOURCES.emilyPost}>Emily Post — General Tipping Guide</a>. These are etiquette guidelines,
+          not transaction data.
         </p>
       </div>
       <div>
         <table class="worked">
-          <caption>Buffet tip on a $25 meal (typical per person):</caption>
+          <caption>Example tip math on a $25 pre-tax buffet bill</caption>
           <thead>
-            <tr><th scope="col">Scenario</th><th scope="col">Tip</th><th scope="col">Total</th></tr>
+            <tr><th scope="col">Reference rate</th><th scope="col">Tip</th><th scope="col">Subtotal + tip</th></tr>
           </thead>
           <tbody>
-            <tr><td>Tip jar, self-serve</td><td>$1.50</td><td>$26.50</td></tr>
-            <tr><td>Standard buffet · 10%</td><td>$2.50</td><td>$27.50</td></tr>
-            <tr><td>Good table care · 15%</td><td>$3.75</td><td>$28.75</td></tr>
-            <tr><td>Full service · 20%</td><td>$5.00</td><td>$30.00</td></tr>
+            <tr><td>10%</td><td>$2.50</td><td>$27.50</td></tr>
+            <tr><td>15%</td><td>$3.75</td><td>$28.75</td></tr>
+            <tr><td>20%</td><td>$5.00</td><td>$30.00</td></tr>
           </tbody>
         </table>
         <p class="worked-note">
-          On a higher-end $50 buffet, the same percentages are $5, $7.50, or $10 — still a fair share for the work
-          involved.
+          These rows illustrate arithmetic, not measured buffet averages. Use the <a href="/">calculator</a> for any
+          percentage or custom dollar amount.
         </p>
       </div>
     </div>
   </section>
 
-  <!-- ============ DETAILS ============ -->
-  <section class="section" id="details">
-    <h2>Buffet tipping, edge cases</h2>
+  <section class="section" id="scenarios">
+    <h2>Choose based on the service you actually received</h2>
     <div class="prose">
-      <h3>Kids' pricing</h3>
+      <h3>Nearly full self-service</h3>
       <p>
-        Buffets often charge children a reduced rate but their table care costs the same. Tip on the full bill,
-        including the kids' meals, or split the difference and round up.
+        If you collect your own food and drinks and there is no meaningful table service, a counter tip prompt or tip
+        jar is different from buffet wait service. Emily Post's general guide says there is no obligation to use a tip
+        jar, while leaving something for extra help remains optional.
       </p>
-      <h3>Drinks-only service</h3>
+
+      <h3>Plate clearing and drink refills</h3>
       <p>
-        If a server only brings drinks and never returns, $1–2 per drink or 10% is fine — they're doing bar work on a
-        buffet floor.
+        This is the classic buffet-wait-service scenario covered by Emily Post's 10% pre-tax recommendation. It is
+        etiquette guidance, not a claim that 10% is a measured national average.
       </p>
-      <h3>Sushi and hot-pot buffets</h3>
+
+      <h3>Server-assisted buffet</h3>
       <p>
-        These look like buffets but are often order-as-you-go: staff bring every plate. That's full wait service —
-        treat it like a regular restaurant and tip 15–20%.
+        Some buffets involve substantial table service: a server may take drink orders, bring items, replace settings,
+        or coordinate the meal. More service can justify using a higher amount than you would at a mostly self-service
+        buffet. There is no need to invent a special national "buffet standard" for every variation.
       </p>
-      <h3>Already included?</h3>
+
+      <h3>Order-to-table hot pot, sushi, or all-you-can-eat formats</h3>
       <p>
-        Upscale hotel and resort buffets sometimes add an automatic 18–20% service charge per person. Check the check —
-        if it's there, you've already tipped. See
-        <a href="/service-charge-on-restaurant-bill/">the service charge on your restaurant bill</a> to be sure.
+        If staff take orders and bring most dishes to the table, the experience may function more like sit-down wait
+        service than a self-serve buffet. Emily Post's sit-down guidance of 15–20% pre-tax is a more relevant
+        reference point in that situation.
+      </p>
+
+      <h3>A charge is already on the bill</h3>
+      <p>
+        Do not assume that a service charge is the gratuity merely because its percentage looks familiar. Read the
+        disclosure first. The <a href="/service-charge-on-restaurant-bill/">service-charge guide</a> explains how to
+        distinguish an explicit automatic gratuity from a generic fee.
       </p>
     </div>
   </section>
 
-  <!-- ============ FAQ ============ -->
   <section class="section" id="faq">
-    <h2>Buffet tip questions, answered</h2>
+    <h2>Buffet tipping questions, answered</h2>
     <div class="faq">
       <details>
         <summary>How much should you tip at a buffet?</summary>
         <p>
-          Tip at least 10% at a buffet where staff keep drinks filled and clear plates, rising to 15–20% at a
-          full-service buffet where a server looks after your table. At a pure self-serve counter with no table
-          service, $1–2 in the tip jar is plenty.
+          Emily Post recommends 10% of the pre-tax bill for buffet wait service. Treat that as etiquette guidance, not
+          a measured national average. If the restaurant provides more extensive table service, you can choose a
+          higher amount.
         </p>
       </details>
       <details>
-        <summary>Do you tip at a buffet if you serve yourself?</summary>
+        <summary>Do you have to tip at a completely self-serve buffet?</summary>
         <p>
-          Yes — even self-serve buffets have staff setting up the food line, restocking dishes, and cleaning tables.
-          10% is the usual minimum; you can skip the percentage and leave a couple of dollars for a quick
-          cafeteria-style stop.
+          A nearly self-service setup is different from buffet wait service. Emily Post says there is no obligation
+          to use a general tip jar, though you may tip for extra help if you want to.
         </p>
       </details>
       <details>
-        <summary>Why does a buffet tip start at 10% instead of 15%?</summary>
+        <summary>Should drink refills and plate clearing affect the tip?</summary>
         <p>
-          Because a buffet server does less per guest than a full-service waiter — no taking orders, no delivering
-          courses. 10% reflects lighter work, and 15–20% is reserved for buffets where staff refill drinks, clear
-          plates throughout the meal, and provide table service.
+          Yes, service level is a useful way to make the decision. Emily Post's 10% buffet-wait-service guidance fits
+          a setting where staff provide table care such as refills and clearing.
         </p>
       </details>
       <details>
-        <summary>How much should you tip at an all-you-can-eat restaurant like Golden Corral or a casino buffet?</summary>
+        <summary>What about a buffet with full table service?</summary>
         <p>
-          At chain buffets and casino buffets with drink refills and plate clearing, 10–15% is standard, with most
-          regulars landing around 10–12%. The percentage should also cover any server who carries your plates or
-          brings drinks.
-        </p>
-      </details>
-      <details>
-        <summary>Do you tip more at a fancy, expensive buffet?</summary>
-        <p>
-          Yes — high-end seafood and brunch buffets with carving stations, cocktail service, and busier table
-          maintenance earn 15–20%. The percentage matters more than the check total, since large-plate dining means
-          fewer, bigger sittings per server.
+          If staff take orders and bring food much like a sit-down restaurant, sit-down etiquette is the better
+          comparison. Emily Post lists 15–20% pre-tax for sit-down wait service.
         </p>
       </details>
     </div>
+  </section>
+
+  <section class="section" id="sources">
+    <h2>Sources</h2>
+    <ul class="prose">
+      <li>
+        <a href={SOURCES.emilyPost}>Emily Post — General Tipping Guide</a>
+        — buffet wait service, sit-down wait service, delivery, takeout and tip-jar etiquette.
+      </li>
+    </ul>
+    <p class="menu-src">
+      Research last reviewed: {RESEARCH_REVIEW_DATE}. Recommendations are labeled as recommendations rather than
+      population statistics.
+    </p>
   </section>
 
   <aside class="ad ad-native ad-inline" aria-label="Advertisement">
