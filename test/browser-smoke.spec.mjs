@@ -1,0 +1,185 @@
+import { test, expect } from '@playwright/test';
+
+const base = 'http://127.0.0.1:4321';
+const routes = [
+  '/',
+  '/average-restaurant-tip/',
+  '/how-much-tip-waitress-waiter/',
+  '/buffet-tipping-guide/',
+  '/food-delivery-tip-calculator/',
+  '/service-charge-on-restaurant-bill/',
+];
+const widths = [320, 390, 768, 1024, 1440];
+
+function captureConsole(page, errors) {
+  page.on('pageerror', (error) => errors.push(`pageerror: ${error.message}`));
+  page.on('console', (message) => {
+    if (message.type() === 'error') errors.push(`console: ${message.text()}`);
+  });
+}
+
+test.describe('all routes and representative widths', () => {
+  for (const route of routes) {
+    for (const width of widths) {
+      test(`${route} has no overflow or console errors at ${width}px`, async ({ browser }) => {
+        const context = await browser.newContext({ viewport: { width, height: 900 } });
+        const page = await context.newPage();
+        const errors = [];
+        captureConsole(page, errors);
+        const response = await page.goto(base + route, { waitUntil: 'networkidle' });
+        expect(response?.ok()).toBeTruthy();
+        await expect(page.locator('#main-content')).toBeVisible();
+        const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
+        expect(overflow).toBeLessThanOrEqual(1);
+        expect(errors).toEqual([]);
+        await context.close();
+      });
+    }
+  }
+});
+
+test('global skip link targets main content on every route', async ({ page }) => {
+  for (const route of routes) {
+    await page.goto(base + route);
+    await page.keyboard.press('Tab');
+    const skip = page.locator('.skip');
+    await expect(skip).toBeFocused();
+    await expect(skip).toHaveText('Skip to content');
+    await page.keyboard.press('Enter');
+    await expect(page).toHaveURL(new RegExp('#main-content$'));
+    await expect(page.locator('#main-content')).toBeFocused();
+  }
+});
+
+test('comma-decimal typing stays safe and normalizes only on blur', async ({ page }) => {
+  await page.goto(base + '/');
+  const bill = page.locator('#bill');
+  await bill.fill('12,50');
+  await expect(bill).toHaveValue('12,50');
+  await expect(page.locator('#rTip')).toHaveText('$2.50');
+  await expect(page.locator('#rTotal')).toHaveText('$15.00');
+  await bill.press('Tab');
+  await expect(bill).toHaveValue('12.50');
+});
+
+test('remainder-cent splitting reconciles visibly', async ({ page }) => {
+  await page.goto(base + '/');
+  await page.locator('#bill').fill('10');
+  await page.locator('#customTip').fill('0');
+  await page.locator('#ppl').fill('3');
+  await expect(page.locator('#rTotal')).toHaveText('$10.00');
+  await expect(page.locator('#rEach')).toHaveText('$3.33–$3.34');
+  await expect(page.locator('#rNote')).toHaveText('1 pays $3.34 · 2 pay $3.33');
+
+  await page.locator('#ppl').fill('6');
+  await expect(page.locator('#rEach')).toHaveText('$1.66–$1.67');
+  await expect(page.locator('#rNote')).toHaveText('4 pay $1.67 · 2 pay $1.66');
+});
+
+test('tax, fee, percentage basis toggle, and custom dollar tip are deterministic', async ({ page }) => {
+  await page.goto(base + '/');
+  await page.locator('#bill').fill('60');
+  await page.locator('.more-options summary').click();
+  await expect(page.locator('.more-options')).toHaveAttribute('open', '');
+  await page.locator('#tax').fill('4.80');
+  await page.locator('#otherFee').fill('5');
+  await expect(page.locator('#rTip')).toHaveText('$12.00');
+  await expect(page.locator('#rTotal')).toHaveText('$81.80');
+  await expect(page.locator('#rTaxRow')).toBeVisible();
+  await expect(page.locator('#rOtherFeeRow')).toBeVisible();
+
+  await page.locator('#includeTax').check();
+  await expect(page.locator('#rTip')).toHaveText('$12.96');
+  await expect(page.locator('#rTotal')).toHaveText('$82.76');
+
+  await page.locator('#bill').fill('40');
+  await page.locator('#tax').fill('');
+  await page.locator('#otherFee').fill('');
+  await page.locator('#customTip').fill('7');
+  await expect(page.locator('#rTip')).toHaveText('$7.00');
+  await expect(page.locator('#rTotal')).toHaveText('$47.00');
+  await page.locator('input[name="tipPreset"][value="20"]').check();
+  await expect(page.locator('#customTip')).toHaveValue('');
+  await expect(page.locator('#rTip')).toHaveText('$8.00');
+  await expect(page.locator('#rTotal')).toHaveText('$48.00');
+});
+
+test('delivery fees remain outside the percentage tip basis', async ({ page }) => {
+  await page.goto(base + '/food-delivery-tip-calculator/');
+  await page.locator('#bill').fill('32');
+  await page.locator('#deliveryFee').fill('2.99');
+  await expect(page.locator('#rTip')).toHaveText('$6.40');
+  await expect(page.locator('#rTotal')).toHaveText('$41.39');
+  await page.locator('.more-options summary').click();
+  await page.locator('#tax').fill('2.56');
+  await expect(page.locator('#rTip')).toHaveText('$6.40');
+  await expect(page.locator('#rTotal')).toHaveText('$43.95');
+});
+
+test('whole-dollar round-up reports exact total and higher collected amount', async ({ page }) => {
+  await page.goto(base + '/');
+  await page.locator('#bill').fill('60.50');
+  await page.locator('#ppl').fill('3');
+  await page.locator('#roundUp').check();
+  await expect(page.locator('#rTip')).toHaveText('$12.10');
+  await expect(page.locator('#rTotal')).toHaveText('$72.60');
+  await expect(page.locator('#rEach')).toHaveText('$25');
+  await expect(page.locator('#rNote')).toContainText('Collecting $75.00');
+  await expect(page.locator('#rNote')).toContainText('$2.40 extra');
+});
+
+test('invalid negative money is not silently converted', async ({ page }) => {
+  await page.goto(base + '/');
+  await page.locator('#bill').fill('-$25');
+  await expect(page.locator('#bill')).toHaveValue('-$25');
+  await expect(page.locator('#bill')).toHaveAttribute('aria-invalid', 'true');
+  await expect(page.locator('#billError')).toBeVisible();
+  await expect(page.locator('#rTotal')).toHaveText('—');
+});
+
+test('people input preserves last valid count and handles 99 people', async ({ page }) => {
+  await page.goto(base + '/');
+  await page.locator('#bill').fill('10');
+  await page.locator('#customTip').fill('0');
+  await page.locator('#ppl').fill('99');
+  await expect(page.locator('#rNote')).toHaveText('10 pay $0.11 · 89 pay $0.10');
+  await page.locator('#ppl').fill('');
+  await page.locator('#ppl').blur();
+  await expect(page.locator('#ppl')).toHaveValue('99');
+  await page.locator('#pplPlus').click();
+  await expect(page.locator('#ppl')).toHaveValue('99');
+});
+
+test('More options and tip presets are keyboard operable', async ({ page }) => {
+  await page.goto(base + '/');
+  const summary = page.locator('.more-options summary');
+  await summary.focus();
+  await page.keyboard.press('Enter');
+  await expect(page.locator('.more-options')).toHaveAttribute('open', '');
+
+  const radio = page.locator('input[name="tipPreset"][value="18"]');
+  await radio.focus();
+  await page.keyboard.press('Space');
+  await expect(radio).toBeChecked();
+});
+
+test('noscript fallback is visible and static page content remains readable', async ({ browser }) => {
+  const context = await browser.newContext({ javaScriptEnabled: false, viewport: { width: 390, height: 900 } });
+  const page = await context.newPage();
+  await page.goto(base + '/');
+  await expect(page.getByText('The interactive calculator requires JavaScript.')).toBeVisible();
+  await expect(page.locator('h1')).toContainText('Restaurant Tip Calculator');
+  await page.goto(base + '/buffet-tipping-guide/');
+  await expect(page.locator('h1')).toBeVisible();
+  await context.close();
+});
+
+test('reduced-motion preference is honored while results stay correct', async ({ browser }) => {
+  const context = await browser.newContext({ reducedMotion: 'reduce', viewport: { width: 390, height: 900 } });
+  const page = await context.newPage();
+  await page.goto(base + '/');
+  expect(await page.evaluate(() => matchMedia('(prefers-reduced-motion: reduce)').matches)).toBe(true);
+  await page.locator('#bill').fill('60');
+  await expect(page.locator('#rTotal')).toHaveText('$72.00');
+  await context.close();
+});
