@@ -2,14 +2,16 @@
 import Layout from '../layouts/Layout.astro';
 import Calculator from '../components/Calculator.astro';
 import Related from '../components/Related.astro';
+import { RESEARCH_REVIEW_DATE, SOURCES } from '../lib/editorial.js';
 
-const title = 'How Much to Tip a Waitress or Waiter: 15–20% Guide with Examples';
+const title = 'How Much Should You Tip a Waiter or Waitress? U.S. Guide';
 const description =
-  'Tip a waitress or waiter 15–20% of the pre-tax bill: 15% for adequate service, 20% for good service, 22–25% for great. Plus per-check examples and when to tip more or less.';
+  'Practical U.S. table-service tipping guidance for ordinary service, exceptional service, problems, automatic gratuities and bill splitting.';
 
 const nav = [
   { href: '#calculator', label: 'Calculator' },
   { href: '#guide', label: 'Guide' },
+  { href: '#wages', label: 'Wage context' },
   { href: '#faq', label: 'FAQ' },
 ];
 
@@ -29,7 +31,7 @@ const jsonLd = JSON.stringify({
         {
           '@type': 'ListItem',
           position: 2,
-          name: 'How Much to Tip a Waitress or Waiter',
+          name: 'How Much to Tip a Waiter or Waitress',
           item: 'https://restauranttipcalculator.com/how-much-tip-waitress-waiter/',
         },
       ],
@@ -45,88 +47,11 @@ const jsonLd = JSON.stringify({
       inLanguage: 'en',
       offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
       featureList: [
-        'Tip percentage presets (15%, 18%, 20%, 22%) and custom tip',
-        'Instant tip amount and total with tip',
-        'Split the bill between up to 99 people',
-        'No sign-up; all calculations run in the browser',
-      ],
-    },
-    {
-      '@type': 'HowTo',
-      '@id': 'https://restauranttipcalculator.com/how-much-tip-waitress-waiter/#howto',
-      url: 'https://restauranttipcalculator.com/how-much-tip-waitress-waiter/#calculator',
-      name: 'How to calculate your waiter tip',
-      step: [
-        {
-          '@type': 'HowToStep',
-          name: 'Enter the bill',
-          text: 'Type the amount from your check. Everything updates as you type.',
-        },
-        {
-          '@type': 'HowToStep',
-          name: 'Choose a tip',
-          text: 'Tap 15, 18, 20, or 22 percent, or type a custom percentage like 17.5.',
-        },
-        {
-          '@type': 'HowToStep',
-          name: 'Split it',
-          text: 'Set how many people are paying and read the per-person amount.',
-        },
-      ],
-    },
-    {
-      '@type': 'FAQPage',
-      '@id': 'https://restauranttipcalculator.com/how-much-tip-waitress-waiter/#faq',
-      url: 'https://restauranttipcalculator.com/how-much-tip-waitress-waiter/#faq',
-      mainEntity: [
-        {
-          '@type': 'Question',
-          name: 'How much should you tip a waitress or waiter?',
-          acceptedAnswer: {
-            '@type': 'Answer',
-            text: 'Tip your waiter or waitress 15–20% of the pre-tax bill for table service: 15% for adequate but unremarkable service, 18% for good service, and 20–25% for great or exceptional service. Below 15% signals that something went wrong.',
-          },
-        },
-        {
-          '@type': 'Question',
-          name: 'What is the average tip for waiters and waitresses?',
-          acceptedAnswer: {
-            '@type': 'Answer',
-            text: 'The average tip for waiters and waitresses in the U.S. is about 20% of the bill at full-service restaurants, with the standard range between 15% and 20%. Industry point-of-sale data puts full-service averages just under 20%.',
-          },
-        },
-        {
-          '@type': 'Question',
-          name: 'How much tip do you leave on a $40 restaurant bill?',
-          acceptedAnswer: {
-            '@type': 'Answer',
-            text: 'On a $40 bill: 15% is $6.00, 18% is $7.20, 20% is $8.00 and a 22% tip is $8.80. Most people would leave $8.00 for good service — $48.00 total.',
-          },
-        },
-        {
-          '@type': 'Question',
-          name: 'Do you tip a waiter per drink or on the full check?',
-          acceptedAnswer: {
-            '@type': 'Answer',
-            text: 'Tip on the full check — drinks included — or leave $1–2 per drink at the bar. If your server also makes your drinks and the tab is mainly alcohol, 15–20% of the whole check still works.',
-          },
-        },
-        {
-          '@type': 'Question',
-          name: 'Do you still tip when a gratuity is already added?',
-          acceptedAnswer: {
-            '@type': 'Answer',
-            text: 'No — if an automatic gratuity of 18–20% is already on the check (common for parties of six or more), that is the tip. Adding a small extra for standout service is optional and always welcome.',
-          },
-        },
-        {
-          '@type': 'Question',
-          name: 'Should you tip more than 20%?',
-          acceptedAnswer: {
-            '@type': 'Answer',
-            text: 'Yes, when service went above and beyond — attentive pacing, accommodated requests, strong recommendations, difficult seating or a large mobile order. 22–25% is a fair way to say thank you, and exceptional service at high-end restaurants commonly earns it.',
-          },
-        },
+        'Percentage presets, custom percentage, and custom dollar tip',
+        'Tax and other fee inputs',
+        'Optional choice to include entered tax in the percentage tip basis',
+        'Exact cent-reconciled bill splitting for up to 99 people',
+        'Optional whole-dollar round-up with the extra amount shown',
       ],
     },
   ],
@@ -135,11 +60,16 @@ const jsonLd = JSON.stringify({
 
 <Layout title={title} description={description} path="/how-much-tip-waitress-waiter/" jsonLd={jsonLd} nav={nav}>
   <section class="hero">
-    <p class="guide-intro"><a href="/">Restaurant tip calculator</a> / Waiter &amp; waitress tips</p>
-    <h1>How Much to Tip a Waitress or Waiter</h1>
+    <p class="guide-intro"><a href="/">Restaurant tip calculator</a> / Table-service guidance</p>
+    <h1>How Much Should You Tip a Waiter or Waitress?</h1>
     <p class="lede">
-      The short answer: <strong>15–20% of the pre-tax bill</strong> — 15% for merely adequate service, 20% for good,
-      22–25% for great. Here's the full breakdown with examples.
+      For U.S. sit-down wait service, <strong>Emily Post recommends 15–20% of the pre-tax bill</strong>. That is
+      etiquette guidance, not a statistic saying every diner tips the same amount. You can choose more for exceptional
+      service, and a service problem deserves context rather than an automatic formula.
+    </p>
+    <p class="menu-src">
+      Research last reviewed: {RESEARCH_REVIEW_DATE}. For observed and survey data, see the
+      <a href="/average-restaurant-tip/">average restaurant tip evidence page</a>.
     </p>
   </section>
 
@@ -152,132 +82,149 @@ const jsonLd = JSON.stringify({
     </div>
   </aside>
 
-  <!-- ============ GUIDE ============ -->
   <section class="section" id="guide">
-    <h2>Tips for waiters and waitresses: how much at each level</h2>
+    <h2>Practical table-service tipping decisions</h2>
     <div class="guide-grid">
       <div>
         <p class="guide-intro">
-          The scale below is what etiquette guides, servers, and diners actually agree on:
+          Use the range as a starting point, then consider what actually happened at the table.
         </p>
         <div class="menu">
           <div class="menu-row">
-            <span class="menu-name">Adequate, forgettable service</span><span class="dots" aria-hidden="true"
-            ></span><span class="menu-val">15%</span>
+            <span class="menu-name">Sit-down wait service</span><span class="dots" aria-hidden="true"></span><span class="menu-val">15–20% pre-tax guidance</span>
           </div>
           <div class="menu-row">
-            <span class="menu-name">Good, solid service</span><span class="dots" aria-hidden="true"></span><span
-              class="menu-val">18%</span>
+            <span class="menu-name">Exceptional service</span><span class="dots" aria-hidden="true"></span><span class="menu-val">More is optional</span>
           </div>
           <div class="menu-row">
-            <span class="menu-name">Great service — the norm</span><span class="dots" aria-hidden="true"
-            ></span><span class="menu-val">20%</span>
+            <span class="menu-name">Automatic gratuity already added</span><span class="dots" aria-hidden="true"></span><span class="menu-val">Check before adding another full tip</span>
           </div>
           <div class="menu-row">
-            <span class="menu-name">Exceptional, went above and beyond</span><span class="dots" aria-hidden="true"
-            ></span><span class="menu-val">22–25%</span>
-          </div>
-          <div class="menu-row">
-            <span class="menu-name">Poor service (not the server's fault)</span><span class="dots" aria-hidden="true"
-            ></span><span class="menu-val">10–15%</span>
-          </div>
-          <div class="menu-row">
-            <span class="menu-name">Large groups (6+)</span><span class="dots" aria-hidden="true"></span><span
-              class="menu-val">18–20% auto-added</span>
+            <span class="menu-name">Service problem</span><span class="dots" aria-hidden="true"></span><span class="menu-val">Consider cause; speak to manager if needed</span>
           </div>
         </div>
         <p class="menu-src">
-          Should you tip on the pre-tax subtotal? <a href="/#tip-on-tax">Yes, if you want to be precise</a> — the
-          difference is under a dollar on most checks.
+          Etiquette source: <a href={SOURCES.emilyPost}>Emily Post — General Tipping Guide</a>.
         </p>
       </div>
       <div>
         <table class="worked">
-          <caption>Tip on a $60 check, by service level:</caption>
+          <caption>Tip math on a $60 pre-tax bill</caption>
           <thead>
-            <tr><th scope="col">Service</th><th scope="col">Tip</th><th scope="col">Total</th></tr>
+            <tr><th scope="col">Rate</th><th scope="col">Tip</th><th scope="col">Subtotal + tip</th></tr>
           </thead>
           <tbody>
-            <tr><td>Adequate · 15%</td><td>$9.00</td><td>$69.00</td></tr>
-            <tr><td>Good · 18%</td><td>$10.80</td><td>$70.80</td></tr>
-            <tr><td>Great · 20%</td><td>$12.00</td><td>$72.00</td></tr>
-            <tr><td>Exceptional · 22%</td><td>$13.20</td><td>$73.20</td></tr>
-            <tr><td>Best night ever · 25%</td><td>$15.00</td><td>$75.00</td></tr>
+            <tr><td>15%</td><td>$9.00</td><td>$69.00</td></tr>
+            <tr><td>18%</td><td>$10.80</td><td>$70.80</td></tr>
+            <tr><td>20%</td><td>$12.00</td><td>$72.00</td></tr>
+            <tr><td>22%</td><td>$13.20</td><td>$73.20</td></tr>
           </tbody>
         </table>
         <p class="worked-note">
-          Your check's different? <a href="#calculator">Run it through the calculator</a> — it updates as you type.
+          The first three percentages show common calculator choices; 22% is included as arithmetic, not as a claim
+          that etiquette requires it. <a href="#calculator">Use your own amount above.</a>
         </p>
       </div>
     </div>
-  </section>
 
-  <!-- ============ WHY ============ -->
-  <section class="section" id="why">
-    <h2>Why the tip is most of your server's pay</h2>
     <div class="prose">
+      <h3>What if the service was excellent?</h3>
       <p>
-        In most U.S. states, restaurants can pay servers a tipped minimum wage as low as <strong>$2.13 an hour</strong>
-        (U.S. Department of Labor), with tips expected to cover the rest. That means the tip isn't a bonus — it's the
-        bulk of your waiter's or waitress's income, sometimes shared with bartenders, bussers, and food runners through
-        a tip pool. Tipping 20% "even when service is fine" isn't generosity; it's how the system is priced — and 20% tracks
-        the <a href="/average-restaurant-tip/">full-service dining average</a> in U.S. point-of-sale data.
+        Tipping above your usual amount is a voluntary way to recognize exceptional service. There is no need for this
+        site to invent a universal "exceptional service" percentage; the calculator accepts any percentage or exact
+        dollar amount.
+      </p>
+
+      <h3>What if something went wrong?</h3>
+      <p>
+        First separate the server's work from problems they may not control, such as a kitchen delay, unavailable
+        items, or a restaurant policy. If the problem is serious, speaking with a manager is often more useful than
+        trying to communicate everything through a percentage alone.
+      </p>
+
+      <h3>What if a charge is already on the check?</h3>
+      <p>
+        If the bill clearly includes an automatic gratuity, do not add another full gratuity automatically. If it says
+        only service fee, hospitality fee, wellness fee, or something similar, read the restaurant's disclosure
+        instead of guessing by the percentage. See the
+        <a href="/service-charge-on-restaurant-bill/">service-charge guide</a>.
+      </p>
+
+      <h3>Pre-tax or after-tax?</h3>
+      <p>
+        Emily Post's sit-down recommendation is stated on the <strong>pre-tax amount</strong>. That is etiquette
+        guidance, not law. The calculator defaults to a percentage tip basis that excludes entered tax, and its More
+        options section lets you include tax in the percentage basis if that is how you prefer to calculate.
       </p>
     </div>
   </section>
 
-  <!-- ============ FAQ ============ -->
+  <section class="section" id="wages">
+    <h2>What the $2.13 federal tipped-wage figure does — and does not — mean</h2>
+    <div class="prose">
+      <p>
+        The <a href={SOURCES.dolFactSheet15}>U.S. Department of Labor's FLSA guidance</a> says an employer using the
+        federal tip-credit framework must pay a tipped worker at least $2.13 per hour in direct cash wages and ensure
+        that direct wages plus tips reach at least the applicable federal minimum-wage obligation. If they do not, the
+        employer must make up the difference.
+      </p>
+      <p>
+        That does <strong>not</strong> mean every U.S. server earns $2.13 an hour. State laws can require a higher
+        direct wage or prohibit this style of tip credit. The Department of Labor's
+        <a href={SOURCES.dolTippedWages}>state tipped-wage table</a> shows substantial variation.
+      </p>
+      <p>
+        Wage rules help explain the U.S. tipping system, but this page does not use them to claim that a customer's tip
+        is literally "most of every server's paycheck." Earnings and wage rules vary by worker and location.
+      </p>
+    </div>
+  </section>
+
   <section class="section" id="faq">
-    <h2>Waitress and waiter tip questions, answered</h2>
+    <h2>Waiter and waitress tipping questions, answered</h2>
     <div class="faq">
       <details>
-        <summary>How much should you tip a waitress or waiter?</summary>
+        <summary>How much should you tip a waiter or waitress?</summary>
         <p>
-          Tip your waiter or waitress 15–20% of the pre-tax bill for table service: 15% for adequate but unremarkable
-          service, 18% for good service, and 20–25% for great or exceptional service. Below 15% signals that something
-          went wrong.
+          Emily Post recommends 15–20% of the pre-tax bill for U.S. sit-down wait service. It is an etiquette range,
+          not a measured average of every diner.
         </p>
       </details>
       <details>
-        <summary>What is the average tip for waiters and waitresses?</summary>
+        <summary>Is 20% the average tip for servers?</summary>
         <p>
-          The average tip for waiters and waitresses in the U.S. is about 20% of the bill at full-service restaurants,
-          with the standard range between 15% and 20%. Industry point-of-sale data puts full-service averages just
-          under 20%.
+          Do not mix an etiquette target with a measured average. Toast's Q1 2026 card-and-digital data found a 19.3%
+          average at full-service restaurants on its platform. Pew's 2023 hypothetical survey produced a different
+          distribution. <a href="/average-restaurant-tip/">See the data and methodology side by side.</a>
         </p>
       </details>
       <details>
-        <summary>How much tip do you leave on a $40 restaurant bill?</summary>
+        <summary>Should I tip more than 20% for exceptional service?</summary>
         <p>
-          On a $40 bill: 15% is $6.00, 18% is $7.20, 20% is $8.00 and a 22% tip is $8.80. Most people would leave $8.00
-          for good service — $48.00 total.
+          You can, but it is voluntary. Rather than prescribe a universal number, use the amount that reflects your
+          experience and budget.
         </p>
       </details>
       <details>
-        <summary>Do you tip a waiter per drink or on the full check?</summary>
+        <summary>Do I tip again when gratuity is already added?</summary>
         <p>
-          Tip on the full check — drinks included — or leave $1–2 per drink at the bar. If your server also makes your
-          drinks and the tab is mainly alcohol, 15–20% of the whole check still works.
-        </p>
-      </details>
-      <details>
-        <summary>Do you still tip when a gratuity is already added?</summary>
-        <p>
-          No — if an automatic gratuity of 18–20% is already on the check (common for parties of six or more), that is
-          the tip. Adding a small extra for standout service is optional and always welcome. Not sure what the line
-          means? See our guide to the <a href="/service-charge-on-restaurant-bill/">service charge on your restaurant
-          bill</a>.
-        </p>
-      </details>
-      <details>
-        <summary>Should you tip more than 20%?</summary>
-        <p>
-          Yes, when service went above and beyond — attentive pacing, accommodated requests, strong recommendations,
-          difficult seating or a large mobile order. 22–25% is a fair way to say thank you, and exceptional service at
-          high-end restaurants commonly earns it.
+          If the bill clearly identifies an automatic gratuity, do not add another full gratuity automatically. Extra
+          tipping is voluntary. A generic service fee requires a closer look at the restaurant's disclosure.
         </p>
       </details>
     </div>
+  </section>
+
+  <section class="section" id="sources">
+    <h2>Sources</h2>
+    <ul class="prose">
+      <li><a href={SOURCES.emilyPost}>Emily Post — General Tipping Guide</a> — sit-down wait-service etiquette.</li>
+      <li><a href={SOURCES.dolFactSheet15}>U.S. Department of Labor — Fact Sheet #15</a> — federal tipped-employee rules.</li>
+      <li><a href={SOURCES.dolTippedWages}>U.S. Department of Labor — Minimum Wages for Tipped Employees</a> — state variation.</li>
+    </ul>
+    <p class="menu-src">
+      Research last reviewed: {RESEARCH_REVIEW_DATE}. <a href="/methodology/">See source-selection and calculation methodology.</a>
+    </p>
   </section>
 
   <aside class="ad ad-native ad-inline" aria-label="Advertisement">
