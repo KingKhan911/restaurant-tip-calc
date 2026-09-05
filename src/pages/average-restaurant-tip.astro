@@ -2,6 +2,7 @@
 import Layout from '../layouts/Layout.astro';
 import Calculator from '../components/Calculator.astro';
 import Related from '../components/Related.astro';
+import AdSlot from '../components/AdSlot.astro';
 import { RESEARCH_REVIEW_DATE, SOURCES } from '../lib/editorial.js';
 
 const title = 'Average Restaurant Tip in the U.S.: Current Data & Tipping Ranges';
@@ -152,12 +153,7 @@ const jsonLd = JSON.stringify({
 
   <Calculator mode="dinein" />
 
-  <aside class="ad ad-leaderboard ad-below" aria-label="Advertisement">
-    <p class="ad-label">Advertisement</p>
-    <div class="ad-slot" id="ad-below" data-size="728 × 90 · 300 × 250">
-      <!-- e.g. GAM slot: /XXXXXXX/rtc_avgptip_below-calc -->
-    </div>
-  </aside>
+  <AdSlot format="leaderboard" position="below" id="ad-below" />
 
   <section class="section" id="wage-context">
     <h2>Does the federal $2.13 tipped cash wage apply to every server?</h2>
@@ -246,12 +242,7 @@ const jsonLd = JSON.stringify({
     </p>
   </section>
 
-  <aside class="ad ad-native ad-inline" aria-label="Advertisement">
-    <p class="ad-label">Advertisement</p>
-    <div class="ad-slot" id="ad-native" data-size="Native banner · 280px reserved">
-      <!-- Paste the native banner tag from your ad network here -->
-    </div>
-  </aside>
+  <AdSlot format="native" position="inline" id="ad-native" />
 
   <Related exclude="/average-restaurant-tip/" />
 </Layout>

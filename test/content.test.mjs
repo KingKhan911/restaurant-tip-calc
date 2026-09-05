@@ -10,6 +10,8 @@ const pagePaths = [
   'src/pages/food-delivery-tip-calculator.astro',
   'src/pages/service-charge-on-restaurant-bill.astro',
   'src/pages/methodology.astro',
+  'src/pages/about.astro',
+  'src/pages/privacy.astro',
 ];
 
 async function read(path) {
@@ -106,7 +108,7 @@ test('methodology route documents calculator semantics and research policy', asy
   }
 });
 
-test('titles and H1s are unique across the seven public routes', async () => {
+test('titles and H1s are unique across the nine indexable public routes', async () => {
   const titles = [];
   const h1s = [];
   for (const path of pagePaths) {
@@ -123,20 +125,21 @@ test('titles and H1s are unique across the seven public routes', async () => {
   assert.equal(new Set(h1s).size, pagePaths.length, 'H1s must be distinct');
 });
 
-test('sitemap contains exactly the intentional seven-route architecture', async () => {
-  const sitemap = await read('public/sitemap.xml');
-  const locs = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map((match) => match[1]);
-  assert.deepEqual(locs, [
-    'https://restauranttipcalculator.com/',
-    'https://restauranttipcalculator.com/average-restaurant-tip/',
-    'https://restauranttipcalculator.com/how-much-tip-waitress-waiter/',
-    'https://restauranttipcalculator.com/buffet-tipping-guide/',
-    'https://restauranttipcalculator.com/food-delivery-tip-calculator/',
-    'https://restauranttipcalculator.com/service-charge-on-restaurant-bill/',
-    'https://restauranttipcalculator.com/methodology/',
+test('site configuration contains exactly the intentional nine-route indexable architecture', async () => {
+  const source = await read('src/lib/site.js');
+  const routes = [...source.matchAll(/\n  '([^']+)',/g)].map((match) => match[1]);
+  assert.deepEqual(routes, [
+    '/',
+    '/average-restaurant-tip/',
+    '/how-much-tip-waitress-waiter/',
+    '/buffet-tipping-guide/',
+    '/food-delivery-tip-calculator/',
+    '/service-charge-on-restaurant-bill/',
+    '/methodology/',
+    '/about/',
+    '/privacy/',
   ]);
-  assert.equal(sitemap.includes('<priority>'), false);
-  assert.equal(sitemap.includes('<changefreq>'), false);
+  assert.equal(routes.includes('/404/'), false);
 });
 
 test('robots policy remains simple and does not block OAI-SearchBot', async () => {

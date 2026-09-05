@@ -1,6 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import Related from '../components/Related.astro';
+import AdSlot from '../components/AdSlot.astro';
 import { RESEARCH_REVIEW_DATE, SOURCES } from '../lib/editorial.js';
 
 const title = 'Service Charge on a Restaurant Bill: Should You Tip Again?';
@@ -190,12 +191,7 @@ const jsonLd = JSON.stringify({
     </p>
   </section>
 
-  <aside class="ad ad-native ad-inline" aria-label="Advertisement">
-    <p class="ad-label">Advertisement</p>
-    <div class="ad-slot" id="ad-native" data-size="Native banner · 280px reserved">
-      <!-- Paste the native banner tag from your ad network here -->
-    </div>
-  </aside>
+  <AdSlot format="native" position="inline" id="ad-native" />
 
   <Related exclude="/service-charge-on-restaurant-bill/" />
 </Layout>

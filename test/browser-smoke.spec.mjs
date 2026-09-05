@@ -10,8 +10,10 @@ const routes = [
   '/food-delivery-tip-calculator/',
   '/service-charge-on-restaurant-bill/',
   '/methodology/',
+  '/about/',
+  '/privacy/',
 ];
-const widths = [320, 390, 768, 1024, 1440];
+const widths = [320, 390, 768, 1024, 1240, 1440];
 
 function captureConsole(page, errors) {
   page.on('pageerror', (error) => errors.push(`pageerror: ${error.message}`));
@@ -254,7 +256,7 @@ test('default calculator stays simple and optional rows stay hidden until used',
   await expect(page.locator('#rOtherFeeRow')).toBeHidden();
 });
 
-test('mobile money inputs keep decimal keyboards and 16px minimum text without anchor overlap', async ({ browser }) => {
+test('mobile money inputs keep decimal keyboards and default build has no ad chrome', async ({ browser }) => {
   const context = await browser.newContext({ viewport: { width: 320, height: 700 } });
   const page = await context.newPage();
   await page.goto(base + '/');
@@ -262,25 +264,7 @@ test('mobile money inputs keep decimal keyboards and 16px minimum text without a
   expect(await bill.getAttribute('inputmode')).toBe('decimal');
   const fontSize = await bill.evaluate((element) => parseFloat(getComputedStyle(element).fontSize));
   expect(fontSize).toBeGreaterThanOrEqual(16);
-
-  const anchor = page.locator('#ad-anchor');
-  await expect(anchor).toBeVisible();
-  const bodyPaddingBottom = await page.evaluate(() => parseFloat(getComputedStyle(document.body).paddingBottom));
-  const anchorHeight = await anchor.evaluate((element) => element.getBoundingClientRect().height);
-  expect(bodyPaddingBottom).toBeGreaterThanOrEqual(anchorHeight);
-
-  await page.locator('.more-options summary').click();
-  const otherFee = page.locator('#otherFee');
-  await otherFee.scrollIntoViewIfNeeded();
-  await otherFee.focus();
-  const fieldBox = await otherFee.boundingBox();
-  const anchorBox = await anchor.boundingBox();
-  expect(fieldBox).not.toBeNull();
-  expect(anchorBox).not.toBeNull();
-  expect(fieldBox.y + fieldBox.height).toBeLessThanOrEqual(anchorBox.y + 1);
-
-  await page.locator('#anchorClose').click();
-  await expect(anchor).toBeHidden();
+  await expect(page.locator('[data-ad-slot]')).toHaveCount(0);
   expect(await page.evaluate(() => parseFloat(getComputedStyle(document.body).paddingBottom))).toBe(0);
   await context.close();
 });
@@ -368,4 +352,68 @@ test('research-heavy pages expose visible source links and review context', asyn
   await expect(page.locator('#research-method')).toBeVisible();
   await expect(page.locator('#sources')).toBeVisible();
   expect(await page.locator('#sources a[href^="https://"]').count()).toBeGreaterThanOrEqual(6);
+});
+
+
+test('social metadata, canonicals, and favicon references are complete on representative routes', async ({ page, request }) => {
+  const representative = ['/', '/average-restaurant-tip/', '/food-delivery-tip-calculator/', '/methodology/', '/about/', '/privacy/'];
+  for (const route of representative) {
+    await page.goto(base + route);
+    await expect(page.locator('link[rel="canonical"]')).toHaveCount(1);
+    await expect(page.locator('meta[property="og:title"]')).toHaveCount(1);
+    await expect(page.locator('meta[property="og:url"]')).toHaveAttribute('content', new URL(route, canonicalBase).href);
+    await expect(page.locator('meta[property="og:image"]')).toHaveAttribute('content', canonicalBase + '/social/restaurant-tip-calculator-og.png');
+    await expect(page.locator('meta[property="og:image:width"]')).toHaveAttribute('content', '1200');
+    await expect(page.locator('meta[property="og:image:height"]')).toHaveAttribute('content', '630');
+    await expect(page.locator('meta[name="twitter:card"]')).toHaveAttribute('content', 'summary_large_image');
+  }
+  for (const asset of ['/favicon.svg', '/favicon.ico', '/apple-touch-icon.png', '/social/restaurant-tip-calculator-og.png']) {
+    const response = await request.get(base + asset);
+    expect(response.ok(), `Missing brand/social asset: ${asset}`).toBeTruthy();
+  }
+});
+
+test('generated sitemap and robots expose the intentional crawl surface', async ({ request }) => {
+  const sitemapResponse = await request.get(base + '/sitemap.xml');
+  expect(sitemapResponse.ok()).toBeTruthy();
+  const xml = await sitemapResponse.text();
+  const locs = [...xml.matchAll(/<loc>([^<]+)<\/loc>/g)].map((match) => match[1]);
+  expect(locs).toEqual(routes.map((route) => new URL(route, canonicalBase).href));
+  expect(new Set(locs).size).toBe(locs.length);
+  expect(xml).not.toContain('/404/');
+  expect(xml).not.toContain('<priority>');
+  expect(xml).not.toContain('<changefreq>');
+
+  const robotsResponse = await request.get(base + '/robots.txt');
+  expect(robotsResponse.ok()).toBeTruthy();
+  const robots = await robotsResponse.text();
+  expect(robots).toContain('User-agent: *');
+  expect(robots).toContain('Allow: /');
+  expect(robots).toContain('Sitemap: https://restauranttipcalculator.com/sitemap.xml');
+  expect(robots).not.toMatch(/User-agent:\s*OAI-SearchBot[\s\S]*?Disallow:\s*\//i);
+});
+
+test('custom 404 returns HTTP 404, stays noindex, links home, and has no ad shell', async ({ page }) => {
+  const response = await page.goto(base + '/this-page-does-not-exist/');
+  expect(response?.status()).toBe(404);
+  await expect(page.locator('h1')).toHaveText('That page could not be found');
+  await expect(page.locator('meta[name="robots"]')).toHaveAttribute('content', 'noindex,follow');
+  await expect(page.locator('a[href="/"]').first()).toBeVisible();
+  await expect(page.locator('[data-ad-slot]')).toHaveCount(0);
+});
+
+test('supporting pages remain readable with JavaScript disabled', async ({ browser }) => {
+  const context = await browser.newContext({ javaScriptEnabled: false, viewport: { width: 390, height: 900 } });
+  const page = await context.newPage();
+  for (const route of ['/about/', '/privacy/', '/methodology/']) {
+    const response = await page.goto(base + route);
+    expect(response?.ok()).toBeTruthy();
+    await expect(page.locator('h1')).toBeVisible();
+  }
+  await context.close();
+});
+
+test('development-only design reference is not exposed as a production route', async ({ request }) => {
+  const response = await request.get(base + '/design_inspo.html');
+  expect(response.status()).toBe(404);
 });

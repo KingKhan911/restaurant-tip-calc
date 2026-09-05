@@ -1,0 +1,71 @@
+---
+import { ADS_ENABLED } from '../lib/site.js';
+
+interface Props {
+  format: 'leaderboard' | 'native' | 'rail' | 'anchor';
+  position?: 'below' | 'inline';
+  id?: string;
+  enabled?: boolean;
+}
+
+const {
+  format,
+  position = 'inline',
+  id,
+  enabled = ADS_ENABLED,
+} = Astro.props;
+
+const inFlowClass = format === 'native' ? 'ad-native' : 'ad-leaderboard';
+const positionClass = position === 'below' ? 'ad-below' : 'ad-inline';
+const size = format === 'native' ? 'Native banner · 280px reserved' : '728 × 90 · 300 × 250';
+---
+
+{enabled && format === 'rail' && (
+  <aside class="rail" aria-label="Advertisement" data-ad-slot="rail">
+    <div class="rail-sticky">
+      <div class="ad ad-rail">
+        <p class="ad-label">Advertisement</p>
+        <div class="ad-slot" id="ad-rail" data-size="300 × 250"></div>
+      </div>
+    </div>
+  </aside>
+)}
+
+{enabled && format === 'anchor' && (
+  <>
+    <aside class="ad-anchor" id="ad-anchor" aria-label="Advertisement" data-ad-slot="anchor">
+      <div class="anchor-bar">
+        <span class="anchor-label">Advertisement</span>
+        <button type="button" class="anchor-close" id="anchorClose" aria-label="Close advertisement">&times;</button>
+      </div>
+      <div class="anchor-inner">
+        <div class="ad-slot" id="ad-anchor-slot" data-size="320 × 50"></div>
+      </div>
+    </aside>
+    <script is:inline>
+      (function initAnchor() {
+        var anchor = document.getElementById('ad-anchor');
+        var closeBtn = document.getElementById('anchorClose');
+        if (!anchor || !closeBtn) return;
+        var closed = false;
+        try { closed = sessionStorage.getItem('rtc:anchor') === 'closed'; } catch (e) {}
+        if (closed) {
+          anchor.classList.add('is-closed');
+          document.body.classList.add('anchor-closed');
+        }
+        closeBtn.addEventListener('click', function () {
+          anchor.classList.add('is-closed');
+          document.body.classList.add('anchor-closed');
+          try { sessionStorage.setItem('rtc:anchor', 'closed'); } catch (e) {}
+        });
+      })();
+    </script>
+  </>
+)}
+
+{enabled && (format === 'leaderboard' || format === 'native') && (
+  <aside class:list={['ad', inFlowClass, positionClass]} aria-label="Advertisement" data-ad-slot={format}>
+    <p class="ad-label">Advertisement</p>
+    <div class="ad-slot" id={id} data-size={size}></div>
+  </aside>
+)}

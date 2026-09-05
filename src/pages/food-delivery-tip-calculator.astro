@@ -2,6 +2,7 @@
 import Layout from '../layouts/Layout.astro';
 import Calculator from '../components/Calculator.astro';
 import Related from '../components/Related.astro';
+import AdSlot from '../components/AdSlot.astro';
 import { RESEARCH_REVIEW_DATE, SOURCES } from '../lib/editorial.js';
 
 const title = 'Food Delivery Tip Calculator: Percentage or Custom Dollar Tip';
@@ -72,12 +73,7 @@ const jsonLd = JSON.stringify({
 
   <Calculator mode="delivery" />
 
-  <aside class="ad ad-leaderboard ad-below" aria-label="Advertisement">
-    <p class="ad-label">Advertisement</p>
-    <div class="ad-slot" id="ad-below" data-size="728 × 90 · 300 × 250">
-      <!-- e.g. GAM slot: /XXXXXXX/rtc_delivery_below-calc -->
-    </div>
-  </aside>
+  <AdSlot format="leaderboard" position="below" id="ad-below" />
 
   <section class="section" id="how-it-works">
     <h2>How the delivery calculator handles your bill</h2>
@@ -178,12 +174,7 @@ const jsonLd = JSON.stringify({
     </div>
   </section>
 
-  <aside class="ad ad-leaderboard ad-inline" aria-label="Advertisement">
-    <p class="ad-label">Advertisement</p>
-    <div class="ad-slot" id="ad-content-1" data-size="728 × 90 · 300 × 250">
-      <!-- e.g. GAM slot: /XXXXXXX/rtc_delivery_in-content -->
-    </div>
-  </aside>
+  <AdSlot format="leaderboard" position="inline" id="ad-content-1" />
 
   <section class="section" id="faq">
     <h2>Delivery tipping questions, answered</h2>
@@ -246,12 +237,7 @@ const jsonLd = JSON.stringify({
     </p>
   </section>
 
-  <aside class="ad ad-native ad-inline" aria-label="Advertisement">
-    <p class="ad-label">Advertisement</p>
-    <div class="ad-slot" id="ad-native" data-size="Native banner · 280px reserved">
-      <!-- Paste the native banner tag from your ad network here -->
-    </div>
-  </aside>
+  <AdSlot format="native" position="inline" id="ad-native" />
 
   <Related exclude="/food-delivery-tip-calculator/" />
 </Layout>

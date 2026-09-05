@@ -1,16 +1,17 @@
-name: Calculator and Content QA
+name: Launch Readiness QA
 
 on:
   push:
     branches:
       - phase-1/calculator-correctness
       - phase-2/content-truth-seo
+      - phase-3/launch-readiness
   workflow_dispatch:
 
 jobs:
   verify:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 20
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -24,10 +25,10 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Unit and content tests
+      - name: Unit, content, and technical tests
         run: npm test
 
-      - name: Astro build
+      - name: Astro production build
         run: npm run build
 
       - name: Install browser QA runner
@@ -47,5 +48,25 @@ jobs:
           cat /tmp/rtc-preview.log
           exit 1
 
-      - name: Browser, responsive, accessibility, and console QA
+      - name: Browser, responsive, accessibility, metadata, and console QA
         run: npx playwright test test/browser-smoke.spec.mjs --reporter=line
+
+      - name: Build ad-enabled simulation
+        run: PUBLIC_ADS_ENABLED=true npm run build
+
+      - name: Start ad-enabled preview
+        run: |
+          npm run preview -- --host 127.0.0.1 --port 4322 > /tmp/rtc-ad-preview.log 2>&1 &
+          for i in {1..30}; do
+            if curl -fsS http://127.0.0.1:4322/ > /dev/null; then
+              exit 0
+            fi
+            sleep 1
+          done
+          cat /tmp/rtc-ad-preview.log
+          exit 1
+
+      - name: Ad-enabled layout simulation
+        env:
+          RTC_BASE_URL: http://127.0.0.1:4322
+        run: npx playwright test test/ad-enabled.spec.mjs --reporter=line

@@ -1,0 +1,67 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const title = 'About Restaurant Tip Calculator';
+const description =
+  'What Restaurant Tip Calculator does, how its calculator works in your browser, and how its tipping guidance is researched.';
+
+const nav = [
+  { href: '/', label: 'Calculator' },
+  { href: '/methodology/', label: 'Methodology' },
+];
+
+const jsonLd = JSON.stringify({
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  '@id': 'https://restauranttipcalculator.com/about/#breadcrumb',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Restaurant Tip Calculator', item: 'https://restauranttipcalculator.com/' },
+    { '@type': 'ListItem', position: 2, name: 'About', item: 'https://restauranttipcalculator.com/about/' },
+  ],
+});
+---
+
+<Layout title={title} description={description} path="/about/" jsonLd={jsonLd} nav={nav}>
+  <section class="hero">
+    <p class="guide-intro"><a href="/">Restaurant tip calculator</a> / About</p>
+    <h1>About Restaurant Tip Calculator</h1>
+    <p class="lede">
+      Restaurant Tip Calculator is a focused tool for working out a tip, payable total, and exact bill split without
+      turning a simple restaurant check into a spreadsheet.
+    </p>
+  </section>
+
+  <section class="section" id="purpose">
+    <h2>What this site is for</h2>
+    <div class="prose">
+      <p>
+        The calculator supports percentage tips and custom dollar tips, optional tax and fee inputs, delivery-fee
+        handling, exact cent-reconciled splitting, and optional whole-dollar round-up. The goal is to make the math
+        explicit rather than hide assumptions.
+      </p>
+      <p>
+        Calculator inputs are processed locally in your browser. The site does not require an account and does not
+        send bill amounts to a custom calculation server.
+      </p>
+    </div>
+  </section>
+
+  <section class="section" id="research">
+    <h2>How the guidance is handled</h2>
+    <div class="prose">
+      <p>
+        Tipping advice can mix together etiquette, survey responses, transaction data, wage rules, and restaurant
+        policy. This site keeps those categories separate and links to the underlying sources where factual claims
+        depend on them.
+      </p>
+      <p>
+        The <a href="/methodology/">methodology page</a> documents the calculator's rounding and splitting rules,
+        research source hierarchy, review approach, and the distinction between observed behavior and recommendations.
+      </p>
+      <p>
+        The site does not claim a restaurant-industry credential, expert review, or a universal tipping rule where the
+        evidence does not support one.
+      </p>
+    </div>
+  </section>
+</Layout>

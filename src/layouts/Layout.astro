@@ -1,5 +1,12 @@
 ---
 import '../styles/global.css';
+import AdSlot from '../components/AdSlot.astro';
+import {
+  ADS_ENABLED,
+  DEFAULT_SOCIAL_IMAGE_PATH,
+  SITE_NAME,
+  SITE_ORIGIN,
+} from '../lib/site.js';
 
 interface NavLink {
   href: string;
@@ -12,7 +19,8 @@ interface Props {
   path: string;
   jsonLd?: string;
   nav?: NavLink[];
-  footNav?: NavLink[];
+  noindex?: boolean;
+  ads?: boolean;
 }
 
 const pillarNav: NavLink[] = [
@@ -21,19 +29,47 @@ const pillarNav: NavLink[] = [
   { href: '#faq', label: 'FAQ' },
 ];
 
-const pillarFoot: { href: string; label: string; group: 'tools' | 'guides' }[] = [
-  { href: '/', label: 'Tip Calculator', group: 'tools' },
-  { href: '/food-delivery-tip-calculator/', label: 'Delivery Calculator', group: 'tools' },
-  { href: '/average-restaurant-tip/', label: 'Average Restaurant Tip', group: 'guides' },
-  { href: '/how-much-tip-waitress-waiter/', label: 'Waiter & Waitress Tips', group: 'guides' },
-  { href: '/buffet-tipping-guide/', label: 'Buffet Tipping', group: 'guides' },
-  { href: '/service-charge-on-restaurant-bill/', label: 'Service Charge', group: 'guides' },
-  { href: '/methodology/', label: 'Methodology', group: 'guides' },
+const footerGroups: { label: string; links: NavLink[] }[] = [
+  {
+    label: 'Tools',
+    links: [
+      { href: '/', label: 'Tip Calculator' },
+      { href: '/food-delivery-tip-calculator/', label: 'Delivery Calculator' },
+    ],
+  },
+  {
+    label: 'Guides',
+    links: [
+      { href: '/average-restaurant-tip/', label: 'Average Restaurant Tip' },
+      { href: '/how-much-tip-waitress-waiter/', label: 'Waiter & Waitress Tips' },
+      { href: '/buffet-tipping-guide/', label: 'Buffet Tipping' },
+      { href: '/service-charge-on-restaurant-bill/', label: 'Service Charge' },
+    ],
+  },
+  {
+    label: 'Site',
+    links: [
+      { href: '/about/', label: 'About' },
+      { href: '/methodology/', label: 'Methodology' },
+      { href: '/privacy/', label: 'Privacy' },
+    ],
+  },
 ];
 
-const { title, description, path, jsonLd, nav = pillarNav } = Astro.props;
-const canonical = new URL(path, Astro.site).href;
-const brand = 'Restaurant Tip Calculator';
+const {
+  title,
+  description,
+  path,
+  jsonLd,
+  nav = pillarNav,
+  noindex = false,
+  ads = true,
+} = Astro.props;
+
+const canonical = new URL(path, SITE_ORIGIN).href;
+const socialImage = new URL(DEFAULT_SOCIAL_IMAGE_PATH, SITE_ORIGIN).href;
+const adsEnabled = ADS_ENABLED && ads;
+const currentYear = new Date().getFullYear();
 ---
 
 <!doctype html>
@@ -43,17 +79,33 @@ const brand = 'Restaurant Tip Calculator';
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title}</title>
     <meta name="description" content={description} />
-    <meta name="robots" content="index,follow,max-image-preview:large" />
+    <meta name="robots" content={noindex ? 'noindex,follow' : 'index,follow,max-image-preview:large'} />
     <link rel="canonical" href={canonical} />
     <meta name="theme-color" content="#F6F1E7" />
+
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="shortcut icon" href="/favicon.ico" sizes="any" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+
     <meta property="og:type" content="website" />
-    <meta property="og:site_name" content={brand} />
+    <meta property="og:site_name" content={SITE_NAME} />
     <meta property="og:locale" content="en_US" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
-    <!-- Add a 1200x630 image and uncomment: <meta property="og:image" content="https://restauranttipcalculator.com/og.png" /> -->
-    <meta name="twitter:card" content="summary" />
+    <meta property="og:image" content={socialImage} />
+    <meta property="og:image:secure_url" content={socialImage} />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Restaurant Tip Calculator receipt card showing tip, total, and an exact bill split." />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={socialImage} />
+    <meta name="twitter:image:alt" content="Restaurant Tip Calculator receipt card showing tip, total, and an exact bill split." />
+
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -62,7 +114,7 @@ const brand = 'Restaurant Tip Calculator';
     />
     {jsonLd && <script type="application/ld+json" set:html={jsonLd} />}
   </head>
-  <body id="top">
+  <body id="top" class:list={{ 'ads-enabled': adsEnabled }}>
     <a class="skip" href="#main-content">Skip to content</a>
 
     <div class="shell">
@@ -75,10 +127,10 @@ const brand = 'Restaurant Tip Calculator';
               <circle cx="4.4" cy="18.6" r="1.9" fill="currentColor" />
               <circle cx="21.6" cy="18.6" r="1.9" fill="currentColor" />
             </svg>
-            Restaurant Tip Calculator
+            {SITE_NAME}
           </a>
           <nav class="site-nav" aria-label="Site">
-            {nav.map((l) => <a href={l.href}>{l.label}</a>)}
+            {nav.map((link) => <a href={link.href}>{link.label}</a>)}
           </nav>
         </header>
 
@@ -96,74 +148,30 @@ const brand = 'Restaurant Tip Calculator';
                   <circle cx="21.6" cy="18.6" r="1.9" fill="currentColor" />
                   <circle cx="4.4" cy="18.6" r="1.9" fill="currentColor" />
                 </svg>
-                Restaurant Tip Calculator
+                {SITE_NAME}
               </span>
               <p class="foot-note">
-                A fast, private tip calculator. Everything runs in your browser — your bill never leaves your device.
+                A fast tip calculator. Calculator values stay in your browser and are not sent to a custom server.
               </p>
             </div>
             <nav class="foot-nav" aria-label="Footer">
-              <span class="foot-group">Tools</span>
-              {pillarFoot.filter((l) => l.group === 'tools').map((l) => <a href={l.href}>{l.label}</a>)}
-              <span class="foot-group">Guides</span>
-              {pillarFoot.filter((l) => l.group === 'guides').map((l) => <a href={l.href}>{l.label}</a>)}
+              {footerGroups.map((group) => (
+                <div class="foot-column">
+                  <span class="foot-group">{group.label}</span>
+                  {group.links.map((link) => <a href={link.href}>{link.label}</a>)}
+                </div>
+              ))}
             </nav>
-            <p class="foot-copy">© <span id="year">2026</span> Restaurant Tip Calculator. Amounts in US dollars.</p>
+            <p class="foot-copy">© {currentYear} {SITE_NAME}. Amounts in US dollars.</p>
           </div>
         </footer>
       </div>
 
-      <!-- ============ AD: STICKY SIDEBAR RAIL (desktop ≥1240px only) ============ -->
-      <aside class="rail" aria-label="Advertisement">
-        <div class="rail-sticky">
-          <div class="ad ad-rail">
-            <p class="ad-label">Advertisement</p>
-            <div class="ad-slot" id="ad-rail" data-size="300 × 250">
-              <!-- e.g. GAM slot: /XXXXXXX/rtc_sidebar -->
-            </div>
-          </div>
-        </div>
-      </aside>
+      <AdSlot format="rail" enabled={adsEnabled} />
     </div>
 
-    <!-- ============ AD: MOBILE STICKY ANCHOR 320×50 (≤779px only) ============ -->
-    <aside class="ad-anchor" id="ad-anchor" aria-label="Advertisement">
-      <div class="anchor-bar">
-        <span class="anchor-label">Advertisement</span>
-        <button type="button" class="anchor-close" id="anchorClose" aria-label="Close advertisement">&times;</button>
-      </div>
-      <div class="anchor-inner">
-        <div class="ad-slot" id="ad-anchor-slot" data-size="320 × 50">
-          <!-- e.g. GAM slot: /XXXXXXX/rtc_anchor -->
-        </div>
-      </div>
-    </aside>
+    <AdSlot format="anchor" enabled={adsEnabled} />
 
-    <!-- Polite announcements for screen readers (debounced, not on every keystroke) -->
     <div class="sr-only" role="status" aria-live="polite" id="announce"></div>
-
-    <script>
-      document.getElementById('year').textContent = String(new Date().getFullYear());
-      (function initAnchor() {
-        var anchor = document.getElementById('ad-anchor');
-        var closeBtn = document.getElementById('anchorClose');
-        if (!anchor || !closeBtn) return;
-        var closed = false;
-        try {
-          closed = sessionStorage.getItem('rtc:anchor') === 'closed';
-        } catch (e) {}
-        if (closed) {
-          anchor.classList.add('is-closed');
-          document.body.classList.add('anchor-closed');
-        }
-        closeBtn.addEventListener('click', function () {
-          anchor.classList.add('is-closed');
-          document.body.classList.add('anchor-closed');
-          try {
-            sessionStorage.setItem('rtc:anchor', 'closed');
-          } catch (e) {}
-        });
-      })();
-    </script>
   </body>
 </html>

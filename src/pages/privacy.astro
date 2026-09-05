@@ -1,0 +1,80 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const title = 'Privacy';
+const description =
+  'How Restaurant Tip Calculator currently handles calculator inputs, browser storage, fonts, advertising, and analytics.';
+
+const nav = [
+  { href: '/', label: 'Calculator' },
+  { href: '/about/', label: 'About' },
+  { href: '/methodology/', label: 'Methodology' },
+];
+
+const jsonLd = JSON.stringify({
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  '@id': 'https://restauranttipcalculator.com/privacy/#breadcrumb',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Restaurant Tip Calculator', item: 'https://restauranttipcalculator.com/' },
+    { '@type': 'ListItem', position: 2, name: 'Privacy', item: 'https://restauranttipcalculator.com/privacy/' },
+  ],
+});
+---
+
+<Layout title={title} description={description} path="/privacy/" jsonLd={jsonLd} nav={nav}>
+  <section class="hero">
+    <p class="guide-intro"><a href="/">Restaurant tip calculator</a> / Privacy</p>
+    <h1>Privacy</h1>
+    <p class="lede">
+      This page describes the site's current Phase-3 behavior: a static calculator site with no live advertising or
+      analytics scripts installed.
+    </p>
+  </section>
+
+  <section class="section" id="calculator-data">
+    <h2>Calculator values stay in your browser</h2>
+    <div class="prose">
+      <p>
+        Bill amounts, tax, fees, people count, and calculated results are processed by JavaScript in your browser. The
+        calculator does not send those values to a custom server for calculation, and no account is required.
+      </p>
+      <p>
+        The calculator uses localStorage for a small set of preferences: the selected tip setting, the tax-in-tip-basis
+        option, and the whole-dollar round-up option. It does not intentionally store bill history or the amounts you
+        type into the bill, tax, delivery-fee, or other-fee fields.
+      </p>
+      <p>
+        If advertising is enabled in a future build, the current ad-ready shell can also remember a closed mobile ad
+        anchor for the browser session. Advertising is disabled in the current launch-ready configuration.
+      </p>
+    </div>
+  </section>
+
+  <section class="section" id="external-resources">
+    <h2>External resources and current tracking</h2>
+    <div class="prose">
+      <p>
+        The site currently loads Fraunces and Spline Sans Mono from Google Fonts to preserve the intended typography.
+        Loading those font resources creates requests to Google's font infrastructure and can expose ordinary request
+        information such as an IP address, browser information, and referrer data to that provider.
+      </p>
+      <p>
+        No live advertising vendor, analytics platform, tag manager, tracking pixel, or account system is installed in
+        this Phase-3 build. The site also does not call an external API to perform calculator math.
+      </p>
+    </div>
+  </section>
+
+  <section class="section" id="future-changes">
+    <h2>Before advertising or analytics are enabled</h2>
+    <div class="prose">
+      <p>
+        This privacy page must be reviewed and updated before enabling third-party advertising, analytics, or other
+        tracking technologies that materially change data handling. Any consent mechanism should be based on the
+        technologies actually deployed and the jurisdictions served, not added as a placeholder.
+      </p>
+      <p>This page is a plain-language description of current site behavior, not legal advice.</p>
+    </div>
+  </section>
+</Layout>

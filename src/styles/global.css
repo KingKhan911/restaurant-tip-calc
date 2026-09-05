@@ -189,14 +189,14 @@
       .ad-native .ad-slot{width:300px;height:280px}
       /* Reserve room for the sticky anchor (1px border + 24px bar + 50px creative + iOS home bar)
          so it never covers page content. Removed when the user closes the ad. */
-      body{padding-bottom:calc(75px + env(safe-area-inset-bottom))}
+      body.ads-enabled{padding-bottom:calc(75px + env(safe-area-inset-bottom))}
       body.anchor-closed{padding-bottom:0}
     }
 
-    /* Sticky ad rail: only when there is genuine room beside the 1040px column.
+    /* Sticky ad rail: only when there is genuine room beside the 1040px column.\n       The 1440px threshold avoids squeezing the calculator merely to make room for advertising.
        align-self:stretch makes the rail span the full page height — REQUIRED for
        position:sticky to keep the unit pinned while the user scrolls. */
-    @media (min-width:1240px){
+    @media (min-width:1440px){
       .shell{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:48px}
       .rail{display:block;align-self:stretch}
       .rail-sticky{position:sticky;top:20px}
@@ -273,7 +273,7 @@
 
     /* Related guides */
     .related{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px;max-width:760px}
-    .related-card{display:flex;flex-direction:column;gap:4px;padding:16px 18px;border:1px solid var(--line);border-radius:10px;text-decoration:none;background:var(--surface)}
+    .related-card{display:flex;flex-direction:column;gap:4px;padding:16px 18px;border:1px solid var(--line);border-radius:10px;text-decoration:none;background:var(--card)}
     .related-card:hover{border-color:var(--accent);box-shadow:0 2px 10px rgba(0,0,0,.06)}
     .related-title{font:600 1rem var(--font-display);color:var(--ink)}
     .related-card:hover .related-title{color:var(--accent-ink)}
@@ -284,9 +284,9 @@
     .foot-inner{display:flex;flex-wrap:wrap;gap:20px 40px;justify-content:space-between;padding-block:28px 46px}
     .foot-brand{display:inline-flex;align-items:center;gap:8px;font:600 1.05rem var(--font-display)}
     .foot-note{margin:6px 0 0;font-size:.85rem;color:var(--ink-soft);max-width:46ch}
-    .foot-nav{display:flex;gap:18px;flex-wrap:wrap;align-items:center}
-    .foot-nav .foot-group{font:700 .68rem var(--font-body);letter-spacing:.14em;text-transform:uppercase;color:var(--ink-soft);opacity:.75}
-    .foot-nav a{color:var(--ink-soft);text-decoration:none;font-size:.9rem;font-weight:500}
+    .foot-nav{display:flex;gap:22px;flex-wrap:wrap;align-items:flex-start}
+    .foot-column{display:grid;gap:2px;min-width:132px}\n    .foot-nav .foot-group{font:700 .68rem var(--font-body);letter-spacing:.14em;text-transform:uppercase;color:var(--ink-soft);opacity:.75}
+    .foot-nav a{display:flex;align-items:center;min-height:40px;color:var(--ink-soft);text-decoration:none;font-size:.9rem;font-weight:500}
     .foot-nav a:hover{color:var(--accent-ink);text-decoration:underline;text-underline-offset:4px}
     .foot-copy{flex-basis:100%;font-size:.8rem;color:var(--ink-soft)}
 
@@ -377,4 +377,17 @@
       .menu-val{white-space:normal;max-width:55%;text-align:right;line-height:1.35}
       .ad-native .ad-slot{width:100%;max-width:300px}
       .worked{display:block;width:100%;max-width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch}
+    }
+
+    /* ============ PHASE 3: SUPPORTING / TRUST PAGES ============ */
+    .error-hero{max-width:720px}
+    .error-code{margin:0 0 8px;font:700 .76rem var(--font-mono);letter-spacing:.18em;color:var(--accent-ink)}
+    .error-action{margin:24px 0 0}
+    .primary-link{display:inline-flex;min-height:44px;align-items:center;padding:0 16px;border:1.5px solid var(--accent);border-radius:999px;background:var(--accent-tint);font-weight:700;text-decoration:none;color:var(--accent-ink)}
+    .primary-link:hover{text-decoration:underline;text-underline-offset:3px}
+    @media (max-width:520px){
+      .foot-nav{width:100%;display:grid;grid-template-columns:1fr 1fr;gap:14px 24px}
+      .foot-column{min-width:0}
+      .foot-nav a{min-height:44px}
+      .primary-link{min-height:46px}
     }

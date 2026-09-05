@@ -1,0 +1,26 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Related from '../components/Related.astro';
+
+const title = 'Page Not Found | Restaurant Tip Calculator';
+const description = 'The requested page could not be found. Return to the tip calculator or choose a useful tipping guide.';
+
+const nav = [
+  { href: '/', label: 'Calculator' },
+  { href: '/average-restaurant-tip/', label: 'Tipping data' },
+];
+---
+
+<Layout title={title} description={description} path="/404/" nav={nav} noindex={true} ads={false}>
+  <section class="hero error-hero">
+    <p class="error-code" aria-hidden="true">404</p>
+    <h1>That page could not be found</h1>
+    <p class="lede">
+      The address may have changed or the page may no longer exist. The calculator and core tipping guides are still
+      available.
+    </p>
+    <p class="error-action"><a class="primary-link" href="/">Back to the tip calculator</a></p>
+  </section>
+
+  <Related />
+</Layout>

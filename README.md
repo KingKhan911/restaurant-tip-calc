@@ -1,46 +1,48 @@
-# Astro Starter Kit: Basics
+# Restaurant Tip Calculator
+
+Restaurant Tip Calculator is a small Astro site for calculating restaurant and delivery tips, adding optional tax and fees, splitting totals exactly to the cent, and explaining U.S. tipping guidance with sourced research.
+
+Production domain: `https://restauranttipcalculator.com`
+
+## Development
 
 ```sh
-npm create astro@latest -- --template basics
+npm ci
+npm run dev
+npm test
+npm run build
+npm run preview
 ```
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+Browser QA uses Playwright in GitHub Actions after the production build is created.
 
-## 🚀 Project Structure
+## Architecture
 
-Inside of your Astro project, you'll see the following folders and files:
+- Astro static HTML is the site shell and article layer.
+- Calculator UI: `src/components/Calculator.astro`
+- Pure money parsing and calculation logic: `src/lib/money.js` and `src/lib/tip.js`
+- Research/source constants: `src/lib/editorial.js`
+- Site/crawl/ad configuration: `src/lib/site.js`
+- Shared metadata, header, footer, and global ad shell: `src/layouts/Layout.astro`
+- Generated sitemap endpoint: `src/pages/sitemap.xml.ts`
+- Editorial/research methodology: `/methodology/`
 
-```text
-/
-├── public/
-│   └── favicon.svg
-├── src
-│   ├── assets
-│   │   └── astro.svg
-│   ├── components
-│   │   └── Welcome.astro
-│   ├── layouts
-│   │   └── Layout.astro
-│   └── pages
-│       └── index.astro
-└── package.json
+Important public routes are the calculator, five focused tipping guides, Methodology, About, and Privacy. The custom 404 page is intentionally excluded from the sitemap.
+
+## Advertising configuration
+
+Live ads are **disabled by default**. The shared `AdSlot` component and reserved-size CSS can be exercised in a development/test build with:
+
+```sh
+PUBLIC_ADS_ENABLED=true npm run build
 ```
 
-To learn more about the folder structure of an Astro project, refer to [our guide on project structure](https://docs.astro.build/en/basics/project-structure/).
+That switch only exposes the ad-ready layout. No ad vendor script, publisher ID, or zone ID is installed.
 
-## 🧞 Commands
+Before enabling a real ad or analytics vendor, update `/privacy/` and add any consent mechanism actually required for the vendor and jurisdictions served.
 
-All commands are run from the root of the project, from a terminal:
+## Research and privacy
 
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
+Phase-2 factual content and research rules are documented on `/methodology/`. Calculator values are computed in the browser. A small set of calculator preferences is stored in localStorage; bill history is not intentionally persisted.
 
-## 👀 Want to learn more?
-
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+The current build loads Fraunces and Spline Sans Mono from Google Fonts. This is disclosed on `/privacy/`; there are no live analytics or advertising scripts in Phase 3.
