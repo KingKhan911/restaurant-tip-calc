@@ -62,7 +62,7 @@ const brand = 'Restaurant Tip Calculator';
     {jsonLd && <script type="application/ld+json" set:html={jsonLd} />}
   </head>
   <body id="top">
-    <a class="skip" href="#calculator">Skip to calculator</a>
+    <a class="skip" href="#main-content">Skip to content</a>
 
     <div class="shell">
       <div class="wrap">
@@ -81,7 +81,7 @@ const brand = 'Restaurant Tip Calculator';
           </nav>
         </header>
 
-        <main>
+        <main id="main-content" tabindex="-1">
           <slot />
         </main>
 
