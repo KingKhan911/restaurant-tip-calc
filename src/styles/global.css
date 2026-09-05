@@ -367,8 +367,8 @@
     }
 
 
-    /* Phase 1 narrow-screen containment: preserve the design without page-level overflow. */
-    @media (max-width:340px){
+    /* Narrow-screen containment for longer research labels and guide navigation. */
+    @media (max-width:520px){
       .site-head{flex-direction:column;align-items:flex-start;gap:10px;padding-block:16px}
       .brand{font-size:1.16rem;min-width:0}
       .site-nav{display:flex;flex-wrap:wrap;gap:6px 14px}
