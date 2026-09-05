@@ -190,7 +190,7 @@
       /* Reserve room for the sticky anchor (1px border + 24px bar + 50px creative + iOS home bar)
          so it never covers page content. Removed when the user closes the ad. */
       body.ads-enabled{padding-bottom:calc(75px + env(safe-area-inset-bottom))}
-      body.anchor-closed{padding-bottom:0}
+      body.ads-enabled.anchor-closed{padding-bottom:0}
     }
 
     /* Sticky ad rail: only when there is genuine room beside the 1040px column.\n       The 1440px threshold avoids squeezing the calculator merely to make room for advertising.
