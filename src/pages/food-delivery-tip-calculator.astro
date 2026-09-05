@@ -2,15 +2,17 @@
 import Layout from '../layouts/Layout.astro';
 import Calculator from '../components/Calculator.astro';
 import Related from '../components/Related.astro';
+import { RESEARCH_REVIEW_DATE, SOURCES } from '../lib/editorial.js';
 
-const title = 'Food Delivery Tip Calculator: Tip Your Driver Right';
+const title = 'Food Delivery Tip Calculator: Percentage or Custom Dollar Tip';
 const description =
-  'Calculate a 15–20% delivery tip on your food subtotal, add the delivery fee, and see the order total instantly. Free, no sign-up.';
+  'Calculate a food delivery tip by percentage or custom dollar amount, add delivery fees, tax and other fees, and split the total accurately.';
 
 const nav = [
   { href: '#calculator', label: 'Calculator' },
   { href: '#delivery-guide', label: 'Guide' },
   { href: '#faq', label: 'FAQ' },
+  { href: '#sources', label: 'Sources' },
 ];
 
 const jsonLd = JSON.stringify({
@@ -45,88 +47,13 @@ const jsonLd = JSON.stringify({
       inLanguage: 'en',
       offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
       featureList: [
-        'Tip is calculated on the food subtotal, excluding delivery fees',
-        'Delivery fee added back into the order total',
-        'Minimum-tip nudge for small orders',
-        'No sign-up; all calculations run in the browser',
-      ],
-    },
-    {
-      '@type': 'HowTo',
-      '@id': 'https://restauranttipcalculator.com/food-delivery-tip-calculator/#howto',
-      url: 'https://restauranttipcalculator.com/food-delivery-tip-calculator/#how-it-works',
-      name: 'How to use the food delivery tip calculator',
-      step: [
-        {
-          '@type': 'HowToStep',
-          name: 'Enter the food subtotal',
-          text: 'Type the menu total before fees, tax, and tip.',
-        },
-        {
-          '@type': 'HowToStep',
-          name: 'Add the delivery fee',
-          text: 'It stays out of the tip math and gets added back to your total.',
-        },
-        {
-          '@type': 'HowToStep',
-          name: 'Choose a tip',
-          text: 'Pick 15, 18, 20, or 22 percent of the subtotal, or a custom amount.',
-        },
-      ],
-    },
-    {
-      '@type': 'FAQPage',
-      '@id': 'https://restauranttipcalculator.com/food-delivery-tip-calculator/#faq',
-      url: 'https://restauranttipcalculator.com/food-delivery-tip-calculator/#faq',
-      mainEntity: [
-        {
-          '@type': 'Question',
-          name: 'Do you tip on the delivery fee?',
-          acceptedAnswer: {
-            '@type': 'Answer',
-            text: 'No — tip on the food subtotal only. The delivery fee is a separate charge that rarely reaches the driver, so tipping a percentage of it just inflates your bill without helping them.',
-          },
-        },
-        {
-          '@type': 'Question',
-          name: 'What is a good minimum tip for a small order?',
-          acceptedAnswer: {
-            '@type': 'Answer',
-            text: 'Leave at least $3–5 even when 20% works out to less. A $10 order at 20% is only $2.00, which barely covers the driver\'s trip to your door.',
-          },
-        },
-        {
-          '@type': 'Question',
-          name: 'Does the app service fee go to the driver?',
-          acceptedAnswer: {
-            '@type': 'Answer',
-            text: 'Generally no. Service fees, small-order fees, and priority fees go to the platform. If you want the driver paid, it has to be on the tip line (or cash at the door).',
-          },
-        },
-        {
-          '@type': 'Question',
-          name: 'How much extra for bad weather or a long drive?',
-          acceptedAnswer: {
-            '@type': 'Answer',
-            text: 'Start at 20% and add $2–5 for rain, snow, or distances over a few miles. Drivers take fewer orders per hour in bad conditions, so each trip needs to pay more.',
-          },
-        },
-        {
-          '@type': 'Question',
-          name: 'Should you tip in the app or with cash?',
-          acceptedAnswer: {
-            '@type': 'Answer',
-            text: 'Either works — in-app tips are tracked and reliable, while cash guarantees the driver keeps every cent immediately. If service was great, a small cash top-up on top of the app tip never hurts.',
-          },
-        },
-        {
-          '@type': 'Question',
-          name: 'How do you split a group delivery order?',
-          acceptedAnswer: {
-            '@type': 'Answer',
-            text: 'Have everyone tip 15–20% on their own food, then split the delivery fee and tax evenly. Set the people count in the calculator to see each share.',
-          },
-        },
+        'Percentage presets, custom percentage, and custom dollar tip',
+        'Delivery fee, tax, and other fee inputs',
+        'Delivery and other fees excluded from the percentage tip basis',
+        'Optional choice to include entered tax in the percentage tip basis',
+        'Exact cent-reconciled bill splitting for up to 99 people',
+        'Optional whole-dollar round-up with the extra amount shown',
+        'No sign-up; calculations run in the browser',
       ],
     },
   ],
@@ -138,8 +65,8 @@ const jsonLd = JSON.stringify({
     <p class="guide-intro"><a href="/">Restaurant tip calculator</a> / Food delivery</p>
     <h1>Food Delivery Tip Calculator</h1>
     <p class="lede">
-      Enter your food subtotal and delivery fee, pick a tip, and see the driver's tip plus a total based on the
-      amounts you enter. Add tax or other fees under More options when they apply.
+      Enter the food subtotal and any delivery fee, choose a percentage or custom dollar tip, and see the total based
+      on the amounts you enter. Tax and other fees can be added under More options.
     </p>
   </section>
 
@@ -153,67 +80,58 @@ const jsonLd = JSON.stringify({
   </aside>
 
   <section class="section" id="how-it-works">
-    <h2>How it works</h2>
+    <h2>How the delivery calculator handles your bill</h2>
     <ol class="steps">
       <li>
         <span class="step-n" aria-hidden="true">1.</span><p>
-          <strong>Enter the food subtotal</strong> — the menu total before fees, tax, and tip.
+          <strong>Enter the food subtotal.</strong> This is the default basis for a percentage tip.
         </p>
       </li>
       <li>
         <span class="step-n" aria-hidden="true">2.</span><p>
-          <strong>Add the delivery fee</strong> — it's kept out of the tip math and added back to your total.
+          <strong>Add the delivery fee, tax, or other fees you actually owe.</strong> They are included in the payable
+          total. Delivery and other fees stay outside the percentage tip basis.
         </p>
       </li>
       <li>
         <span class="step-n" aria-hidden="true">3.</span><p>
-          <strong>Choose a tip</strong> — 15, 18, 20, or 22 percent of the subtotal, or a custom amount.
+          <strong>Choose the tip you want.</strong> Use a preset, enter a custom percentage, or enter an exact dollar
+          amount. If you want the entered tax included in a percentage tip basis, turn that option on.
         </p>
       </li>
     </ol>
   </section>
 
   <section class="section" id="delivery-guide">
-    <h2>How much should you tip for delivery?</h2>
+    <h2>How much should you tip for food delivery?</h2>
     <div class="guide-grid">
       <div>
         <p class="guide-intro">
-          Tip 15–20% of the food subtotal — never on the delivery fee or tax. The rules that actually matter:
+          Delivery-tip percentages are <strong>etiquette recommendations</strong>, not universal platform rules.
+          Emily Post currently recommends 10–15% of the bill for delivery and gives a $2–5 pizza-delivery guideline
+          depending on the size and difficulty of the delivery.
         </p>
         <div class="menu">
           <div class="menu-row">
-            <span class="menu-name">Standard delivery</span><span class="dots" aria-hidden="true"></span><span
-              class="menu-val">15–20% of subtotal</span
-            >
+            <span class="menu-name">Emily Post delivery guidance</span><span class="dots" aria-hidden="true"></span><span class="menu-val">10–15%</span>
           </div>
           <div class="menu-row">
-            <span class="menu-name">Small orders</span><span class="dots" aria-hidden="true"></span><span
-              class="menu-val">$3–5 minimum</span
-            >
+            <span class="menu-name">Pizza-delivery dollar guidance</span><span class="dots" aria-hidden="true"></span><span class="menu-val">$2–5, depending on size/difficulty</span>
           </div>
           <div class="menu-row">
-            <span class="menu-name">Rain, snow, or long distance</span><span class="dots" aria-hidden="true"></span><span
-              class="menu-val">20%+, add $2–5</span
-            >
-          </div>
-          <div class="menu-row">
-            <span class="menu-name">App service fees</span><span class="dots" aria-hidden="true"></span><span
-              class="menu-val">not a tip — tip anyway</span
-            >
+            <span class="menu-name">Calculator choices</span><span class="dots" aria-hidden="true"></span><span class="menu-val">preset, custom %, or custom $</span>
           </div>
         </div>
         <p class="menu-src">
-          Delivery fees and service fees mostly go to the app or restaurant, not your driver. The tip line is what
-          pays them for the trip — and it's a different animal from the
-          <a href="/service-charge-on-restaurant-bill/">service charge on a sit-down restaurant bill</a>, which is
-          usually an automatic gratuity.
+          Source: <a href={SOURCES.emilyPost}>Emily Post — General Tipping Guide</a>. The calculator also lets you
+          choose any other amount that fits your situation.
         </p>
       </div>
       <div>
         <table class="worked">
-          <caption>A $32.00 order with a $2.99 delivery fee:</caption>
+          <caption>A $32 food subtotal with a $2.99 delivery fee, before tax</caption>
           <thead>
-            <tr><th scope="col">Tip</th><th scope="col">Driver gets</th><th scope="col">You pay</th></tr>
+            <tr><th scope="col">Tip rate</th><th scope="col">Tip amount</th><th scope="col">Entered total</th></tr>
           </thead>
           <tbody>
             <tr><td>15%</td><td>$4.80</td><td>$39.79</td></tr>
@@ -223,9 +141,40 @@ const jsonLd = JSON.stringify({
           </tbody>
         </table>
         <p class="worked-note">
-          Totals include the $2.99 delivery fee, before sales tax. <a href="#calculator">Run your own order</a> above.
+          The table demonstrates calculator math; it does not claim that every rate shown is an etiquette
+          recommendation. Add tax and other fees if they apply to your order.
         </p>
       </div>
+    </div>
+
+    <div class="prose">
+      <h3>Is a delivery fee the same as a tip?</h3>
+      <p>
+        Do not assume so. A delivery fee, service fee, small-order fee, or priority fee is a separate charge from a
+        voluntary tip, but compensation policies vary by restaurant, platform, worker arrangement, and location.
+        Check the restaurant or app's disclosure if you need to know how a specific fee is used.
+      </p>
+
+      <h3>What about rain, distance, stairs, or a difficult order?</h3>
+      <p>
+        It is reasonable to choose a higher amount when a delivery requires more work or difficulty, but there is no
+        universal mileage or bad-weather surcharge that this site can state as fact. Emily Post's pizza-delivery
+        guidance explicitly varies with order size and delivery difficulty.
+      </p>
+
+      <h3>Cash or in-app?</h3>
+      <p>
+        Use a payment method the restaurant or platform supports and that works for you. Policies differ, so this site
+        does not claim that cash guarantees a particular payout outcome or that every in-app fee is distributed the
+        same way.
+      </p>
+
+      <h3>What does survey data tell us?</h3>
+      <p>
+        Pew Research Center's 2023 survey found that 76% of U.S. adults who have food delivered said they always or
+        often tip in that situation. That measures <strong>how often respondents say they tip</strong>; it does not
+        establish what percentage they leave on an order.
+      </p>
     </div>
   </section>
 
@@ -240,49 +189,61 @@ const jsonLd = JSON.stringify({
     <h2>Delivery tipping questions, answered</h2>
     <div class="faq">
       <details>
-        <summary>Do you tip on the delivery fee?</summary>
+        <summary>Should I calculate a percentage tip on the delivery fee?</summary>
         <p>
-          No — tip on the food subtotal only. The delivery fee is a separate charge that rarely reaches the driver, so
-          tipping a percentage of it just inflates your bill without helping them.
+          This calculator keeps the delivery fee outside the percentage tip basis and adds it to the final total.
+          That is a calculator choice, not a claim about every platform's compensation policy. You can always enter a
+          custom dollar tip if you prefer.
         </p>
       </details>
       <details>
-        <summary>What is a good minimum tip for a small order?</summary>
+        <summary>What is a commonly recommended delivery tip?</summary>
         <p>
-          Leave at least $3–5 even when 20% works out to less. A $10 order at 20% is only $2.00, which barely covers
-          the driver's trip to your door. For comparison, sit-down diners never drop below the
-          <a href="/average-restaurant-tip/">standard tip</a> floor of 15% — a $10 check would still get $1.50.
+          Emily Post currently recommends 10–15% of the bill for delivery and $2–5 for pizza delivery depending on
+          order size and difficulty. Other guides and personal choices can differ.
         </p>
       </details>
       <details>
-        <summary>Does the app service fee go to the driver?</summary>
+        <summary>Does a service fee go to the driver?</summary>
         <p>
-          Generally no. Service fees, small-order fees, and priority fees go to the platform. If you want the driver
-          paid, it has to be on the tip line (or cash at the door).
+          You cannot tell from the fee name alone. Platform and restaurant policies vary. Check the specific
+          disclosure instead of assuming the fee either goes entirely to the driver or entirely to the platform.
         </p>
       </details>
       <details>
-        <summary>How much extra for bad weather or a long drive?</summary>
+        <summary>Should I tip more for a difficult delivery?</summary>
         <p>
-          Start at 20% and add $2–5 for rain, snow, or distances over a few miles. Drivers take fewer orders per hour
-          in bad conditions, so each trip needs to pay more.
+          You may. Order size and delivery difficulty are reasonable factors to consider, and Emily Post explicitly
+          varies its pizza-delivery dollar guidance by those factors. There is no universal dollar surcharge for rain
+          or distance.
         </p>
       </details>
       <details>
-        <summary>Should you tip in the app or with cash?</summary>
+        <summary>How do I split a group delivery order?</summary>
         <p>
-          Either works — in-app tips are tracked and reliable, while cash guarantees the driver keeps every cent
-          immediately. If service was great, a small cash top-up on top of the app tip never hurts.
-        </p>
-      </details>
-      <details>
-        <summary>How do you split a group delivery order?</summary>
-        <p>
-          Have everyone tip 15–20% on their own food, then split the delivery fee and tax evenly. Set the people count
-          in the <a href="#calculator">calculator above</a> to see each share.
+          Enter every amount that the group owes, choose the tip, and set the number of people. The calculator
+          reconciles odd cents exactly; the optional whole-dollar round-up shows any extra money collected separately.
         </p>
       </details>
     </div>
+  </section>
+
+  <section class="section" id="sources">
+    <h2>Sources</h2>
+    <ul class="prose">
+      <li>
+        <a href={SOURCES.emilyPost}>Emily Post — General Tipping Guide</a>
+        — delivery etiquette recommendations.
+      </li>
+      <li>
+        <a href={SOURCES.pewTipping}>Pew Research Center — Services Americans do and don't tip for, and how much</a>
+        (November 9, 2023) — stated tipping frequency for food delivery and other services.
+      </li>
+    </ul>
+    <p class="menu-src">
+      Research last reviewed: {RESEARCH_REVIEW_DATE}. Platform compensation policies can change independently of this
+      guide.
+    </p>
   </section>
 
   <aside class="ad ad-native ad-inline" aria-label="Advertisement">
