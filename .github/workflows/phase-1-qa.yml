@@ -68,14 +68,14 @@ jobs:
 
       - name: Stop default preview
         if: always()
-        run: kill "$(cat /tmp/rtc-preview.pid)" 2>/dev/null || true
+        run: npx astro preview stop || true
 
       - name: Build ad-enabled simulation
         run: PUBLIC_ADS_ENABLED=true npm run build
 
       - name: Start ad-enabled preview
         run: |
-          npm run preview -- --host 127.0.0.1 --port 4322 > /tmp/rtc-ad-preview.log 2>&1 &
+          npm run preview -- --host 127.0.0.1 --port 4322 --force > /tmp/rtc-ad-preview.log 2>&1 &
           echo $! > /tmp/rtc-ad-preview.pid
           for i in {1..30}; do
             if curl -fsS http://127.0.0.1:4322/ > /dev/null; then
@@ -93,4 +93,4 @@ jobs:
 
       - name: Stop ad-enabled preview
         if: always()
-        run: kill "$(cat /tmp/rtc-ad-preview.pid)" 2>/dev/null || true
+        run: npx astro preview stop || true
