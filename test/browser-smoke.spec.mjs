@@ -1,6 +1,7 @@
 import { test, expect } from '@playwright/test';
 
 const base = 'http://127.0.0.1:4321';
+const canonicalBase = 'https://restauranttipcalculator.com';
 const routes = [
   '/',
   '/average-restaurant-tip/',
@@ -8,6 +9,7 @@ const routes = [
   '/buffet-tipping-guide/',
   '/food-delivery-tip-calculator/',
   '/service-charge-on-restaurant-bill/',
+  '/methodology/',
 ];
 const widths = [320, 390, 768, 1024, 1440];
 
@@ -293,4 +295,77 @@ test('important rendered routes contain no duplicate ids', async ({ page }) => {
     });
     expect(duplicates).toEqual([]);
   }
+});
+
+
+test('retained JSON-LD parses, matches supported types, and canonicals are exact', async ({ page }) => {
+  for (const route of routes) {
+    await page.goto(base + route);
+    const canonical = await page.locator('link[rel="canonical"]').getAttribute('href');
+    expect(canonical).toBe(new URL(route, canonicalBase).href);
+    await expect(page.locator('h1')).toHaveCount(1);
+
+    const blocks = await page.locator('script[type="application/ld+json"]').allTextContents();
+    expect(blocks.length).toBeGreaterThan(0);
+    for (const block of blocks) {
+      const parsed = JSON.parse(block);
+      const types = [];
+      const visit = (value) => {
+        if (!value || typeof value !== 'object') return;
+        if (Array.isArray(value)) {
+          value.forEach(visit);
+          return;
+        }
+        if (typeof value['@type'] === 'string') types.push(value['@type']);
+        Object.values(value).forEach(visit);
+      };
+      visit(parsed);
+      expect(types).not.toContain('FAQPage');
+      expect(types).not.toContain('HowTo');
+    }
+  }
+});
+
+test('all same-page navigation fragments resolve to real ids', async ({ page }) => {
+  for (const route of routes) {
+    await page.goto(base + route);
+    const fragments = await page.locator('a[href^="#"]').evaluateAll((anchors) =>
+      anchors.map((anchor) => anchor.getAttribute('href')).filter(Boolean),
+    );
+    for (const fragment of fragments) {
+      const target = page.locator(fragment);
+      await expect(target, `Missing fragment ${fragment} on ${route}`).toHaveCount(1);
+    }
+  }
+});
+
+test('all rendered internal page links resolve', async ({ page, request }) => {
+  const paths = new Set();
+  for (const route of routes) {
+    await page.goto(base + route);
+    const hrefs = await page.locator('a[href]').evaluateAll((anchors) =>
+      anchors.map((anchor) => anchor.getAttribute('href')).filter(Boolean),
+    );
+    for (const href of hrefs) {
+      const url = new URL(href, canonicalBase + route);
+      if (url.origin === canonicalBase) paths.add(url.pathname);
+    }
+  }
+
+  for (const path of paths) {
+    const response = await request.get(base + path);
+    expect(response.ok(), `Internal link failed: ${path} -> ${response.status()}`).toBeTruthy();
+  }
+});
+
+test('research-heavy pages expose visible source links and review context', async ({ page }) => {
+  await page.goto(base + '/average-restaurant-tip/');
+  await expect(page.locator('#sources')).toBeVisible();
+  expect(await page.locator('#sources a[href^="https://"]').count()).toBeGreaterThanOrEqual(5);
+  await expect(page.locator('body')).toContainText('Research last reviewed: September 5, 2026');
+
+  await page.goto(base + '/methodology/');
+  await expect(page.locator('#research-method')).toBeVisible();
+  await expect(page.locator('#sources')).toBeVisible();
+  expect(await page.locator('#sources a[href^="https://"]').count()).toBeGreaterThanOrEqual(6);
 });
