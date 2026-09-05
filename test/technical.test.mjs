@@ -99,8 +99,21 @@ test('source avoids unsafe user-input HTML sinks and unprotected target-blank li
     'src/pages/privacy.astro',
   ];
   const combined = (await Promise.all(paths.map(read))).join('\n');
-  assert.equal(/\.innerHTML\s*=/.test(combined), false, 'Direct innerHTML assignment found');
+  const htmlAssignments = combined.match(/\.innerHTML\s*=/g) || [];
+  assert.equal(htmlAssignments.length, 1, 'Unexpected direct innerHTML assignment found');
+  assert.ok(
+    combined.includes('diagWrap.innerHTML = svg;'),
+    'The only allowed innerHTML sink must be the internally constructed table SVG',
+  );
   for (const match of combined.matchAll(/<a\b[^>]*target=["']_blank["'][^>]*>/gi)) {
     assert.match(match[0], /rel=["'][^"']*(?:noopener|noreferrer)[^"']*["']/i, `Unprotected target=_blank link: ${match[0]}`);
   }
+});
+
+test('ad-disabled CSS does not reserve desktop rail space and malformed escape text is absent', async () => {
+  const css = await read('src/styles/global.css');
+  assert.ok(css.includes('body.ads-enabled .shell{display:grid'));
+  assert.ok(css.includes('body.ads-enabled .rail{display:block'));
+  assert.equal(css.includes('}\\n    .foot-nav'), false);
+  assert.equal(css.includes('column.\\n'), false);
 });
