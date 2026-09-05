@@ -1,91 +1,35 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import Related from '../components/Related.astro';
+import { RESEARCH_REVIEW_DATE, SOURCES } from '../lib/editorial.js';
 
-const title = 'Service Charge on Restaurant Bill: What It Is & Whether to Still Tip';
+const title = 'Service Charge on a Restaurant Bill: Should You Tip Again?';
 const description =
-  'A service charge on your restaurant bill is usually an automatic 18–20% gratuity — often legally not a tip. Learn what it covers, when you must pay it, and whether to add a tip on top.';
+  'Learn how to read automatic gratuities, service fees, hospitality fees and unclear restaurant charges without guessing from the percentage alone.';
 
 const nav = [
   { href: '#guide', label: 'Guide' },
+  { href: '#tax-treatment', label: 'IRS distinction' },
   { href: '#faq', label: 'FAQ' },
+  { href: '#sources', label: 'Sources' },
 ];
 
 const jsonLd = JSON.stringify({
   '@context': 'https://schema.org',
-  '@graph': [
+  '@type': 'BreadcrumbList',
+  '@id': 'https://restauranttipcalculator.com/service-charge-on-restaurant-bill/#breadcrumb',
+  itemListElement: [
     {
-      '@type': 'BreadcrumbList',
-      '@id': 'https://restauranttipcalculator.com/service-charge-on-restaurant-bill/#breadcrumb',
-      itemListElement: [
-        {
-          '@type': 'ListItem',
-          position: 1,
-          name: 'Restaurant Tip Calculator',
-          item: 'https://restauranttipcalculator.com/',
-        },
-        {
-          '@type': 'ListItem',
-          position: 2,
-          name: 'Service Charge on Restaurant Bill',
-          item: 'https://restauranttipcalculator.com/service-charge-on-restaurant-bill/',
-        },
-      ],
+      '@type': 'ListItem',
+      position: 1,
+      name: 'Restaurant Tip Calculator',
+      item: 'https://restauranttipcalculator.com/',
     },
     {
-      '@type': 'FAQPage',
-      '@id': 'https://restauranttipcalculator.com/service-charge-on-restaurant-bill/#faq',
-      url: 'https://restauranttipcalculator.com/service-charge-on-restaurant-bill/#faq',
-      mainEntity: [
-        {
-          '@type': 'Question',
-          name: 'What is a service charge on a restaurant bill?',
-          acceptedAnswer: {
-            '@type': 'Answer',
-            text: 'A service charge is a compulsory fee restaurants add to the bill, typically 5–20% of the check. It is most often an automatic gratuity for large groups of six or more, or a restaurant-wide fee added to cover staffing costs or rising overhead. The money is the restaurant\'s — legally it is not a tip that must go to the server.',
-          },
-        },
-        {
-          '@type': 'Question',
-          name: 'Do you still tip if a service charge is added?',
-          acceptedAnswer: {
-            '@type': 'Answer',
-            text: 'No — if the service charge is a true gratuity, like the automatic 18–20% added for large parties, it replaces the tip. If it is a smaller restaurant fee (under 10%), leave a normal tip to the difference. When in doubt, ask the server directly: they know exactly how the money is distributed.',
-          },
-        },
-        {
-          '@type': 'Question',
-          name: 'Is a service charge the same as a tip or gratuity?',
-          acceptedAnswer: {
-            '@type': 'Answer',
-            text: 'Not legally. The U.S. Department of Labor treats automatic gratuities as service charges, not tips, because the restaurant controls where the money goes. A true tip is a voluntary payment given to the employee. In practice, many restaurants pass automatic gratuities fully to staff — but you cannot assume it.',
-          },
-        },
-        {
-          '@type': 'Question',
-          name: 'Why is there a service charge on my bill?',
-          acceptedAnswer: {
-            '@type': 'Answer',
-            text: 'The most common reasons: a party of six or more triggers an automatic gratuity of 18–20%; the restaurant added a small fixed fee to raise pay or cover costs (common in cities like New York and Seattle); or your city requires a surcharge for employee health benefits. Ask the server which one applies to your visit.',
-          },
-        },
-        {
-          '@type': 'Question',
-          name: 'Can you refuse to pay a service charge?',
-          acceptedAnswer: {
-            '@type': 'Answer',
-            text: 'Usually not — it is a contractual price term disclosed on the menu or by staff, so refusing it is like refusing to pay for an item you ordered. If it was not disclosed before you ordered, you can raise it with the manager. Automatic gratuities for large groups are standard industry practice.',
-          },
-        },
-        {
-          '@type': 'Question',
-          name: 'How much is an automatic gratuity for large groups?',
-          acceptedAnswer: {
-            '@type': 'Answer',
-            text: '18–20% is the standard automatic gratuity for parties of six or more, with some upscale restaurants charging 20–22%. It should be disclosed on the menu or stated when you book. If the printed tip line still appears on the check, you can draw a line through it — the gratuity is the tip.',
-          },
-        },
-      ],
+      '@type': 'ListItem',
+      position: 2,
+      name: 'Service Charge on Restaurant Bill',
+      item: 'https://restauranttipcalculator.com/service-charge-on-restaurant-bill/',
     },
   ],
 });
@@ -94,112 +38,156 @@ const jsonLd = JSON.stringify({
 <Layout title={title} description={description} path="/service-charge-on-restaurant-bill/" jsonLd={jsonLd} nav={nav}>
   <section class="hero">
     <p class="guide-intro"><a href="/">Restaurant tip calculator</a> / Service charges explained</p>
-    <h1>Service Charge on Your Restaurant Bill: What It Is &amp; Whether to Still Tip</h1>
+    <h1>Service Charge on a Restaurant Bill: Should You Tip Again?</h1>
     <p class="lede">
-      A "service charge" line on a restaurant bill is almost always an <strong>automatic 18–20% gratuity</strong> for
-      large groups — and legally it's <strong>not a tip</strong>. Here's how to read it and what to do.
+      <strong>Read the label and the restaurant's disclosure before adding another full tip.</strong> If the check
+      clearly says an automatic gratuity has already been added, many diners treat that as the gratuity for the meal
+      and add more only if they want to. A service, hospitality, wellness, or administrative fee does not tell you by
+      itself whether it replaces a gratuity or how the restaurant uses the money.
+    </p>
+    <p class="menu-src">
+      Research last reviewed: {RESEARCH_REVIEW_DATE}. <a href="/methodology/">See our methodology.</a>
     </p>
   </section>
 
-  <!-- ============ GUIDE ============ -->
   <section class="section" id="guide">
-    <h2>Reading a service charge on your bill</h2>
+    <h2>How to read a charge before deciding whether to tip again</h2>
+    <p class="guide-intro">
+      The percentage is not a reliable shortcut. A 5%, 18%, or 20% charge can mean different things at different
+      restaurants. Use the wording and disclosure instead.
+    </p>
+    <table class="worked">
+      <caption>Restaurant charge decision framework</caption>
+      <thead>
+        <tr>
+          <th scope="col">What the check says</th>
+          <th scope="col">What you can safely infer</th>
+          <th scope="col">Practical next step</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Automatic gratuity / mandatory gratuity</td>
+          <td>A mandatory gratuity amount has already been added.</td>
+          <td>Do not add a second full gratuity automatically. Any extra amount is voluntary.</td>
+        </tr>
+        <tr>
+          <td>Service / hospitality / wellness / administrative fee</td>
+          <td>The fee is mandatory if the restaurant has made it part of the bill, but the label alone does not show who receives it or whether extra tipping is expected.</td>
+          <td>Read the menu or check disclosure. Ask the restaurant how the fee works if the disclosure is unclear.</td>
+        </tr>
+        <tr>
+          <td>Unclear charge</td>
+          <td>The percentage alone does not identify it as a gratuity.</td>
+          <td>Ask before adding another full tip so you do not double-pay by mistake.</td>
+        </tr>
+      </tbody>
+    </table>
+
     <div class="prose">
-      <h3>What it usually is</h3>
+      <h3>Do not use a percentage rule</h3>
       <p>
-        Most "service charge" or "auto-gratuity" lines are <strong>an automatic tip</strong>: 18–20% added for parties
-        of six or more, disclosed on the menu or at booking. It covers the table's gratuity, so you don't add another
-        tip on the tip line.
+        A small fee is not automatically "just overhead," and a charge near 18–20% is not automatically the server's
+        gratuity. Restaurant policies vary, so this site no longer uses rules such as "under 10% means tip normally"
+        or "18–20% means you have already tipped."
       </p>
-      <h3>What it sometimes is</h3>
+
+      <h3>What if the check has both a charge and a tip line?</h3>
       <p>
-        Some restaurants add a smaller flat fee or percentage to every check to cover staffing, rent, or health
-        benefits — nothing to do with your server's pay. If the charge is under ~10% and there's no gratuity language,
-        it's likely a restaurant fee, and your server still expects a normal tip.
+        A blank tip line does not, by itself, explain an existing charge. Check the restaurant's wording first. If an
+        automatic gratuity is clearly disclosed, an additional tip can still be left voluntarily. If the existing
+        line is only described as a service or hospitality fee, ask how the restaurant treats it before deciding what
+        to add.
       </p>
-      <h3>The legal catch</h3>
+
+      <h3>Can you refuse a restaurant service charge?</h3>
       <p>
-        The <a href="https://www.dol.gov/agencies/whd/flsa">U.S. Department of Labor</a> classifies automatic
-        gratuities as <strong>service charges, not tips</strong>, because the restaurant decides where the money goes.
-        Most restaurants pass them to staff in full, but it's not guaranteed by law the way a voluntary tip is.
+        There is no useful nationwide yes-or-no answer here. Disclosure and consumer rules can vary by jurisdiction
+        and circumstance. If a charge was unexpected, review the menu or booking disclosure and raise it with restaurant
+        management. This page provides general information, not legal advice.
       </p>
-      <h3>Whether to tip on top</h3>
+    </div>
+  </section>
+
+  <section class="section" id="tax-treatment">
+    <h2>What the IRS distinction actually means</h2>
+    <div class="prose">
       <p>
-        A true gratuity charge → <strong>don't double-tip</strong>. A restaurant fee under 10% → leave a normal
-        15–20% tip, and the fee sits on top. An unclear charge → <strong>ask your server</strong>. They know exactly
-        how it's distributed, and asking is never awkward. Need a sense of what's normal? Start with the
-        <a href="/average-restaurant-tip/">average restaurant tip</a>, then run any check through the
-        <a href="/">restaurant tip calculator</a>.
+        For <strong>federal tax purposes</strong>, the IRS distinguishes voluntary tips from mandatory service charges.
+        A payment is a tip when the customer voluntarily decides to pay it and determines the amount. Mandatory
+        charges, including automatic gratuities, are service charges rather than tips for this classification.
+      </p>
+      <p>
+        The IRS also says a service charge that an employer distributes to an employee is generally treated as wages.
+        That tax rule does <strong>not</strong> tell a diner that every restaurant distributes a charge the same way,
+        nor does it tell you whether that restaurant expects an additional gratuity. Those are separate questions.
+      </p>
+      <p>
+        Source: <a href={SOURCES.irsTips}>IRS — Tip recordkeeping and reporting</a>.
       </p>
     </div>
 
     <table class="worked">
-      <caption>Service charge scenarios on a $100 dinner:</caption>
+      <caption>Simple arithmetic examples on a $100 meal, before tax</caption>
       <thead>
-        <tr><th scope="col">Charge on bill</th><th scope="col">What it is</th><th scope="col">You should leave</th><th scope="col">You pay</th></tr>
+        <tr><th scope="col">Bill detail</th><th scope="col">Amount due before any extra voluntary tip</th><th scope="col">What the example does not assume</th></tr>
       </thead>
       <tbody>
-        <tr><td>$20.00 "auto-gratuity"</td><td>Large-group tip</td><td>Nothing extra</td><td>$120.00</td></tr>
-        <tr><td>$5.00 "service fee"</td><td>Restaurant fee</td><td>$20.00 tip (20%)</td><td>$125.00</td></tr>
-        <tr><td>No charge</td><td>—</td><td>$20.00 tip (20%)</td><td>$120.00</td></tr>
+        <tr><td>$100 meal + $20 automatic gratuity</td><td>$120</td><td>Whether you choose to add anything extra</td></tr>
+        <tr><td>$100 meal + $5 service fee</td><td>$105</td><td>Whether the fee replaces a gratuity or who receives it</td></tr>
       </tbody>
     </table>
+    <p class="worked-note">
+      Once you know which amounts belong on your bill, the <a href="/">restaurant tip calculator</a> can include tax
+      and other fees without treating those fees as part of the percentage tip basis.
+    </p>
   </section>
 
-  <!-- ============ FAQ ============ -->
   <section class="section" id="faq">
     <h2>Service charge questions, answered</h2>
     <div class="faq">
       <details>
-        <summary>What is a service charge on a restaurant bill?</summary>
+        <summary>Should I tip if an automatic gratuity is already included?</summary>
         <p>
-          A service charge is a compulsory fee restaurants add to the bill, typically 5–20% of the check. It is most
-          often an automatic gratuity for large groups of six or more, or a restaurant-wide fee added to cover staffing
-          costs or rising overhead. The money is the restaurant's — legally it is not a tip that must go to the
-          server.
+          If the bill clearly identifies a mandatory automatic gratuity, you do not need to add a second full
+          gratuity automatically. You can still add an extra voluntary tip if you want to.
         </p>
       </details>
       <details>
-        <summary>Do you still tip if a service charge is added?</summary>
+        <summary>Does a service fee go to the server?</summary>
         <p>
-          No — if the service charge is a true gratuity, like the automatic 18–20% added for large parties, it replaces
-          the tip. If it is a smaller restaurant fee (under 10%), leave a normal tip to the difference. When in doubt,
-          ask the server directly: they know exactly how the money is distributed.
+          The label alone does not answer that. Restaurant policies differ. Read the restaurant's disclosure or ask
+          how the charge is used before assuming it either replaces a tip or goes entirely to the server.
         </p>
       </details>
       <details>
-        <summary>Is a service charge the same as a tip or gratuity?</summary>
+        <summary>Is an automatic gratuity a tip for tax purposes?</summary>
         <p>
-          Not legally. The U.S. Department of Labor treats automatic gratuities as service charges, not tips, because
-          the restaurant controls where the money goes. A true tip is a voluntary payment given to the employee. In
-          practice, many restaurants pass automatic gratuities fully to staff — but you cannot assume it.
+          The IRS treats mandatory charges such as automatic gratuities as service charges rather than voluntary tips
+          for federal tax purposes. If distributed to an employee, the amount is generally treated as wages.
         </p>
       </details>
       <details>
-        <summary>Why is there a service charge on my bill?</summary>
+        <summary>Does an 18% or 20% service charge mean I am done tipping?</summary>
         <p>
-          The most common reasons: a party of six or more triggers an automatic gratuity of 18–20%; the restaurant
-          added a small fixed fee to raise pay or cover costs (common in cities like New York and Seattle); or your
-          city requires a surcharge for employee health benefits. Ask the server which one applies to your visit.
-        </p>
-      </details>
-      <details>
-        <summary>Can you refuse to pay a service charge?</summary>
-        <p>
-          Usually not — it is a contractual price term disclosed on the menu or by staff, so refusing it is like
-          refusing to pay for an item you ordered. If it was not disclosed before you ordered, you can raise it with
-          the manager. Automatic gratuities for large groups are standard industry practice.
-        </p>
-      </details>
-      <details>
-        <summary>How much is an automatic gratuity for large groups?</summary>
-        <p>
-          18–20% is the standard automatic gratuity for parties of six or more, with some upscale restaurants charging
-          20–22%. It should be disclosed on the menu or stated when you book. If the printed tip line still appears on
-          the check, you can draw a line through it — the gratuity is the tip.
+          Not necessarily. The percentage does not identify the charge. If it is explicitly an automatic gratuity,
+          that is meaningful; if it is a generic service or hospitality fee, read the disclosure or ask the restaurant.
         </p>
       </details>
     </div>
+  </section>
+
+  <section class="section" id="sources">
+    <h2>Sources</h2>
+    <ul class="prose">
+      <li>
+        <a href={SOURCES.irsTips}>Internal Revenue Service — Tip recordkeeping and reporting</a>
+        — federal distinction between voluntary tips and mandatory service charges; reviewed September 2026.
+      </li>
+    </ul>
+    <p class="menu-src">
+      Restaurant policies and local rules can change. <a href="/methodology/">Read how this site separates legal/tax facts from practical guidance.</a>
+    </p>
   </section>
 
   <aside class="ad ad-native ad-inline" aria-label="Advertisement">
