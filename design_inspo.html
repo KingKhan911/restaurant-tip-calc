@@ -1,0 +1,1034 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <title></title>
+  <meta name="Generator" content="Cocoa HTML Writer">
+  <meta name="CocoaVersion" content="2685.6">
+  <style type="text/css">
+    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica}
+    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica; min-height: 14.0px}
+  </style>
+</head>
+<body>
+<p class="p1">&lt;!DOCTYPE html&gt;</p>
+<p class="p1">&lt;html lang="en"&gt;</p>
+<p class="p1">&lt;head&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;meta charset="UTF-8"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;meta name="viewport" content="width=device-width, initial-scale=1"&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;!-- ============ PRIMARY SEO ============ --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;title&gt;Restaurant Tip Calculator – Tip, Total &amp;amp; Split Per Person | Tiptable&lt;/title&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;meta name="description" content="Calculate a 15%, 18%, 20% or custom tip in seconds. See the total with tip and the per-person amount when splitting the bill. Free, instant, no sign-up."&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;meta name="robots" content="index,follow,max-image-preview:large"&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;!-- Replace www.tiptable.com with your production domain before deploying --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;link rel="canonical" href="https://www.tiptable.com/tip-calculator/"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;meta name="theme-color" content="#F6F1E7"&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;!-- Open Graph / Twitter --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;meta property="og:type" content="website"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;meta property="og:site_name" content="Tiptable"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;meta property="og:locale" content="en_US"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;meta property="og:title" content="Restaurant Tip Calculator – Tip, Total &amp;amp; Split Per Person"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;meta property="og:description" content="Pick a percentage, split the bill, see per-person amounts instantly. Free, fast, no sign-up."&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;meta property="og:url" content="https://www.tiptable.com/tip-calculator/"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;!-- Add a 1200x630 image and uncomment: &lt;meta property="og:image" content="https://www.tiptable.com/og.png"&gt; --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;meta name="twitter:card" content="summary"&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;!-- Fonts: preconnect + display=swap; subset families only --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;link rel="preconnect" href="https://fonts.googleapis.com"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;link rel="preconnect" href="https://fonts.gstatic.com" crossorigin&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&amp;family=Spline+Sans+Mono:wght@400;600;700&amp;display=swap"&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;style&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>/* ============ TOKENS ============ */</p>
+<p class="p1"><span class="Apple-converted-space">    </span>:root{</p>
+<p class="p1"><span class="Apple-converted-space">      </span>--paper:#F6F1E7;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>--card:#FFFDF8;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>--table:#F2EBDC;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>--ink:#191512;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>--ink-body:#3E372E;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>--ink-soft:#635A4C;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>--line:#DCD3C0;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>--line-soft:#E9E2D3;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>--accent:#B5432A;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>--accent-ink:#8F3320;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>--accent-tint:#F6E3DC;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>--ok:#2E6B4F;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>--font-display:"Fraunces","Fraunces Fallback",Georgia,serif;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>--font-mono:"Spline Sans Mono","Spline Sans Mono Fallback",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>--font-body:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>@font-face{</p>
+<p class="p1"><span class="Apple-converted-space">      </span>font-family:"Fraunces Fallback";</p>
+<p class="p1"><span class="Apple-converted-space">      </span>src:local("Georgia"),local("Times New Roman");</p>
+<p class="p1"><span class="Apple-converted-space">      </span>size-adjust:104%;ascent-override:96%;descent-override:26%;line-gap-override:0%;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>@font-face{</p>
+<p class="p1"><span class="Apple-converted-space">      </span>font-family:"Spline Sans Mono Fallback";</p>
+<p class="p1"><span class="Apple-converted-space">      </span>src:local("Menlo"),local("Consolas"),local("monospace");</p>
+<p class="p1"><span class="Apple-converted-space">      </span>size-adjust:99%;ascent-override:100%;descent-override:25%;line-gap-override:0%;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>/* ============ BASE ============ */</p>
+<p class="p1"><span class="Apple-converted-space">    </span>*,*::before,*::after{box-sizing:border-box}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>html{scroll-behavior:smooth}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>body{</p>
+<p class="p1"><span class="Apple-converted-space">      </span>margin:0;background:var(--paper);color:var(--ink);</p>
+<p class="p1"><span class="Apple-converted-space">      </span>font:400 16px/1.6 var(--font-body);</p>
+<p class="p1"><span class="Apple-converted-space">      </span>-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>::selection{background:#F0D9CF}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>a{color:var(--accent-ink)}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>a:focus-visible,button:focus-visible,summary:focus-visible,input:focus-visible{</p>
+<p class="p1"><span class="Apple-converted-space">      </span>outline:2px solid var(--accent);outline-offset:3px;border-radius:3px;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.shell{max-width:1432px;margin-inline:auto;padding-inline:24px}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.wrap{max-width:1040px;margin-inline:auto;padding-inline:clamp(18px,4vw,32px)}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.skip{position:absolute;left:12px;top:-48px;z-index:10;background:var(--ink);color:var(--card);padding:10px 16px;border-radius:8px;text-decoration:none;font-weight:600;transition:top .15s}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.skip:focus{top:12px}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>/* ============ HEADER ============ */</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.site-head{display:flex;align-items:center;justify-content:space-between;padding-block:20px}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.brand{display:inline-flex;align-items:center;gap:10px;color:var(--ink);text-decoration:none;font:600 1.3rem var(--font-display);letter-spacing:-.01em}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.brand svg{display:block}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.site-nav a{color:var(--ink-soft);text-decoration:none;font-weight:500;font-size:.95rem;margin-left:22px}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.site-nav a:hover{color:var(--accent-ink);text-decoration:underline;text-underline-offset:4px}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>/* ============ HERO ============ */</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.hero{padding-top:clamp(18px,4vh,42px)}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>h1{font:600 clamp(2.15rem,6vw,3.35rem)/1.06 var(--font-display);letter-spacing:-.015em;margin:0 0 14px;max-width:16ch}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.lede{margin:0;color:var(--ink-soft);font-size:clamp(1.02rem,2vw,1.13rem);max-width:54ch}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>/* ============ CALCULATOR LAYOUT ============ */</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.calc{display:grid;grid-template-columns:minmax(0,10fr) minmax(0,9fr);gap:clamp(28px,5vw,64px);align-items:start;margin-top:clamp(30px,5vh,52px)}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.field{margin:0 0 26px}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.lbl{display:block;font:600 .76rem/1 var(--font-body);letter-spacing:.13em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:10px}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>/* Bill input */</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.money-wrap{position:relative}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.money-wrap .cur{position:absolute;left:18px;top:50%;translate:0 -50%;font:600 1.4rem var(--font-mono);color:var(--ink-soft);pointer-events:none}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>#bill{</p>
+<p class="p1"><span class="Apple-converted-space">      </span>width:100%;height:64px;padding:0 18px 0 43px;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>border:1.5px solid var(--line);border-radius:12px;background:var(--card);</p>
+<p class="p1"><span class="Apple-converted-space">      </span>font:600 clamp(1.5rem,3.5vw,1.8rem)/1 var(--font-mono);color:var(--ink);</p>
+<p class="p1"><span class="Apple-converted-space">      </span>caret-color:var(--accent);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>#bill:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 4px rgba(181,67,42,.14)}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>#bill::placeholder{color:#C9BFA9}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>/* Tip chips */</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.chips{display:flex;flex-wrap:wrap;gap:9px}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.chip{position:relative;display:inline-flex}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.chip input[type=radio]{position:absolute;opacity:0;width:1px;height:1px}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.chip-face{</p>
+<p class="p1"><span class="Apple-converted-space">      </span>display:inline-flex;align-items:center;gap:3px;height:46px;padding:0 18px;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>border:1.5px solid var(--line);border-radius:999px;background:var(--card);</p>
+<p class="p1"><span class="Apple-converted-space">      </span>font:600 .95rem var(--font-body);color:var(--ink);</p>
+<p class="p1"><span class="Apple-converted-space">      </span>cursor:pointer;user-select:none;touch-action:manipulation;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>transition:border-color .15s,background .15s,color .15s,box-shadow .15s;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.chip-face:hover{border-color:#C4B99F}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.chip input:checked + .chip-face{border-color:var(--accent);background:var(--accent-tint);color:var(--accent-ink);box-shadow:inset 0 0 0 1px var(--accent)}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.chip input:focus-visible + .chip-face{outline:2px solid var(--accent);outline-offset:2px}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.chip-face.custom{padding:0 15px}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.chip-face.custom .pct{font:600 .95rem var(--font-mono);color:var(--ink-soft)}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>#customPct{</p>
+<p class="p1"><span class="Apple-converted-space">      </span>width:64px;border:0;background:transparent;padding:0;text-align:center;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>font:600 16px var(--font-mono);color:var(--ink); /* 16px: prevents iOS focus zoom */</p>
+<p class="p1"><span class="Apple-converted-space">      </span>caret-color:var(--accent);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>#customPct:focus{outline:none}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>#customPct::placeholder{color:#B4AA93;font-family:var(--font-body)}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.chip-face.custom:focus-within{border-color:var(--accent);box-shadow:0 0 0 4px rgba(181,67,42,.14)}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.chip-face.custom.is-active{border-color:var(--accent);background:var(--accent-tint);color:var(--accent-ink);box-shadow:inset 0 0 0 1px var(--accent)}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.chip-face.custom.is-active .pct{color:var(--accent-ink)}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>/* Split stepper */</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.split-row{display:flex;align-items:center;justify-content:space-between;gap:12px}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.split-row .lbl{margin:0}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.stepper{display:inline-flex;border:1.5px solid var(--line);border-radius:12px;background:var(--card);overflow:hidden;transition:border-color .15s,box-shadow .15s}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.stepper:focus-within{border-color:var(--accent);box-shadow:0 0 0 4px rgba(181,67,42,.14)}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.stepper button{</p>
+<p class="p1"><span class="Apple-converted-space">      </span>width:48px;height:48px;border:0;background:transparent;color:var(--ink);</p>
+<p class="p1"><span class="Apple-converted-space">      </span>font:500 1.35rem/1 var(--font-mono);cursor:pointer;touch-action:manipulation;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.stepper button:hover{background:#F3EDE0}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.stepper button:active{background:var(--accent-tint)}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.stepper button:focus-visible{outline:2px solid var(--accent);outline-offset:-3px}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>#ppl{width:64px;height:48px;border:0;border-inline:1.5px solid var(--line);background:transparent;text-align:center;font:600 1.15rem var(--font-mono);color:var(--ink)}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>#ppl:focus{outline:none}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>/* Round-up toggle */</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.toggle-row{display:flex;align-items:center;gap:12px;margin-top:24px;padding-top:22px;border-top:1.5px dashed var(--line);cursor:pointer}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.switch{position:relative;display:inline-flex;flex:none}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.switch input{position:absolute;inset:0;opacity:0;cursor:pointer}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.track{width:46px;height:26px;border-radius:999px;background:#E7DFCE;border:1.5px solid var(--line);position:relative;pointer-events:none;transition:background .18s,border-color .18s}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.track::after{content:"";position:absolute;top:2.5px;left:3px;width:18px;height:18px;border-radius:50%;background:#fff;border:1px solid rgba(25,21,18,.15);box-shadow:0 1px 2px rgba(0,0,0,.12);transition:translate .18s}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.switch input:checked + .track{background:var(--accent);border-color:var(--accent)}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.switch input:checked + .track::after{translate:20px 0}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.switch input:focus-visible + .track{outline:2px solid var(--accent);outline-offset:2px}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.toggle-text{font-size:.95rem;color:var(--ink)}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>.hint{margin:16px 0 0;font-size:.93rem;color:var(--ink-soft)}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.hint[hidden]{display:none}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>/* ============ RECEIPT ============ */</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.receipt-wrap{</p>
+<p class="p1"><span class="Apple-converted-space">      </span>width:100%;max-width:460px;justify-self:center;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>filter:drop-shadow(0 2px 3px rgba(25,21,18,.07)) drop-shadow(0 18px 32px rgba(25,21,18,.16));</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.receipt{background:var(--card);border-radius:14px 14px 0 0;padding:20px 24px 16px}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.r-head{display:flex;justify-content:space-between;font:700 .68rem var(--font-mono);letter-spacing:.2em;color:var(--ink-soft)}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.r-sub{display:flex;justify-content:space-between;margin-top:7px;padding-bottom:12px;border-bottom:1.5px dashed var(--line);font:500 .68rem var(--font-mono);letter-spacing:.14em;color:var(--ink-soft)}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.r-row{display:flex;justify-content:space-between;align-items:baseline;padding:8px 0}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.r-lab{font-size:.95rem}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.r-lab em{font:500 .76rem var(--font-mono);font-style:normal;color:var(--ink-soft);margin-left:6px;letter-spacing:.02em}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.r-val{font:600 1.06rem var(--font-mono);font-variant-numeric:tabular-nums;letter-spacing:-.01em}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.r-rule{border-top:1.5px solid var(--ink);margin-top:8px;position:relative}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.r-rule::after{content:"";position:absolute;left:0;right:0;top:2.5px;border-top:1px solid var(--ink)}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.r-each{padding:14px 0 4px;align-items:center}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.r-each .r-lab{font:600 .78rem var(--font-body);letter-spacing:.13em;text-transform:uppercase}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>#rEach{font:700 clamp(1.7rem,4.5vw,2.05rem)/1.1 var(--font-mono);letter-spacing:-.02em}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.r-note{margin:2px 0 8px;font:500 .8rem var(--font-mono);color:var(--ok)}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.r-note[hidden]{display:none}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.tear{display:block;margin-top:-1px}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>/* ============ TABLE DIAGRAM ============ */</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.tablefig{margin-top:22px;text-align:center}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>#diagWrap svg{width:min(100%,340px);height:auto;transition:opacity .25s}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>#diagWrap.is-empty svg{opacity:.45}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>#diag text{font-family:var(--font-mono)}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.d-amount{font-weight:700;font-size:21px;fill:var(--ink);letter-spacing:-.02em}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.d-cap{font-size:9.5px;letter-spacing:.24em;fill:var(--ink-soft);font-weight:600}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.diag-cap{margin-top:2px;font:500 .74rem var(--font-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--ink-soft)}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>/* ============ AD SLOTS (hard-sized: late-loading creatives cause zero CLS) ============ */</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.rail{display:none} /* fully removed below 1240px — gone from layout AND accessibility tree */</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.ad{margin:0}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.ad-label{</p>
+<p class="p1"><span class="Apple-converted-space">      </span>margin:0 0 6px;text-align:center;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>font:600 .6rem var(--font-mono);letter-spacing:.24em;text-transform:uppercase;color:#AC9F86;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.ad-slot{</p>
+<p class="p1"><span class="Apple-converted-space">      </span>display:grid;place-items:center;overflow:hidden;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>background:#FBF7EC;border:1px dashed var(--line);</p>
+<p class="p1"><span class="Apple-converted-space">      </span>color:#B9AD94;font:500 .68rem var(--font-mono);letter-spacing:.16em;text-transform:uppercase;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.ad-slot::after{content:attr(data-size)} /* dev placeholder — hidden under any real creative */</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.ad-leaderboard .ad-slot{width:728px;height:90px;max-width:100%;margin-inline:auto}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.ad-below{margin:clamp(30px,5vh,48px) auto 0}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.ad-inline{margin:clamp(30px,5vh,52px) auto}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>/* Native banner: responsive creative, so we reserve the typical render height.</p>
+<p class="p1"><span class="Apple-converted-space">       </span>If your network's native banner renders taller/shorter, adjust this one value</p>
+<p class="p1"><span class="Apple-converted-space">       </span>to match and CLS stays at zero. */</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.ad-native .ad-slot{width:100%;max-width:728px;height:280px;margin-inline:auto}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>@media (max-width:779px){</p>
+<p class="p1"><span class="Apple-converted-space">      </span>/* Mobile in-flow slots: 300×250 */</p>
+<p class="p1"><span class="Apple-converted-space">      </span>.ad-leaderboard .ad-slot{width:300px;height:250px}</p>
+<p class="p1"><span class="Apple-converted-space">      </span>.ad-native .ad-slot{width:300px;height:280px}</p>
+<p class="p1"><span class="Apple-converted-space">      </span>/* Reserve room for the sticky anchor (24px bar + 50px creative + iOS home bar)</p>
+<p class="p1"><span class="Apple-converted-space">         </span>so it never covers page content. Removed when the user closes the ad. */</p>
+<p class="p1"><span class="Apple-converted-space">      </span>body{padding-bottom:calc(74px + env(safe-area-inset-bottom))}</p>
+<p class="p1"><span class="Apple-converted-space">      </span>body.anchor-closed{padding-bottom:0}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>/* Sticky ad rail: only when there is genuine room beside the 1040px column.</p>
+<p class="p1"><span class="Apple-converted-space">       </span>align-self:stretch makes the rail span the full page height — REQUIRED for</p>
+<p class="p1"><span class="Apple-converted-space">       </span>position:sticky to keep the unit pinned while the user scrolls. */</p>
+<p class="p1"><span class="Apple-converted-space">    </span>@media (min-width:1240px){</p>
+<p class="p1"><span class="Apple-converted-space">      </span>.shell{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:48px}</p>
+<p class="p1"><span class="Apple-converted-space">      </span>.rail{display:block;align-self:stretch}</p>
+<p class="p1"><span class="Apple-converted-space">      </span>.rail-sticky{position:sticky;top:20px}</p>
+<p class="p1"><span class="Apple-converted-space">      </span>/* Primary unit: 300×250. To run a half-page 300×600 instead,</p>
+<p class="p1"><span class="Apple-converted-space">         </span>change height here AND in your ad server's slot size. */</p>
+<p class="p1"><span class="Apple-converted-space">      </span>.ad-rail .ad-slot{width:300px;height:250px}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>/* ============ MOBILE STICKY ANCHOR (≤779px only) ============ */</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.ad-anchor{display:none}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>@media (max-width:779px){</p>
+<p class="p1"><span class="Apple-converted-space">      </span>.ad-anchor{</p>
+<p class="p1"><span class="Apple-converted-space">        </span>display:block;position:fixed;left:0;right:0;bottom:0;z-index:60;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>background:var(--card);border-top:1px solid var(--line);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>box-shadow:0 -2px 12px rgba(25,21,18,.10);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>padding-bottom:env(safe-area-inset-bottom);</p>
+<p class="p1"><span class="Apple-converted-space">      </span>}</p>
+<p class="p1"><span class="Apple-converted-space">      </span>.ad-anchor.is-closed{display:none}</p>
+<p class="p1"><span class="Apple-converted-space">      </span>.anchor-bar{</p>
+<p class="p1"><span class="Apple-converted-space">        </span>display:flex;align-items:center;justify-content:space-between;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>height:24px;padding-inline:10px;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>}</p>
+<p class="p1"><span class="Apple-converted-space">      </span>.anchor-label{font:600 .55rem var(--font-mono);letter-spacing:.22em;text-transform:uppercase;color:#AC9F86}</p>
+<p class="p1"><span class="Apple-converted-space">      </span>.anchor-close{</p>
+<p class="p1"><span class="Apple-converted-space">        </span>border:0;background:transparent;cursor:pointer;color:var(--ink-soft);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>font:400 1.15rem/1 var(--font-mono);padding:2px 6px;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>}</p>
+<p class="p1"><span class="Apple-converted-space">      </span>.anchor-close:focus-visible{outline:2px solid var(--accent);outline-offset:1px;border-radius:3px}</p>
+<p class="p1"><span class="Apple-converted-space">      </span>.anchor-inner{display:flex;justify-content:center}</p>
+<p class="p1"><span class="Apple-converted-space">      </span>.anchor-inner .ad-slot{width:320px;height:50px;border-top:1px dashed var(--line);border-inline:0;border-bottom:0}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>/* ============ CONTENT SECTIONS ============ */</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.section{margin-top:clamp(56px,10vh,92px);scroll-margin-top:20px}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.section h2{display:flex;align-items:center;gap:18px;margin:0 0 18px;font:600 clamp(1.45rem,3vw,1.85rem)/1.15 var(--font-display);letter-spacing:-.01em}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.section h2::after{content:"";flex:1;border-top:1px solid var(--line)}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>.steps{list-style:none;margin:0;padding:0;max-width:62ch}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.steps li{display:flex;gap:16px;padding:12px 0;border-bottom:1px dashed var(--line-soft)}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.steps li:last-child{border-bottom:0}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.step-n{font:600 1.1rem/1.5 var(--font-display);color:var(--accent-ink);min-width:1.3em}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.steps p{margin:0}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>.guide-grid{display:grid;grid-template-columns:minmax(0,11fr) minmax(0,9fr);gap:clamp(28px,4vw,56px);margin-top:6px}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.guide-intro{margin:0 0 14px;color:var(--ink-soft);max-width:52ch}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.menu{max-width:640px;margin:0}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.menu-row{display:flex;align-items:baseline;gap:10px;padding:9px 0}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.menu-name{font-weight:600;font-size:.98rem}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.dots{flex:1;border-bottom:2px dotted var(--line);translate:0 -4px;min-width:24px}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.menu-val{font:500 .92rem var(--font-mono);white-space:nowrap}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.menu-src{margin:14px 0 0;font-size:.85rem;color:var(--ink-soft);max-width:58ch}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>.worked{border-collapse:collapse;width:100%;max-width:420px}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.worked caption{caption-side:top;text-align:left;font-size:.9rem;color:var(--ink-soft);padding-bottom:10px}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.worked th{font:600 .7rem var(--font-body);letter-spacing:.12em;text-transform:uppercase;color:var(--ink-soft);text-align:right;padding:8px 0;border-bottom:1.5px solid var(--ink)}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.worked td{font:500 .98rem var(--font-mono);text-align:right;padding:9px 0;border-bottom:1px solid var(--line-soft);font-variant-numeric:tabular-nums}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.worked th:first-child,.worked td:first-child{text-align:left}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.worked-note{margin:14px 0 0;font-size:.9rem;color:var(--ink-soft)}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>.prose{max-width:64ch}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.prose p{margin:0 0 12px}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.prose b{font-variant-numeric:tabular-nums}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>/* FAQ */</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.faq{max-width:720px}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.faq details{border-bottom:1px solid var(--line-soft)}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.faq details:first-of-type{border-top:1px solid var(--line-soft)}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.faq summary{list-style:none;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:16px;padding:15px 0;font-weight:600;font-size:1.02rem}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.faq summary::-webkit-details-marker{display:none}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.faq summary:hover{color:var(--accent-ink)}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.faq summary::after{content:"+";font:400 1.4rem/1 var(--font-mono);color:var(--accent-ink);transition:rotate .2s}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.faq details[open] summary::after{rotate:45deg}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.faq details p{margin:0 0 16px;max-width:62ch;font-size:.97rem;color:var(--ink-body)}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>/* Footer */</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.site-foot{margin-top:clamp(64px,10vh,110px);border-top:1px solid var(--line)}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.foot-inner{display:flex;flex-wrap:wrap;gap:20px 40px;justify-content:space-between;padding-block:28px 46px}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.foot-brand{display:inline-flex;align-items:center;gap:8px;font:600 1.05rem var(--font-display)}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.foot-note{margin:6px 0 0;font-size:.85rem;color:var(--ink-soft);max-width:46ch}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.foot-nav{display:flex;gap:18px;flex-wrap:wrap;align-items:center}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.foot-nav a{color:var(--ink-soft);text-decoration:none;font-size:.9rem;font-weight:500}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.foot-nav a:hover{color:var(--accent-ink);text-decoration:underline;text-underline-offset:4px}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.foot-copy{flex-basis:100%;font-size:.8rem;color:var(--ink-soft)}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>/* ============ RESPONSIVE ============ */</p>
+<p class="p1"><span class="Apple-converted-space">    </span>@media (max-width:900px){</p>
+<p class="p1"><span class="Apple-converted-space">      </span>.calc{grid-template-columns:1fr;gap:38px}</p>
+<p class="p1"><span class="Apple-converted-space">      </span>.receipt-wrap{max-width:480px}</p>
+<p class="p1"><span class="Apple-converted-space">      </span>.guide-grid{grid-template-columns:1fr;gap:10px}</p>
+<p class="p1"><span class="Apple-converted-space">      </span>.worked{max-width:100%}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>@media (max-width:520px){</p>
+<p class="p1"><span class="Apple-converted-space">      </span>.shell{padding-inline:16px}</p>
+<p class="p1"><span class="Apple-converted-space">      </span>.site-nav a{margin-left:14px;font-size:.9rem}</p>
+<p class="p1"><span class="Apple-converted-space">      </span>.chip-face{height:44px;padding:0 15px}</p>
+<p class="p1"><span class="Apple-converted-space">      </span>.stepper button{width:46px}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>@media (prefers-reduced-motion:reduce){</p>
+<p class="p1"><span class="Apple-converted-space">      </span>html{scroll-behavior:auto}</p>
+<p class="p1"><span class="Apple-converted-space">      </span>*,*::before,*::after{transition:none!important;animation:none!important}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/style&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;!-- ============ STRUCTURED DATA (single graph: WebSite + WebApplication + FAQPage) ============ --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;script type="application/ld+json"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>{</p>
+<p class="p1"><span class="Apple-converted-space">    </span>"@context": "https://schema.org",</p>
+<p class="p1"><span class="Apple-converted-space">    </span>"@graph": [</p>
+<p class="p1"><span class="Apple-converted-space">      </span>{</p>
+<p class="p1"><span class="Apple-converted-space">        </span>"@type": "WebSite",</p>
+<p class="p1"><span class="Apple-converted-space">        </span>"@id": "https://www.tiptable.com/#website",</p>
+<p class="p1"><span class="Apple-converted-space">        </span>"url": "https://www.tiptable.com/",</p>
+<p class="p1"><span class="Apple-converted-space">        </span>"name": "Tiptable",</p>
+<p class="p1"><span class="Apple-converted-space">        </span>"inLanguage": "en"</p>
+<p class="p1"><span class="Apple-converted-space">      </span>},</p>
+<p class="p1"><span class="Apple-converted-space">      </span>{</p>
+<p class="p1"><span class="Apple-converted-space">        </span>"@type": "WebApplication",</p>
+<p class="p1"><span class="Apple-converted-space">        </span>"@id": "https://www.tiptable.com/tip-calculator/#app",</p>
+<p class="p1"><span class="Apple-converted-space">        </span>"url": "https://www.tiptable.com/tip-calculator/",</p>
+<p class="p1"><span class="Apple-converted-space">        </span>"name": "Tiptable Restaurant Tip Calculator",</p>
+<p class="p1"><span class="Apple-converted-space">        </span>"applicationCategory": "UtilitiesApplication",</p>
+<p class="p1"><span class="Apple-converted-space">        </span>"operatingSystem": "Any",</p>
+<p class="p1"><span class="Apple-converted-space">        </span>"browserRequirements": "Requires JavaScript",</p>
+<p class="p1"><span class="Apple-converted-space">        </span>"inLanguage": "en",</p>
+<p class="p1"><span class="Apple-converted-space">        </span>"isPartOf": { "@id": "https://www.tiptable.com/#website" },</p>
+<p class="p1"><span class="Apple-converted-space">        </span>"offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },</p>
+<p class="p1"><span class="Apple-converted-space">        </span>"featureList": [</p>
+<p class="p1"><span class="Apple-converted-space">          </span>"Tip percentage presets (15%, 18%, 20%, 22%) and custom tip",</p>
+<p class="p1"><span class="Apple-converted-space">          </span>"Instant tip amount and total with tip",</p>
+<p class="p1"><span class="Apple-converted-space">          </span>"Split the bill between up to 99 people",</p>
+<p class="p1"><span class="Apple-converted-space">          </span>"Round-up option for whole-dollar shares",</p>
+<p class="p1"><span class="Apple-converted-space">          </span>"No sign-up; all calculations run in the browser"</p>
+<p class="p1"><span class="Apple-converted-space">        </span>]</p>
+<p class="p1"><span class="Apple-converted-space">      </span>},</p>
+<p class="p1"><span class="Apple-converted-space">      </span>{</p>
+<p class="p1"><span class="Apple-converted-space">        </span>"@type": "FAQPage",</p>
+<p class="p1"><span class="Apple-converted-space">        </span>"@id": "https://www.tiptable.com/tip-calculator/#faq",</p>
+<p class="p1"><span class="Apple-converted-space">        </span>"isPartOf": { "@id": "https://www.tiptable.com/tip-calculator/#app" },</p>
+<p class="p1"><span class="Apple-converted-space">        </span>"mainEntity": [</p>
+<p class="p1"><span class="Apple-converted-space">          </span>{</p>
+<p class="p1"><span class="Apple-converted-space">            </span>"@type": "Question",</p>
+<p class="p1"><span class="Apple-converted-space">            </span>"name": "How much do you tip on a $50 bill?",</p>
+<p class="p1"><span class="Apple-converted-space">            </span>"acceptedAnswer": { "@type": "Answer", "text": "At 18%, the tip is $9.00 for a total of $59.00. At 20%, the tip is $10.00 for a total of $60.00. Split two ways, that works out to $29.50 or $30.00 per person." }</p>
+<p class="p1"><span class="Apple-converted-space">          </span>},</p>
+<p class="p1"><span class="Apple-converted-space">          </span>{</p>
+<p class="p1"><span class="Apple-converted-space">            </span>"@type": "Question",</p>
+<p class="p1"><span class="Apple-converted-space">            </span>"name": "Do you tip for takeout?",</p>
+<p class="p1"><span class="Apple-converted-space">            </span>"acceptedAnswer": { "@type": "Answer", "text": "Tipping on takeout is optional. Many people skip it or leave about 10%, since there is no table service. If the kitchen handled a large or complicated order, a few extra dollars is a nice gesture." }</p>
+<p class="p1"><span class="Apple-converted-space">          </span>},</p>
+<p class="p1"><span class="Apple-converted-space">          </span>{</p>
+<p class="p1"><span class="Apple-converted-space">            </span>"@type": "Question",</p>
+<p class="p1"><span class="Apple-converted-space">            </span>"name": "What if my bill already includes a service charge?",</p>
+<p class="p1"><span class="Apple-converted-space">            </span>"acceptedAnswer": { "@type": "Answer", "text": "Many restaurants add an automatic 18\u201320% gratuity for parties of six or more, and some add a service fee to every check. Look at the itemized bill before tipping \u2014 if a gratuity is already there, you don't need to add the full amount again, though extra for standout service is always welcome." }</p>
+<p class="p1"><span class="Apple-converted-space">          </span>},</p>
+<p class="p1"><span class="Apple-converted-space">          </span>{</p>
+<p class="p1"><span class="Apple-converted-space">            </span>"@type": "Question",</p>
+<p class="p1"><span class="Apple-converted-space">            </span>"name": "Should you tip on the discounted price or the original?",</p>
+<p class="p1"><span class="Apple-converted-space">            </span>"acceptedAnswer": { "@type": "Answer", "text": "If you used a coupon or discount, the customary move is to tip on the pre-discount amount, since your server did the same work either way. Tipping on what you actually paid is also common \u2014 just remember the difference comes out of your server's pocket." }</p>
+<p class="p1"><span class="Apple-converted-space">          </span>},</p>
+<p class="p1"><span class="Apple-converted-space">          </span>{</p>
+<p class="p1"><span class="Apple-converted-space">            </span>"@type": "Question",</p>
+<p class="p1"><span class="Apple-converted-space">            </span>"name": "Is tipping the same outside the United States?",</p>
+<p class="p1"><span class="Apple-converted-space">            </span>"acceptedAnswer": { "@type": "Answer", "text": "No \u2014 norms vary a lot. In much of Europe, service is included in the price (look for \u201cservice compris\u201d) and rounding up the bill is a pleasant gesture. In Japan, tipping can be unnecessary or even awkward. A quick search before you travel beats an awkward moment at the table." }</p>
+<p class="p1"><span class="Apple-converted-space">          </span>},</p>
+<p class="p1"><span class="Apple-converted-space">          </span>{</p>
+<p class="p1"><span class="Apple-converted-space">            </span>"@type": "Question",</p>
+<p class="p1"><span class="Apple-converted-space">            </span>"name": "How do you split a bill when everyone ordered differently?",</p>
+<p class="p1"><span class="Apple-converted-space">            </span>"acceptedAnswer": { "@type": "Answer", "text": "This calculator splits everything evenly, which is fastest for groups with similar checks. For uneven orders, either split the food cost exactly and tip evenly, or have each person tip 20% on what they ordered and round their share up to the next dollar." }</p>
+<p class="p1"><span class="Apple-converted-space">          </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>]</p>
+<p class="p1"><span class="Apple-converted-space">      </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>]</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/script&gt;</p>
+<p class="p1">&lt;/head&gt;</p>
+<p class="p1">&lt;body id="top"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;a class="skip" href="#calculator"&gt;Skip to calculator&lt;/a&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="shell"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="wrap"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;header class="site-head"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;a class="brand" href="#top" aria-label="Tiptable — home"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;svg width="26" height="26" viewBox="0 0 26 26" aria-hidden="true" focusable="false"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;ellipse cx="13" cy="13" rx="10.5" ry="6.8" fill="none" stroke="currentColor" stroke-width="1.8"/&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;circle cx="13" cy="3.4" r="1.9" fill="#B5432A"/&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;circle cx="4.4" cy="18.6" r="1.9" fill="currentColor"/&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;circle cx="21.6" cy="18.6" r="1.9" fill="currentColor"/&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;/svg&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>Tiptable</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/a&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;nav class="site-nav" aria-label="Site"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;a href="#calculator"&gt;Calculator&lt;/a&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;a href="#tipping-guide"&gt;Guide&lt;/a&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;a href="#faq"&gt;FAQ&lt;/a&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/nav&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/header&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;main&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;section class="hero"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;h1&gt;Restaurant Tip Calculator&lt;/h1&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;p class="lede"&gt;Enter your check, pick a percentage, split it any way you like. Tip, total, and per-person amounts update live — no buttons, no sign-up, no math at the table.&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/section&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;!-- ============ THE CALCULATOR ============ --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;section class="calc" id="calculator" aria-label="Tip calculator"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;form id="calcForm" autocomplete="off" novalidate&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="field"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;label class="lbl" for="bill"&gt;Bill amount&lt;/label&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;div class="money-wrap"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;span class="cur" aria-hidden="true"&gt;$&lt;/span&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;input id="bill" type="text" inputmode="decimal" enterkeyhint="done"</p>
+<p class="p1"><span class="Apple-converted-space">                       </span>placeholder="0.00" maxlength="12" spellcheck="false"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;fieldset class="field" style="border:0;padding:0;margin:0 0 26px"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;legend class="lbl"&gt;Tip percentage&lt;/legend&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;div class="chips"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;label class="chip"&gt;&lt;input type="radio" name="tip" value="15"&gt;&lt;span class="chip-face"&gt;15%&lt;/span&gt;&lt;/label&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;label class="chip"&gt;&lt;input type="radio" name="tip" value="18"&gt;&lt;span class="chip-face"&gt;18%&lt;/span&gt;&lt;/label&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;label class="chip"&gt;&lt;input type="radio" name="tip" value="20" checked&gt;&lt;span class="chip-face"&gt;20%&lt;/span&gt;&lt;/label&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;label class="chip"&gt;&lt;input type="radio" name="tip" value="22"&gt;&lt;span class="chip-face"&gt;22%&lt;/span&gt;&lt;/label&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;label class="chip"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                  </span>&lt;span class="chip-face custom" id="customFace"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;input id="customPct" type="text" inputmode="decimal" enterkeyhint="done"</p>
+<p class="p1"><span class="Apple-converted-space">                           </span>placeholder="Custom" maxlength="5" aria-label="Custom tip percentage"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;span class="pct" aria-hidden="true"&gt;%&lt;/span&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                  </span>&lt;/span&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;/label&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/fieldset&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="field split-row"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;label class="lbl" for="ppl" id="splitLabel"&gt;Split between&lt;/label&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;div class="stepper"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;button type="button" id="pplMinus" aria-label="One person fewer"&gt;&amp;minus;&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;input id="ppl" type="text" inputmode="numeric" value="1" maxlength="2"</p>
+<p class="p1"><span class="Apple-converted-space">                       </span>aria-labelledby="splitLabel" aria-describedby="splitUnit"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;button type="button" id="pplPlus" aria-label="One person more"&gt;+&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;span class="sr-only" id="splitUnit"&gt;people&lt;/span&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;label class="toggle-row"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;span class="switch"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;input type="checkbox" id="roundUp"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;span class="track" aria-hidden="true"&gt;&lt;/span&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;/span&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;span class="toggle-text"&gt;Round each share up to the next dollar&lt;/span&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/label&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;p class="hint" id="formHint"&gt;Start with the bill amount — tip, total, and split fill in as you type.&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;/form&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="receipt-wrap"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;div class="receipt"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="r-head"&gt;&lt;span&gt;TIPTABLE&lt;/span&gt;&lt;span&gt;GUEST CHECK&lt;/span&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="r-sub"&gt;&lt;span id="receiptDate"&gt;&lt;/span&gt;&lt;span id="tableFor"&gt;TABLE FOR 1&lt;/span&gt;&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="r-row"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                  </span>&lt;span class="r-lab"&gt;Bill&lt;/span&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                  </span>&lt;span class="r-val" id="rBill"&gt;—&lt;/span&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="r-row"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                  </span>&lt;span class="r-lab"&gt;Tip &lt;em id="rPct"&gt;@ 20%&lt;/em&gt;&lt;/span&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                  </span>&lt;span class="r-val" id="rTip"&gt;—&lt;/span&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="r-row"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                  </span>&lt;span class="r-lab"&gt;Total&lt;/span&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                  </span>&lt;span class="r-val" id="rTotal"&gt;—&lt;/span&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="r-rule" aria-hidden="true"&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="r-row r-each"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                  </span>&lt;span class="r-lab"&gt;Each person&lt;/span&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                  </span>&lt;span class="r-val" id="rEach"&gt;—&lt;/span&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;p class="r-note" id="rNote" hidden&gt;&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;!-- torn bottom edge, tile pattern --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;svg class="tear" width="100%" height="10" aria-hidden="true" focusable="false"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;defs&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                  </span>&lt;pattern id="teeth" width="14" height="10" patternUnits="userSpaceOnUse"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;path d="M0 0 L14 0 L7 10 Z" fill="var(--card)"/&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                  </span>&lt;/pattern&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;/defs&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;rect width="100%" height="10" fill="url(#teeth)"/&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;/svg&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;div class="tablefig"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;div id="diagWrap"&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;p class="diag-cap" id="diagCap"&gt;&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/section&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;!-- ============ AD: BELOW CALCULATOR ============</p>
+<p class="p1"><span class="Apple-converted-space">             </span>728×90 desktop · 300×250 mobile. Paste your ad tag inside .ad-slot.</p>
+<p class="p1"><span class="Apple-converted-space">             </span>Space is pre-reserved — no CLS. --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;aside class="ad ad-leaderboard ad-below" aria-label="Advertisement"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;p class="ad-label"&gt;Advertisement&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;div class="ad-slot" id="ad-below" data-size="728 × 90 · 300 × 250"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;!-- e.g. GAM slot: /XXXXXXX/tiptable_below-calc --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/aside&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;!-- ============ HOW IT WORKS ============ --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;section class="section" id="how-it-works"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;h2&gt;How it works&lt;/h2&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;ol class="steps"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;li&gt;&lt;span class="step-n" aria-hidden="true"&gt;1.&lt;/span&gt;&lt;p&gt;&lt;strong&gt;Enter the bill&lt;/strong&gt; — the amount from your check. Everything updates as you type.&lt;/p&gt;&lt;/li&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;li&gt;&lt;span class="step-n" aria-hidden="true"&gt;2.&lt;/span&gt;&lt;p&gt;&lt;strong&gt;Choose a tip&lt;/strong&gt; — tap 15, 18, 20, or 22 percent, or type a custom percentage like 17.5.&lt;/p&gt;&lt;/li&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;li&gt;&lt;span class="step-n" aria-hidden="true"&gt;3.&lt;/span&gt;&lt;p&gt;&lt;strong&gt;Split it&lt;/strong&gt; — set how many people are paying and read the per-person amount.&lt;/p&gt;&lt;/li&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;/ol&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/section&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;!-- ============ TIPPING GUIDE ============ --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;section class="section" id="tipping-guide"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;h2&gt;How much should you tip?&lt;/h2&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;div class="guide-grid"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;p class="guide-intro"&gt;In the U.S., 20% is the norm for good table service. The ranges below cover the situations you'll actually run into:&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;div class="menu"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="menu-row"&gt;&lt;span class="menu-name"&gt;Table service, solid experience&lt;/span&gt;&lt;span class="dots" aria-hidden="true"&gt;&lt;/span&gt;&lt;span class="menu-val"&gt;15–18%&lt;/span&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="menu-row"&gt;&lt;span class="menu-name"&gt;Table service, great experience&lt;/span&gt;&lt;span class="dots" aria-hidden="true"&gt;&lt;/span&gt;&lt;span class="menu-val"&gt;20–22%&lt;/span&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="menu-row"&gt;&lt;span class="menu-name"&gt;Counter service &amp;amp; coffee shops&lt;/span&gt;&lt;span class="dots" aria-hidden="true"&gt;&lt;/span&gt;&lt;span class="menu-val"&gt;0–10%, optional&lt;/span&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="menu-row"&gt;&lt;span class="menu-name"&gt;Bar drinks&lt;/span&gt;&lt;span class="dots" aria-hidden="true"&gt;&lt;/span&gt;&lt;span class="menu-val"&gt;$1–2 per drink, or 15–20%&lt;/span&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="menu-row"&gt;&lt;span class="menu-name"&gt;Food delivery&lt;/span&gt;&lt;span class="dots" aria-hidden="true"&gt;&lt;/span&gt;&lt;span class="menu-val"&gt;15–20%&lt;/span&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="menu-row"&gt;&lt;span class="menu-name"&gt;Large groups (6+)&lt;/span&gt;&lt;span class="dots" aria-hidden="true"&gt;&lt;/span&gt;&lt;span class="menu-val"&gt;often added automatically&lt;/span&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;p class="menu-src"&gt;Tips in the U.S. make up the bulk of a server's income — the tipped minimum wage can be as low as $2.13 per hour before tips.&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;table class="worked"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;caption&gt;A $60 check at each common percentage:&lt;/caption&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;thead&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                  </span>&lt;tr&gt;&lt;th scope="col"&gt;Tip&lt;/th&gt;&lt;th scope="col"&gt;Tip amount&lt;/th&gt;&lt;th scope="col"&gt;Total&lt;/th&gt;&lt;/tr&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;/thead&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;tbody&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                  </span>&lt;tr&gt;&lt;td&gt;15%&lt;/td&gt;&lt;td&gt;$9.00&lt;/td&gt;&lt;td&gt;$69.00&lt;/td&gt;&lt;/tr&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                  </span>&lt;tr&gt;&lt;td&gt;18%&lt;/td&gt;&lt;td&gt;$10.80&lt;/td&gt;&lt;td&gt;$70.80&lt;/td&gt;&lt;/tr&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                  </span>&lt;tr&gt;&lt;td&gt;20%&lt;/td&gt;&lt;td&gt;$12.00&lt;/td&gt;&lt;td&gt;$72.00&lt;/td&gt;&lt;/tr&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                  </span>&lt;tr&gt;&lt;td&gt;22%&lt;/td&gt;&lt;td&gt;$13.20&lt;/td&gt;&lt;td&gt;$73.20&lt;/td&gt;&lt;/tr&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;/tbody&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;/table&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;p class="worked-note"&gt;Splitting that $72.00 check three ways? &lt;a href="#calculator"&gt;Run it through the calculator&lt;/a&gt; — it's $24.00 each.&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/section&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;!-- ============ AD: IN-CONTENT DISPLAY (lazy-load candidate) ============</p>
+<p class="p1"><span class="Apple-converted-space">             </span>728×90 desktop · 300×250 mobile — the required mobile in-content unit --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;aside class="ad ad-leaderboard ad-inline" aria-label="Advertisement"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;p class="ad-label"&gt;Advertisement&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;div class="ad-slot" id="ad-content-1" data-size="728 × 90 · 300 × 250"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;!-- e.g. GAM slot: /XXXXXXX/tiptable_in-content --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/aside&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;!-- ============ TAX ============ --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;section class="section" id="tip-on-tax"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;h2&gt;Do you tip on tax, or before tax?&lt;/h2&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;div class="prose"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;p&gt;Strictly speaking, etiquette says tip on the &lt;strong&gt;pre-tax subtotal&lt;/strong&gt; — the tip pays your server, not the tax office. In practice, most people tip on the after-tax total because it's the number printed at the bottom of the check, and the difference is small: on a $60 check with 8% sales tax, a 20% tip is &lt;b&gt;$12.00&lt;/b&gt; on the subtotal versus &lt;b&gt;$12.96&lt;/b&gt; on the taxed total — under a dollar.&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;p&gt;Pick one approach, be consistent, and don't sweat it. If you want to be precise, enter the pre-tax amount in the &lt;a href="#calculator"&gt;calculator above&lt;/a&gt;.&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/section&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;!-- ============ FAQ ============ --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;section class="section" id="faq"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;h2&gt;Tipping questions, answered&lt;/h2&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;div class="faq"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;details&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;summary&gt;How much do you tip on a $50 bill?&lt;/summary&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;p&gt;At 18%, the tip is $9.00 for a total of $59.00. At 20%, the tip is $10.00 for a total of $60.00. Split two ways, that works out to $29.50 or $30.00 per person.&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/details&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;details&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;summary&gt;Do you tip for takeout?&lt;/summary&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;p&gt;Tipping on takeout is optional. Many people skip it or leave about 10%, since there is no table service. If the kitchen handled a large or complicated order, a few extra dollars is a nice gesture.&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/details&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;details&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;summary&gt;What if my bill already includes a service charge?&lt;/summary&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;p&gt;Many restaurants add an automatic 18–20% gratuity for parties of six or more, and some add a service fee to every check. Look at the itemized bill before tipping — if a gratuity is already there, you don't need to add the full amount again, though extra for standout service is always welcome.&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/details&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;details&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;summary&gt;Should you tip on the discounted price or the original?&lt;/summary&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;p&gt;If you used a coupon or discount, the customary move is to tip on the pre-discount amount, since your server did the same work either way. Tipping on what you actually paid is also common — just remember the difference comes out of your server's pocket.&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/details&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;details&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;summary&gt;Is tipping the same outside the United States?&lt;/summary&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;p&gt;No — norms vary a lot. In much of Europe, service is included in the price (look for “service compris”) and rounding up the bill is a pleasant gesture. In Japan, tipping can be unnecessary or even awkward. A quick search before you travel beats an awkward moment at the table.&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/details&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;details&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;summary&gt;How do you split a bill when everyone ordered differently?&lt;/summary&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;p&gt;This calculator splits everything evenly, which is fastest for groups with similar checks. For uneven orders, either split the food cost exactly and tip evenly, or have each person tip 20% on what they ordered and round their share up to the next dollar.&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/details&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/section&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;!-- ============ AD: NATIVE BANNER (lazy-load candidate) ============</p>
+<p class="p1"><span class="Apple-converted-space">             </span>Responsive native creative placed naturally after the supporting content.</p>
+<p class="p1"><span class="Apple-converted-space">             </span>Height reserved at 280px — match this value to your network's typical</p>
+<p class="p1"><span class="Apple-converted-space">             </span>native banner render for zero CLS. --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;aside class="ad ad-native ad-inline" aria-label="Advertisement"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;p class="ad-label"&gt;Advertisement&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;div class="ad-slot" id="ad-native" data-size="Native banner · 280px reserved"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;!-- Paste the native banner tag from your ad network here --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/aside&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/main&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;footer class="site-foot"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="foot-inner"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;span class="foot-brand"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;svg width="20" height="20" viewBox="0 0 26 26" aria-hidden="true" focusable="false"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;ellipse cx="13" cy="13" rx="10.5" ry="6.8" fill="none" stroke="currentColor" stroke-width="1.8"/&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;circle cx="13" cy="3.4" r="1.9" fill="#B5432A"/&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;circle cx="4.4" cy="18.6" r="1.9" fill="currentColor"/&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;circle cx="21.6" cy="18.6" r="1.9" fill="currentColor"/&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;/svg&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>Tiptable</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/span&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;p class="foot-note"&gt;A fast, private tip calculator. Everything runs in your browser — your bill never leaves your device.&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;nav class="foot-nav" aria-label="Footer"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;a href="#calculator"&gt;Calculator&lt;/a&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;a href="#tipping-guide"&gt;Tipping guide&lt;/a&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;a href="#tip-on-tax"&gt;Tip on tax?&lt;/a&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;a href="#faq"&gt;FAQ&lt;/a&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;/nav&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;p class="foot-copy"&gt;© &lt;span id="year"&gt;2025&lt;/span&gt; Tiptable. Amounts in US dollars.&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/footer&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;!-- ============ AD: STICKY SIDEBAR RAIL (desktop ≥1240px only) ============</p>
+<p class="p1"><span class="Apple-converted-space">         </span>300×250, pinned while the page scrolls (rail stretches full column height,</p>
+<p class="p1"><span class="Apple-converted-space">         </span>.rail-sticky holds position:sticky). Hidden entirely below 1240px. --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;aside class="rail" aria-label="Advertisement"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="rail-sticky"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="ad ad-rail"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;p class="ad-label"&gt;Advertisement&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;div class="ad-slot" id="ad-rail" data-size="300 × 250"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;!-- e.g. GAM slot: /XXXXXXX/tiptable_sidebar --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/aside&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;!-- ============ AD: MOBILE STICKY ANCHOR 320×50 (≤779px only) ============</p>
+<p class="p1"><span class="Apple-converted-space">       </span>Fixed overlay — cannot cause CLS. Body padding reserves its visual space</p>
+<p class="p1"><span class="Apple-converted-space">       </span>(incl. iOS safe-area). Close button dismisses for the session. --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;aside class="ad-anchor" id="ad-anchor" aria-label="Advertisement"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="anchor-bar"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;span class="anchor-label"&gt;Advertisement&lt;/span&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;button type="button" class="anchor-close" id="anchorClose" aria-label="Close advertisement"&gt;&amp;times;&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="anchor-inner"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="ad-slot" id="ad-anchor-slot" data-size="320 × 50"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;!-- e.g. GAM slot: /XXXXXXX/tiptable_anchor --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/aside&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;!-- Polite announcements for screen readers (debounced, not on every keystroke) --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="sr-only" role="status" aria-live="polite" id="announce"&gt;&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;!-- ============ AD LOADER ============</p>
+<p class="p1"><span class="Apple-converted-space">       </span>Paste your ad network bootstrap here. Slot contract:</p>
+<p class="p1"><span class="Apple-converted-space">       </span>• #ad-rail<span class="Apple-converted-space">          </span>300×250<span class="Apple-converted-space">        </span>(desktop ≥1240px) <span class="Apple-converted-space">  </span>eager</p>
+<p class="p1"><span class="Apple-converted-space">       </span>• #ad-below <span class="Apple-converted-space">        </span>728×90 / 300×250 (mobile)<span class="Apple-converted-space">          </span>eager</p>
+<p class="p1"><span class="Apple-converted-space">       </span>• #ad-content-1 <span class="Apple-converted-space">    </span>728×90 / 300×250 (mobile)<span class="Apple-converted-space">          </span>lazy, IntersectionObserver</p>
+<p class="p1"><span class="Apple-converted-space">       </span>• #ad-native<span class="Apple-converted-space">        </span>responsive, 280px reserved <span class="Apple-converted-space">        </span>lazy, IntersectionObserver</p>
+<p class="p1"><span class="Apple-converted-space">       </span>• #ad-anchor-slot <span class="Apple-converted-space">  </span>320×50 <span class="Apple-converted-space">        </span>(mobile ≤779px) <span class="Apple-converted-space">    </span>eager; hide slot when</p>
+<p class="p1"><span class="Apple-converted-space">                                                          </span>.is-closed is set</p>
+<p class="p1"><span class="Apple-converted-space">       </span>Define each slot in your ad server at exactly these sizes so creative</p>
+<p class="p1"><span class="Apple-converted-space">       </span>dimensions match the reservations (CLS stays at zero). Publish /ads.txt</p>
+<p class="p1"><span class="Apple-converted-space">       </span>at the domain root. --&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;script&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>(function () {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>"use strict";</p>
+<p class="p1"><span class="Apple-converted-space">    </span>var $ = function (id) { return document.getElementById(id); };</p>
+<p class="p1"><span class="Apple-converted-space">    </span>var reduce = window.matchMedia("(prefers-reduced-motion: reduce)");</p>
+<p class="p1"><span class="Apple-converted-space">    </span>var dash = "\u2014";</p>
+<p class="p1"><span class="Apple-converted-space">    </span>var fmt2 = new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" });</p>
+<p class="p1"><span class="Apple-converted-space">    </span>var fmt0 = new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 0 });</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>var billEl = $("bill"), customEl = $("customPct"), customFace = $("customFace"),</p>
+<p class="p1"><span class="Apple-converted-space">        </span>pplEl = $("ppl"), roundEl = $("roundUp"),</p>
+<p class="p1"><span class="Apple-converted-space">        </span>rBill = $("rBill"), rTip = $("rTip"), rPct = $("rPct"), rTotal = $("rTotal"),</p>
+<p class="p1"><span class="Apple-converted-space">        </span>rEach = $("rEach"), rNote = $("rNote"),</p>
+<p class="p1"><span class="Apple-converted-space">        </span>tableFor = $("tableFor"), receiptDate = $("receiptDate"),</p>
+<p class="p1"><span class="Apple-converted-space">        </span>diagWrap = $("diagWrap"), diagCap = $("diagCap"),</p>
+<p class="p1"><span class="Apple-converted-space">        </span>hint = $("formHint"), announceEl = $("announce");</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>var PRESETS = Array.prototype.slice.call(document.querySelectorAll('input[name="tip"]'));</p>
+<p class="p1"><span class="Apple-converted-space">    </span>var lastPreset = PRESETS.filter(function (r) { return r.checked; })[0] || PRESETS[2];</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>var store = {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>get: function (k) { try { return JSON.parse(localStorage.getItem(k)); } catch (e) { return null; } },</p>
+<p class="p1"><span class="Apple-converted-space">      </span>set: function (k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>};</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>receiptDate.textContent = new Date()</p>
+<p class="p1"><span class="Apple-converted-space">      </span>.toLocaleDateString("en-US", { month: "short", day: "numeric" }).toUpperCase();</p>
+<p class="p1"><span class="Apple-converted-space">    </span>$("year").textContent = new Date().getFullYear();</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>/* ---------- mobile anchor ad: restore dismissal + close button ---------- */</p>
+<p class="p1"><span class="Apple-converted-space">    </span>(function initAnchor() {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>var anchor = $("ad-anchor"), closeBtn = $("anchorClose");</p>
+<p class="p1"><span class="Apple-converted-space">      </span>if (!anchor || !closeBtn) return;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>var closed = false;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>try { closed = sessionStorage.getItem("tiptable:anchor") === "closed"; } catch (e) {}</p>
+<p class="p1"><span class="Apple-converted-space">      </span>if (closed) {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>anchor.classList.add("is-closed");</p>
+<p class="p1"><span class="Apple-converted-space">        </span>document.body.classList.add("anchor-closed");</p>
+<p class="p1"><span class="Apple-converted-space">      </span>}</p>
+<p class="p1"><span class="Apple-converted-space">      </span>closeBtn.addEventListener("click", function () {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>anchor.classList.add("is-closed");</p>
+<p class="p1"><span class="Apple-converted-space">        </span>document.body.classList.add("anchor-closed");</p>
+<p class="p1"><span class="Apple-converted-space">        </span>try { sessionStorage.setItem("tiptable:anchor", "closed"); } catch (e) {}</p>
+<p class="p1"><span class="Apple-converted-space">      </span>});</p>
+<p class="p1"><span class="Apple-converted-space">    </span>})();</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>/* ---------- number tweening (skipped under reduced motion) ---------- */</p>
+<p class="p1"><span class="Apple-converted-space">    </span>var anims = new WeakMap();</p>
+<p class="p1"><span class="Apple-converted-space">    </span>function tweenText(el, to, fmt) {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>var st = anims.get(el) || {};</p>
+<p class="p1"><span class="Apple-converted-space">      </span>if (st.raf) cancelAnimationFrame(st.raf);</p>
+<p class="p1"><span class="Apple-converted-space">      </span>var from = (typeof el._v === "number") ? el._v : to;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>el._v = to;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>if (reduce.matches || from === to || !isFinite(from)) { el.textContent = fmt(to); return; }</p>
+<p class="p1"><span class="Apple-converted-space">      </span>var t0 = performance.now(), dur = 240;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>var step = function (t) {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>var p = Math.min(1, (t - t0) / dur), e = 1 - Math.pow(1 - p, 3);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>el.textContent = fmt(from + (to - from) * e);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>if (p &lt; 1) { st.raf = requestAnimationFrame(step); anims.set(el, st); }</p>
+<p class="p1"><span class="Apple-converted-space">      </span>};</p>
+<p class="p1"><span class="Apple-converted-space">      </span>st.raf = requestAnimationFrame(step);</p>
+<p class="p1"><span class="Apple-converted-space">      </span>anims.set(el, st);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>function resetText(el) {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>var st = anims.get(el);</p>
+<p class="p1"><span class="Apple-converted-space">      </span>if (st &amp;&amp; st.raf) cancelAnimationFrame(st.raf);</p>
+<p class="p1"><span class="Apple-converted-space">      </span>el._v = null; el.textContent = dash;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>/* "each person" writes to both the receipt and the diagram, in lockstep */</p>
+<p class="p1"><span class="Apple-converted-space">    </span>var eachRaf = 0, eachShown = null, diagEachEl = null;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>function writeEach(v, fmt) {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>rEach.textContent = fmt.format(v);</p>
+<p class="p1"><span class="Apple-converted-space">      </span>if (diagEachEl) diagEachEl.textContent = fmt.format(v);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>function renderEach(v, round) {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>var fmt = round ? fmt0 : fmt2;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>if (eachRaf) cancelAnimationFrame(eachRaf);</p>
+<p class="p1"><span class="Apple-converted-space">      </span>if (eachShown === null || reduce.matches || eachShown === v) { eachShown = v; writeEach(v, fmt); return; }</p>
+<p class="p1"><span class="Apple-converted-space">      </span>var from = eachShown; eachShown = v;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>var t0 = performance.now(), dur = 240;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>var step = function (t) {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>var p = Math.min(1, (t - t0) / dur), e = 1 - Math.pow(1 - p, 3);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>writeEach(from + (v - from) * e, fmt);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>if (p &lt; 1) eachRaf = requestAnimationFrame(step);</p>
+<p class="p1"><span class="Apple-converted-space">      </span>};</p>
+<p class="p1"><span class="Apple-converted-space">      </span>eachRaf = requestAnimationFrame(step);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>function resetEach() {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>if (eachRaf) cancelAnimationFrame(eachRaf);</p>
+<p class="p1"><span class="Apple-converted-space">      </span>eachShown = null; rEach.textContent = dash;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>if (diagEachEl) diagEachEl.textContent = dash;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>/* ---------- tip state ---------- */</p>
+<p class="p1"><span class="Apple-converted-space">    </span>/* Any non-empty numeric value counts — including 0% */</p>
+<p class="p1"><span class="Apple-converted-space">    </span>function customActive() {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>return customEl.value !== "" &amp;&amp; isFinite(parseFloat(customEl.value));</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>function setCustomClass() {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>customFace.classList.toggle("is-active", customActive());</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>/* Label is derived from the clamped pct, so display and math can never diverge */</p>
+<p class="p1"><span class="Apple-converted-space">    </span>function getTip() {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>if (customActive()) {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>var p = Math.min(999, Math.max(0, parseFloat(customEl.value)));</p>
+<p class="p1"><span class="Apple-converted-space">        </span>return { pct: p, label: p + "%" };</p>
+<p class="p1"><span class="Apple-converted-space">      </span>}</p>
+<p class="p1"><span class="Apple-converted-space">      </span>var sel = PRESETS.filter(function (r) { return r.checked; })[0];</p>
+<p class="p1"><span class="Apple-converted-space">      </span>if (sel) return { pct: +sel.value, label: sel.value + "%" };</p>
+<p class="p1"><span class="Apple-converted-space">      </span>return { pct: +lastPreset.value, label: lastPreset.value + "%" };</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>function savePct() {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>if (customActive()) { store.set("tiptable:tip", { t: "c", v: customEl.value }); return; }</p>
+<p class="p1"><span class="Apple-converted-space">      </span>var sel = PRESETS.filter(function (r) { return r.checked; })[0];</p>
+<p class="p1"><span class="Apple-converted-space">      </span>if (sel) store.set("tiptable:tip", { t: "p", v: sel.value });</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>/* ---------- announcements (debounced) ---------- */</p>
+<p class="p1"><span class="Apple-converted-space">    </span>var aTimer = 0;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>function announce(text) {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>clearTimeout(aTimer);</p>
+<p class="p1"><span class="Apple-converted-space">      </span>aTimer = setTimeout(function () { announceEl.textContent = text; }, 900);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>/* ---------- party size: hold the last valid count while the field is transiently empty ---------- */</p>
+<p class="p1"><span class="Apple-converted-space">    </span>var lastN = 1;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>function readN() {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>var n = parseInt(pplEl.value, 10);</p>
+<p class="p1"><span class="Apple-converted-space">      </span>if (isFinite(n) &amp;&amp; n &gt;= 1) lastN = Math.min(99, n);</p>
+<p class="p1"><span class="Apple-converted-space">      </span>return lastN;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>/* ---------- round-table diagram ---------- */</p>
+<p class="p1"><span class="Apple-converted-space">    </span>function buildDiagram(n, each, round) {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>var W = 320, H = 180, cx = 160, cy = 90, rx = 98, ry = 56;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>var seats = Math.min(n, 12);</p>
+<p class="p1"><span class="Apple-converted-space">      </span>var r = seats &lt;= 3 ? 15 : seats &lt;= 4 ? 14 : seats &lt;= 6 ? 12.5 : seats &lt;= 8 ? 11.5 : seats &lt;= 10 ? 10.5 : 9.5;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>var showNums = n &lt;= 12;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>var fmt = round ? fmt0 : fmt2;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>var eachStr = each === null ? dash : fmt.format(each);</p>
+<p class="p1"><span class="Apple-converted-space">      </span>var fs = eachStr.length &gt; 11 ? 13 : eachStr.length &gt; 8 ? 16 : 21;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>var s = '&lt;svg viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="Table diagram: ' + n +</p>
+<p class="p1"><span class="Apple-converted-space">              </span>(n === 1 ? ' person' : ' people') +</p>
+<p class="p1"><span class="Apple-converted-space">              </span>(each !== null ? ', each paying ' + eachStr : '') + '"&gt;';</p>
+<p class="p1"><span class="Apple-converted-space">      </span>s += '&lt;ellipse cx="' + cx + '" cy="' + cy + '" rx="' + rx + '" ry="' + ry + '" fill="var(--table)" stroke="#BCB09A" stroke-width="1.5"/&gt;';</p>
+<p class="p1"><span class="Apple-converted-space">      </span>s += '&lt;ellipse cx="' + cx + '" cy="' + cy + '" rx="' + (rx - 10) + '" ry="' + (ry - 9) + '" fill="none" stroke="rgba(25,21,18,.09)" stroke-width="1"/&gt;';</p>
+<p class="p1"><span class="Apple-converted-space">      </span>for (var i = 0; i &lt; seats; i++) {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>var a = -Math.PI / 2 + i * 2 * Math.PI / seats;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>var x = cx + Math.cos(a) * (rx + 17), y = cy + Math.sin(a) * (ry + 13);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>s += '&lt;circle cx="' + x.toFixed(1) + '" cy="' + y.toFixed(1) + '" r="' + r + '" fill="var(--card)" stroke="#191512" stroke-width="1.5"/&gt;';</p>
+<p class="p1"><span class="Apple-converted-space">        </span>if (showNums) {</p>
+<p class="p1"><span class="Apple-converted-space">          </span>s += '&lt;text x="' + x.toFixed(1) + '" y="' + (y + 0.5).toFixed(1) + '" text-anchor="middle" dy=".35em" ' +</p>
+<p class="p1"><span class="Apple-converted-space">               </span>'font-size="' + Math.max(9.5, r * 0.82).toFixed(1) + '" font-weight="600" fill="#191512"&gt;' + (i + 1) + '&lt;/text&gt;';</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">      </span>}</p>
+<p class="p1"><span class="Apple-converted-space">      </span>s += '&lt;text x="' + cx + '" y="' + (cy - 8) + '" text-anchor="middle" class="d-amount" style="font-size:' + fs + 'px"&gt;' + eachStr + '&lt;/text&gt;';</p>
+<p class="p1"><span class="Apple-converted-space">      </span>s += '&lt;text x="' + cx + '" y="' + (cy + 16) + '" text-anchor="middle" class="d-cap"&gt;EACH&lt;/text&gt;';</p>
+<p class="p1"><span class="Apple-converted-space">      </span>s += '&lt;/svg&gt;';</p>
+<p class="p1"><span class="Apple-converted-space">      </span>diagWrap.innerHTML = s;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>diagEachEl = diagWrap.querySelector(".d-amount");</p>
+<p class="p1"><span class="Apple-converted-space">      </span>diagWrap.classList.toggle("is-empty", each === null);</p>
+<p class="p1"><span class="Apple-converted-space">      </span>diagCap.textContent = n &gt; 12 ? ("Splitting " + n + " ways \u00B7 showing 12 seats")</p>
+<p class="p1"><span class="Apple-converted-space">                          </span>: n === 1 ? "The whole check is yours"</p>
+<p class="p1"><span class="Apple-converted-space">                          </span>: "Splitting between " + n + " people";</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>/* ---------- the one recalculation ---------- */</p>
+<p class="p1"><span class="Apple-converted-space">    </span>function recalc() {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>var raw = parseFloat(billEl.value);</p>
+<p class="p1"><span class="Apple-converted-space">      </span>var has = billEl.value !== "" &amp;&amp; isFinite(raw) &amp;&amp; raw &gt; 0;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>var tip = getTip();</p>
+<p class="p1"><span class="Apple-converted-space">      </span>var n = readN();</p>
+<p class="p1"><span class="Apple-converted-space">      </span>var round = roundEl.checked;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">      </span>tableFor.textContent = "TABLE FOR " + n;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>rPct.textContent = "@ " + tip.label;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>hint.hidden = has;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">      </span>if (!has) {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>resetText(rBill); resetText(rTip); resetText(rTotal); resetEach();</p>
+<p class="p1"><span class="Apple-converted-space">        </span>rNote.hidden = true;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>buildDiagram(n, null, round);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>announce("");</p>
+<p class="p1"><span class="Apple-converted-space">        </span>return;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">      </span>var tipAmt = raw * tip.pct / 100;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>var total = raw + tipAmt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>var eachExact = total / n;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>var each = round ? Math.ceil(eachExact - 1e-9) : eachExact;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>var extra = round ? each * n - total : 0;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">      </span>tweenText(rBill, raw, fmt2.format);</p>
+<p class="p1"><span class="Apple-converted-space">      </span>tweenText(rTip, tipAmt, fmt2.format);</p>
+<p class="p1"><span class="Apple-converted-space">      </span>tweenText(rTotal, total, fmt2.format);</p>
+<p class="p1"><span class="Apple-converted-space">      </span>buildDiagram(n, each, round);</p>
+<p class="p1"><span class="Apple-converted-space">      </span>renderEach(each, round);</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">      </span>if (extra &gt; 0.005) {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>rNote.hidden = false;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>rNote.textContent = "+" + fmt2.format(extra) + " extra from rounding up";</p>
+<p class="p1"><span class="Apple-converted-space">      </span>} else {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>rNote.hidden = true;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">      </span>announce(tip.label + " tip on " + fmt2.format(raw) + ": tip " + fmt2.format(tipAmt) +</p>
+<p class="p1"><span class="Apple-converted-space">               </span>", total " + fmt2.format(total) +</p>
+<p class="p1"><span class="Apple-converted-space">               </span>(n &gt; 1 ? ", split " + n + " ways, " : ", ") +</p>
+<p class="p1"><span class="Apple-converted-space">               </span>(round ? fmt0.format(each) : fmt2.format(each)) + " each.");</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>/* ---------- bill input ---------- */</p>
+<p class="p1"><span class="Apple-converted-space">    </span>billEl.addEventListener("input", function () {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>var v = billEl.value.replace(/[^\d.]/g, "");</p>
+<p class="p1"><span class="Apple-converted-space">      </span>var d = v.indexOf(".");</p>
+<p class="p1"><span class="Apple-converted-space">      </span>if (d &gt; -1) v = v.slice(0, d + 1) + v.slice(d + 1).replace(/\./g, "").slice(0, 2);</p>
+<p class="p1"><span class="Apple-converted-space">      </span>var ip = v.split(".")[0];</p>
+<p class="p1"><span class="Apple-converted-space">      </span>if (ip.length &gt; 9) v = ip.slice(0, 9) + v.slice(ip.length);</p>
+<p class="p1"><span class="Apple-converted-space">      </span>if (v !== billEl.value) billEl.value = v;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>recalc();</p>
+<p class="p1"><span class="Apple-converted-space">    </span>});</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>/* ---------- custom percentage: sanitizes AND clamps ---------- */</p>
+<p class="p1"><span class="Apple-converted-space">    </span>customEl.addEventListener("input", function () {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>var v = customEl.value.replace(/[^\d.]/g, "");</p>
+<p class="p1"><span class="Apple-converted-space">      </span>var d = v.indexOf(".");</p>
+<p class="p1"><span class="Apple-converted-space">      </span>if (d &gt; -1) v = v.slice(0, d + 1) + v.slice(d + 1).replace(/\./g, "").slice(0, 2);</p>
+<p class="p1"><span class="Apple-converted-space">      </span>if (v.length &gt; 5) v = v.slice(0, 5);</p>
+<p class="p1"><span class="Apple-converted-space">      </span>if (v !== "" &amp;&amp; parseFloat(v) &gt; 999) v = "999";</p>
+<p class="p1"><span class="Apple-converted-space">      </span>if (v !== customEl.value) customEl.value = v;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>if (customActive()) {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>PRESETS.forEach(function (r) { r.checked = false; });</p>
+<p class="p1"><span class="Apple-converted-space">      </span>} else {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>lastPreset.checked = true;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>}</p>
+<p class="p1"><span class="Apple-converted-space">      </span>setCustomClass();</p>
+<p class="p1"><span class="Apple-converted-space">      </span>savePct();</p>
+<p class="p1"><span class="Apple-converted-space">      </span>recalc();</p>
+<p class="p1"><span class="Apple-converted-space">    </span>});</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>/* ---------- preset radios ---------- */</p>
+<p class="p1"><span class="Apple-converted-space">    </span>PRESETS.forEach(function (r) {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>r.addEventListener("change", function () {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>if (!r.checked) return;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>lastPreset = r;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>customEl.value = "";</p>
+<p class="p1"><span class="Apple-converted-space">        </span>setCustomClass();</p>
+<p class="p1"><span class="Apple-converted-space">        </span>savePct();</p>
+<p class="p1"><span class="Apple-converted-space">        </span>recalc();</p>
+<p class="p1"><span class="Apple-converted-space">      </span>});</p>
+<p class="p1"><span class="Apple-converted-space">    </span>});</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>/* ---------- party size events ---------- */</p>
+<p class="p1"><span class="Apple-converted-space">    </span>pplEl.addEventListener("input", function () {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>pplEl.value = pplEl.value.replace(/\D/g, "").slice(0, 2);</p>
+<p class="p1"><span class="Apple-converted-space">      </span>recalc();</p>
+<p class="p1"><span class="Apple-converted-space">    </span>});</p>
+<p class="p1"><span class="Apple-converted-space">    </span>pplEl.addEventListener("blur", function () {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>pplEl.value = String(readN());</p>
+<p class="p1"><span class="Apple-converted-space">      </span>recalc();</p>
+<p class="p1"><span class="Apple-converted-space">    </span>});</p>
+<p class="p1"><span class="Apple-converted-space">    </span>function bump(d) {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>pplEl.value = String(Math.min(99, Math.max(1, readN() + d)));</p>
+<p class="p1"><span class="Apple-converted-space">      </span>recalc();</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>$("pplMinus").addEventListener("click", function () { bump(-1); });</p>
+<p class="p1"><span class="Apple-converted-space">    </span>$("pplPlus").addEventListener("click", function () { bump(1); });</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>/* ---------- round-up toggle ---------- */</p>
+<p class="p1"><span class="Apple-converted-space">    </span>roundEl.addEventListener("change", function () {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>store.set("tiptable:round", roundEl.checked);</p>
+<p class="p1"><span class="Apple-converted-space">      </span>recalc();</p>
+<p class="p1"><span class="Apple-converted-space">    </span>});</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>/* ---------- Enter blurs ---------- */</p>
+<p class="p1"><span class="Apple-converted-space">    </span>$("calcForm").addEventListener("submit", function (e) {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>e.preventDefault();</p>
+<p class="p1"><span class="Apple-converted-space">      </span>if (document.activeElement &amp;&amp; document.activeElement.blur) document.activeElement.blur();</p>
+<p class="p1"><span class="Apple-converted-space">    </span>});</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>/* ---------- restore last session ---------- */</p>
+<p class="p1"><span class="Apple-converted-space">    </span>(function restore() {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>var rr = store.get("tiptable:round");</p>
+<p class="p1"><span class="Apple-converted-space">      </span>if (rr) roundEl.checked = !!rr;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>var s = store.get("tiptable:tip");</p>
+<p class="p1"><span class="Apple-converted-space">      </span>if (!s) return;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>if (s.t === "p") {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>var r = PRESETS.filter(function (x) { return x.value === String(s.v); })[0];</p>
+<p class="p1"><span class="Apple-converted-space">        </span>if (r) { r.checked = true; lastPreset = r; }</p>
+<p class="p1"><span class="Apple-converted-space">      </span>} else if (s.t === "c") {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>var cv = String(s.v), c = parseFloat(cv);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>if (!isFinite(c) || c &lt; 0) return;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>if (c &gt; 999) cv = "999";</p>
+<p class="p1"><span class="Apple-converted-space">        </span>customEl.value = cv;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>PRESETS.forEach(function (x) { x.checked = false; });</p>
+<p class="p1"><span class="Apple-converted-space">      </span>}</p>
+<p class="p1"><span class="Apple-converted-space">      </span>setCustomClass();</p>
+<p class="p1"><span class="Apple-converted-space">    </span>})();</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>recalc();</p>
+<p class="p1"><span class="Apple-converted-space">  </span>})();</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/script&gt;</p>
+<p class="p1">&lt;/body&gt;</p>
+<p class="p1">&lt;/html&gt;</p>
+</body>
+</html>

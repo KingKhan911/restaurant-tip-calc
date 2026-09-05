@@ -1,0 +1,168 @@
+---
+import '../styles/global.css';
+
+interface NavLink {
+  href: string;
+  label: string;
+}
+
+interface Props {
+  title: string;
+  description: string;
+  path: string;
+  jsonLd?: string;
+  nav?: NavLink[];
+  footNav?: NavLink[];
+}
+
+const pillarNav: NavLink[] = [
+  { href: '#calculator', label: 'Calculator' },
+  { href: '#tipping-guide', label: 'Guide' },
+  { href: '#faq', label: 'FAQ' },
+];
+
+const pillarFoot: { href: string; label: string; group: 'tools' | 'guides' }[] = [
+  { href: '/', label: 'Tip Calculator', group: 'tools' },
+  { href: '/food-delivery-tip-calculator/', label: 'Delivery Calculator', group: 'tools' },
+  { href: '/average-restaurant-tip/', label: 'Average Restaurant Tip', group: 'guides' },
+  { href: '/how-much-tip-waitress-waiter/', label: 'Waiter & Waitress Tips', group: 'guides' },
+  { href: '/buffet-tipping-guide/', label: 'Buffet Tipping', group: 'guides' },
+  { href: '/service-charge-on-restaurant-bill/', label: 'Service Charge', group: 'guides' },
+];
+
+const { title, description, path, jsonLd, nav = pillarNav } = Astro.props;
+const canonical = new URL(path, Astro.site).href;
+const brand = 'Restaurant Tip Calculator';
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="robots" content="index,follow,max-image-preview:large" />
+    <link rel="canonical" href={canonical} />
+    <meta name="theme-color" content="#F6F1E7" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={brand} />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <!-- Add a 1200x630 image and uncomment: <meta property="og:image" content="https://restauranttipcalculator.com/og.png" /> -->
+    <meta name="twitter:card" content="summary" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Spline+Sans+Mono:wght@400;600;700&display=swap"
+    />
+    {jsonLd && <script type="application/ld+json" set:html={jsonLd} />}
+  </head>
+  <body id="top">
+    <a class="skip" href="#calculator">Skip to calculator</a>
+
+    <div class="shell">
+      <div class="wrap">
+        <header class="site-head">
+          <a class="brand" href="/" aria-label="Restaurant Tip Calculator — home">
+            <svg width="26" height="26" viewBox="0 0 26 26" aria-hidden="true" focusable="false">
+              <ellipse cx="13" cy="13" rx="10.5" ry="6.8" fill="none" stroke="currentColor" stroke-width="1.8" />
+              <circle cx="13" cy="3.4" r="1.9" fill="#B5432A" />
+              <circle cx="4.4" cy="18.6" r="1.9" fill="currentColor" />
+              <circle cx="21.6" cy="18.6" r="1.9" fill="currentColor" />
+            </svg>
+            Restaurant Tip Calculator
+          </a>
+          <nav class="site-nav" aria-label="Site">
+            {nav.map((l) => <a href={l.href}>{l.label}</a>)}
+          </nav>
+        </header>
+
+        <main>
+          <slot />
+        </main>
+
+        <footer class="site-foot">
+          <div class="foot-inner">
+            <div>
+              <span class="foot-brand">
+                <svg width="20" height="20" viewBox="0 0 26 26" aria-hidden="true" focusable="false">
+                  <ellipse cx="13" cy="13" rx="10.5" ry="6.8" fill="none" stroke="currentColor" stroke-width="1.8" />
+                  <circle cx="13" cy="3.4" r="1.9" fill="#B5432A" />
+                  <circle cx="21.6" cy="18.6" r="1.9" fill="currentColor" />
+                  <circle cx="4.4" cy="18.6" r="1.9" fill="currentColor" />
+                </svg>
+                Restaurant Tip Calculator
+              </span>
+              <p class="foot-note">
+                A fast, private tip calculator. Everything runs in your browser — your bill never leaves your device.
+              </p>
+            </div>
+            <nav class="foot-nav" aria-label="Footer">
+              <span class="foot-group">Tools</span>
+              {pillarFoot.filter((l) => l.group === 'tools').map((l) => <a href={l.href}>{l.label}</a>)}
+              <span class="foot-group">Guides</span>
+              {pillarFoot.filter((l) => l.group === 'guides').map((l) => <a href={l.href}>{l.label}</a>)}
+            </nav>
+            <p class="foot-copy">© <span id="year">2026</span> Restaurant Tip Calculator. Amounts in US dollars.</p>
+          </div>
+        </footer>
+      </div>
+
+      <!-- ============ AD: STICKY SIDEBAR RAIL (desktop ≥1240px only) ============ -->
+      <aside class="rail" aria-label="Advertisement">
+        <div class="rail-sticky">
+          <div class="ad ad-rail">
+            <p class="ad-label">Advertisement</p>
+            <div class="ad-slot" id="ad-rail" data-size="300 × 250">
+              <!-- e.g. GAM slot: /XXXXXXX/rtc_sidebar -->
+            </div>
+          </div>
+        </div>
+      </aside>
+    </div>
+
+    <!-- ============ AD: MOBILE STICKY ANCHOR 320×50 (≤779px only) ============ -->
+    <aside class="ad-anchor" id="ad-anchor" aria-label="Advertisement">
+      <div class="anchor-bar">
+        <span class="anchor-label">Advertisement</span>
+        <button type="button" class="anchor-close" id="anchorClose" aria-label="Close advertisement">&times;</button>
+      </div>
+      <div class="anchor-inner">
+        <div class="ad-slot" id="ad-anchor-slot" data-size="320 × 50">
+          <!-- e.g. GAM slot: /XXXXXXX/rtc_anchor -->
+        </div>
+      </div>
+    </aside>
+
+    <!-- Polite announcements for screen readers (debounced, not on every keystroke) -->
+    <div class="sr-only" role="status" aria-live="polite" id="announce"></div>
+
+    <script>
+      document.getElementById('year').textContent = String(new Date().getFullYear());
+      (function initAnchor() {
+        var anchor = document.getElementById('ad-anchor');
+        var closeBtn = document.getElementById('anchorClose');
+        if (!anchor || !closeBtn) return;
+        var closed = false;
+        try {
+          closed = sessionStorage.getItem('rtc:anchor') === 'closed';
+        } catch (e) {}
+        if (closed) {
+          anchor.classList.add('is-closed');
+          document.body.classList.add('anchor-closed');
+        }
+        closeBtn.addEventListener('click', function () {
+          anchor.classList.add('is-closed');
+          document.body.classList.add('anchor-closed');
+          try {
+            sessionStorage.setItem('rtc:anchor', 'closed');
+          } catch (e) {}
+        });
+      })();
+    </script>
+  </body>
+</html>

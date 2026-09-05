@@ -1,0 +1,327 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Calculator from '../components/Calculator.astro';
+import Related from '../components/Related.astro';
+
+const title = 'Average Restaurant Tip: What Percentage is Standard in the US (15–20%)';
+const description =
+  'The average restaurant tip in the U.S. is 15–20% of the pre-tax bill, with 20% now the standard for full table service. See the data, per-service breakdown, and tip math.';
+
+const nav = [
+  { href: '#calculator', label: 'Calculator' },
+  { href: '#average', label: 'The numbers' },
+  { href: '#faq', label: 'FAQ' },
+];
+
+const jsonLd = JSON.stringify({
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'BreadcrumbList',
+      '@id': 'https://restauranttipcalculator.com/average-restaurant-tip/#breadcrumb',
+      itemListElement: [
+        {
+          '@type': 'ListItem',
+          position: 1,
+          name: 'Restaurant Tip Calculator',
+          item: 'https://restauranttipcalculator.com/',
+        },
+        {
+          '@type': 'ListItem',
+          position: 2,
+          name: 'Average Restaurant Tip',
+          item: 'https://restauranttipcalculator.com/average-restaurant-tip/',
+        },
+      ],
+    },
+    {
+      '@type': 'WebApplication',
+      '@id': 'https://restauranttipcalculator.com/average-restaurant-tip/#app',
+      url: 'https://restauranttipcalculator.com/average-restaurant-tip/',
+      name: 'Restaurant Tip Calculator',
+      applicationCategory: 'UtilitiesApplication',
+      operatingSystem: 'Any',
+      browserRequirements: 'Requires JavaScript',
+      inLanguage: 'en',
+      offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+      featureList: [
+        'Tip percentage presets (15%, 18%, 20%, 22%) and custom tip',
+        'Instant tip amount and total with tip',
+        'Split the bill between up to 99 people',
+        'No sign-up; all calculations run in the browser',
+      ],
+    },
+    {
+      '@type': 'HowTo',
+      '@id': 'https://restauranttipcalculator.com/average-restaurant-tip/#howto',
+      url: 'https://restauranttipcalculator.com/average-restaurant-tip/#calculator',
+      name: 'How to calculate your restaurant tip',
+      step: [
+        {
+          '@type': 'HowToStep',
+          name: 'Enter the bill',
+          text: 'Type the amount from your check. Everything updates as you type.',
+        },
+        {
+          '@type': 'HowToStep',
+          name: 'Choose a tip',
+          text: 'Tap 15, 18, 20, or 22 percent, or type a custom percentage like 17.5.',
+        },
+        {
+          '@type': 'HowToStep',
+          name: 'Split it',
+          text: 'Set how many people are paying and read the per-person amount.',
+        },
+      ],
+    },
+    {
+      '@type': 'FAQPage',
+      '@id': 'https://restauranttipcalculator.com/average-restaurant-tip/#faq',
+      url: 'https://restauranttipcalculator.com/average-restaurant-tip/#faq',
+      mainEntity: [
+        {
+          '@type': 'Question',
+          name: 'What is the average restaurant tip in the U.S.?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'Most U.S. diners tip between 15% and 20% of the pre-tax bill, and 20% has become the norm for full table service. Counter and fast-casual orders average under 10%, while full-service check averages land near 19–20% in industry point-of-sale data (Toast, 2023).',
+          },
+        },
+        {
+          '@type': 'Question',
+          name: 'What percentage is customary for tipping in a restaurant?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'The customary tip for restaurant table service is 15–20% of the pre-tax amount: 15–18% for adequate service and 20% or more for good-to-great service. Etiquette guides have quoted 18–20% for decades, and that same range is the standard restaurant tip today.',
+          },
+        },
+        {
+          '@type': 'Question',
+          name: 'Is 20% now the standard restaurant tip?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'Yes — 20% is widely treated as the default for full-service table service in the U.S., with 18% seen as slightly conservative and 22–25% for exceptional service. A 2023 Pew Research survey found most Americans tip about 20% at sit-down restaurants.',
+          },
+        },
+        {
+          '@type': 'Question',
+          name: 'What is a normal restaurant tip for average or bad service?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'For average or merely acceptable service, 15–18% is normal. For poor service, diners commonly drop to 10% rather than zero — the tipped minimum wage is as low as $2.13 an hour, so zeroing the tip pulls money directly out of the server\'s pay. For clearly hostile service, speak to a manager instead of leaving nothing silently.',
+          },
+        },
+        {
+          '@type': 'Question',
+          name: 'What is the average tip on a $50 restaurant bill?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'At 18%, the tip on a $50 bill is $9.00 for a total of $59.00. At 20%, it is $10.00 for a total of $60.00. Split between two people, that is $29.50 or $30.00 each.',
+          },
+        },
+        {
+          '@type': 'Question',
+          name: 'Do you tip before or after tax?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'Etiquette says calculate the percentage on the pre-tax subtotal. Most people just tip on the after-tax total because it is the number at the bottom of the check — the difference is usually well under a dollar, so either approach is fine as long as you are consistent.',
+          },
+        },
+      ],
+    },
+  ],
+});
+---
+
+<Layout title={title} description={description} path="/average-restaurant-tip/" jsonLd={jsonLd} nav={nav}>
+  <section class="hero">
+    <p class="guide-intro"><a href="/">Restaurant tip calculator</a> / Average restaurant tip</p>
+    <h1>Average Restaurant Tip: What Most Americans Leave in 2026</h1>
+    <p class="lede">
+      The short answer: <strong>15–20% of the pre-tax bill</strong>, with 20% now the default for full table service.
+      Here's the data, the per-service breakdown, and the math — free, no sign-up.
+    </p>
+  </section>
+
+  <Calculator mode="dinein" />
+
+  <aside class="ad ad-leaderboard ad-below" aria-label="Advertisement">
+    <p class="ad-label">Advertisement</p>
+    <div class="ad-slot" id="ad-below" data-size="728 × 90 · 300 × 250">
+      <!-- e.g. GAM slot: /XXXXXXX/rtc_avgptip_below-calc -->
+    </div>
+  </aside>
+
+  <!-- ============ THE NUMBERS ============ -->
+  <section class="section" id="average">
+    <h2>What's the average tip percentage in U.S. restaurants?</h2>
+    <div class="prose">
+      <p>
+        Industry point-of-sale data and consumer surveys agree: <strong>20% is the average restaurant tip</strong> for
+        full table service, and the customary range has settled at <strong>15–20% of the pre-tax bill</strong>. In
+        Toast's 2023 restaurant trends data, full-service tips averaged just under 20% while counter-service orders
+        averaged in the mid-teens. A 2023 Pew Research survey found about <strong>three-quarters of Americans</strong>
+        say tipping is expected of them at sit-down restaurants — and most tip around 20%.
+      </p>
+      <p>
+        What that means in practice: 15% reads as "fine," 18% as "good," and <strong>20–25% as "great."</strong> The
+        percentage for tipping has crept up over the past two decades — the old 15%-as-default norm has become a floor.
+      </p>
+    </div>
+
+    <div class="guide-grid">
+      <div>
+        <p class="guide-intro">Normal restaurant tip by level of service — the range to use:</p>
+        <div class="menu">
+          <div class="menu-row">
+            <span class="menu-name">Counter service, coffee shops</span><span class="dots" aria-hidden="true"
+            ></span><span class="menu-val">0–10%, optional</span>
+          </div>
+          <div class="menu-row">
+            <span class="menu-name">Buffet, full service</span><span class="dots" aria-hidden="true"></span><span
+              class="menu-val">10–20%</span>
+          </div>
+          <div class="menu-row">
+            <span class="menu-name">Table service, acceptable</span><span class="dots" aria-hidden="true"
+            ></span><span class="menu-val">15–18%</span>
+          </div>
+          <div class="menu-row">
+            <span class="menu-name">Table service, good-to-great</span><span class="dots" aria-hidden="true"
+            ></span><span class="menu-val">20–25%</span>
+          </div>
+          <div class="menu-row">
+            <span class="menu-name">Large groups (6+)</span><span class="dots" aria-hidden="true"></span><span
+              class="menu-val">18–20% auto-added</span>
+          </div>
+          <div class="menu-row">
+            <span class="menu-name">Bar drinks</span><span class="dots" aria-hidden="true"></span><span
+              class="menu-val">$1–2 a drink, or 15–20%</span>
+          </div>
+        </div>
+      </div>
+      <div>
+        <table class="worked">
+          <caption>Average tip on common check sizes (18% vs 20%):</caption>
+          <thead>
+            <tr><th scope="col">Bill</th><th scope="col">18% tip</th><th scope="col">20% tip</th><th scope="col">Total @20%</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>$25.00</td><td>$4.50</td><td>$5.00</td><td>$30.00</td></tr>
+            <tr><td>$40.00</td><td>$7.20</td><td>$8.00</td><td>$48.00</td></tr>
+            <tr><td>$60.00</td><td>$10.80</td><td>$12.00</td><td>$72.00</td></tr>
+            <tr><td>$100.00</td><td>$18.00</td><td>$20.00</td><td>$120.00</td></tr>
+          </tbody>
+        </table>
+        <p class="worked-note">
+          Run any check through the <a href="#calculator">tip calculator above</a> — tip, total, and per-person split
+          update live. Bill already has an auto-gratuity? Read up on the
+          <a href="/service-charge-on-restaurant-bill/">service charge on your restaurant bill</a> first.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ WHY TIPS ARE THE NORM ============ -->
+  <section class="section" id="why">
+    <h2>Why tips are the norm — and why the average keeps rising</h2>
+    <div class="prose">
+      <p>
+        U.S. federal law lets employers pay tipped staff as little as <strong>$2.13 an hour</strong>, with tips making
+        up the difference to the regular minimum wage. Tips therefore aren't a bonus for servers — they're most of the
+        paycheck. That's the root of the "always tip at sit-down restaurants" rule, and it's why the customary tip has
+        drifted from 15% to 20%: restaurants raised expectations alongside menu prices, and payment screens nudged
+        tipping into counter-service too.
+      </p>
+      <p>
+        If you're traveling, remember this is a U.S. norm. In much of Europe service is included in the price, and in
+        Japan tipping is unnecessary — check local customs first. And if your server gets it wrong, knowing
+        <a href="/how-much-tip-waitress-waiter/">how much to tip a waitress or waiter</a> per service level keeps the
+        math painless.
+      </p>
+    </div>
+  </section>
+
+  <!-- ============ FAQ ============ -->
+  <section class="section" id="faq">
+    <h2>Average tip questions, answered</h2>
+    <div class="faq">
+      <details>
+        <summary>What is the average restaurant tip in the U.S.?</summary>
+        <p>
+          Most U.S. diners tip between 15% and 20% of the pre-tax bill, and 20% has become the norm for full table
+          service. Counter and fast-casual orders average under 10%, while full-service check averages land near
+          19–20% in industry point-of-sale data (Toast, 2023).
+        </p>
+      </details>
+      <details>
+        <summary>What percentage is customary for tipping in a restaurant?</summary>
+        <p>
+          The customary tip for restaurant table service is 15–20% of the pre-tax amount: 15–18% for adequate service
+          and 20% or more for good-to-great service. Etiquette guides have quoted 18–20% for decades, and that same
+          range is the standard restaurant tip today.
+        </p>
+      </details>
+      <details>
+        <summary>Is 20% now the standard restaurant tip?</summary>
+        <p>
+          Yes — 20% is widely treated as the default for full-service table service in the U.S., with 18% seen as
+          slightly conservative and 22–25% for exceptional service. A 2023 Pew Research survey found most Americans
+          tip about 20% at sit-down restaurants.
+        </p>
+      </details>
+      <details>
+        <summary>What is a normal restaurant tip for average or bad service?</summary>
+        <p>
+          For average or merely acceptable service, 15–18% is normal. For poor service, diners commonly drop to 10%
+          rather than zero — the tipped minimum wage is as low as $2.13 an hour, so zeroing the tip pulls money
+          directly out of the server's pay. For clearly hostile service, speak to a manager instead of leaving nothing
+          silently.
+        </p>
+      </details>
+      <details>
+        <summary>What is the average tip on a $50 restaurant bill?</summary>
+        <p>
+          At 18%, the tip on a $50 bill is $9.00 for a total of $59.00. At 20%, it is $10.00 for a total of $60.00.
+          Split between two people, that is $29.50 or $30.00 each.
+        </p>
+      </details>
+      <details>
+        <summary>Do you tip before or after tax?</summary>
+        <p>
+          Etiquette says calculate the percentage on the pre-tax subtotal. Most people just tip on the after-tax total
+          because it is the number at the bottom of the check — the difference is usually well under a dollar, so
+          either approach is fine as long as you are consistent.
+        </p>
+      </details>
+    </div>
+  </section>
+
+  <!-- ============ SOURCES ============ -->
+  <section class="section" id="sources">
+    <h2>Sources</h2>
+    <ul class="prose">
+      <li>
+        <a href="https://www.pewresearch.org/short-reads/2023/11/22/more-americans-are-saying-tipping-is-now-expected/">
+          Pew Research Center — "More Americans Are Saying Tipping Is Now Expected" (Nov 2023)
+        </a>
+      </li>
+      <li>
+        <a href="https://pos.toasttab.com/resources/restaurant-trends-report">Toast POS Restaurant Trends Report (2023)</a>
+        — average tip percentage by service type.
+      </li>
+      <li>
+        <a href="https://www.dol.gov/agencies/whd/minimum-wage/tips">U.S. Department of Labor — tipped minimum wage factsheet</a>
+        ($2.13 federal tipped minimum wage, tip credit rules).
+      </li>
+    </ul>
+  </section>
+
+  <aside class="ad ad-native ad-inline" aria-label="Advertisement">
+    <p class="ad-label">Advertisement</p>
+    <div class="ad-slot" id="ad-native" data-size="Native banner · 280px reserved">
+      <!-- Paste the native banner tag from your ad network here -->
+    </div>
+  </aside>
+
+  <Related exclude="/average-restaurant-tip/" />
+</Layout>

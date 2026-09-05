@@ -1,0 +1,413 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Calculator from '../components/Calculator.astro';
+import Related from '../components/Related.astro';
+
+const title = 'Restaurant Tip Calculator: Tip, Total & Split Per Person';
+const description =
+  'Calculate a 15%, 18%, 20% or custom tip in seconds. See the total with tip and the per-person amount when splitting the bill. Free, instant, no sign-up.';
+
+const jsonLd = JSON.stringify({
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'WebSite',
+      '@id': 'https://restauranttipcalculator.com/#website',
+      url: 'https://restauranttipcalculator.com/',
+      name: 'Restaurant Tip Calculator',
+      inLanguage: 'en',
+    },
+    {
+      '@type': 'WebApplication',
+      '@id': 'https://restauranttipcalculator.com/#app',
+      url: 'https://restauranttipcalculator.com/',
+      name: 'Restaurant Tip Calculator',
+      applicationCategory: 'UtilitiesApplication',
+      operatingSystem: 'Any',
+      browserRequirements: 'Requires JavaScript',
+      inLanguage: 'en',
+      isPartOf: { '@id': 'https://restauranttipcalculator.com/#website' },
+      offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+      featureList: [
+        'Tip percentage presets (15%, 18%, 20%, 22%) and custom tip',
+        'Instant tip amount and total with tip',
+        'Split the bill between up to 99 people',
+        'Round-up option for whole-dollar shares',
+        'No sign-up; all calculations run in the browser',
+      ],
+    },
+    {
+      '@type': 'HowTo',
+      '@id': 'https://restauranttipcalculator.com/#howto',
+      url: 'https://restauranttipcalculator.com/#how-it-works',
+      name: 'How to use the restaurant tip calculator',
+      step: [
+        {
+          '@type': 'HowToStep',
+          name: 'Enter the bill',
+          text: 'Type the amount from your check. Everything updates as you type.',
+        },
+        {
+          '@type': 'HowToStep',
+          name: 'Choose a tip',
+          text: 'Tap 15, 18, 20, or 22 percent, or type a custom percentage like 17.5.',
+        },
+        {
+          '@type': 'HowToStep',
+          name: 'Split it',
+          text: 'Set how many people are paying and read the per-person amount.',
+        },
+      ],
+    },
+    {
+      '@type': 'FAQPage',
+      '@id': 'https://restauranttipcalculator.com/#faq',
+      url: 'https://restauranttipcalculator.com/#faq',
+      mainEntity: [
+        {
+          '@type': 'Question',
+          name: 'How much do you tip on a $50 bill?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'At 18%, the tip is $9.00 for a total of $59.00. At 20%, the tip is $10.00 for a total of $60.00. Split two ways, that works out to $29.50 or $30.00 per person.',
+          },
+        },
+        {
+          '@type': 'Question',
+          name: 'What is the average restaurant tip?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'A normal restaurant tip falls between 15% and 20% of the pre-tax bill: 15–18% for solid table service and 20–22% for great service. The standard restaurant tip most etiquette guides quote is 18–20%, and the customary tip for restaurant meals has sat in that range for years.',
+          },
+        },
+        {
+          '@type': 'Question',
+          name: 'How much should you tip a waitress or waiter?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'Whether you searched “tip waitress” or “tips for waiters,” the scale is the same 15–20%: 15% for adequate service, 20% or more when your waiter or waitress gets it right. U.S. servers often earn a tipped base wage as low as $2.13 an hour, so the tip is most of their pay, not a bonus on top.',
+          },
+        },
+        {
+          '@type': 'Question',
+          name: 'How much do you tip at a buffet?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'The standard buffet tip is at least 10%, rising to 15–20% at a full-service buffet where staff bring drinks, clear plates, and look after your table. No table service at all — a pure self-serve counter — means a dollar or two in the tip jar is plenty.',
+          },
+        },
+        {
+          '@type': 'Question',
+          name: 'How much do you tip for food delivery?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'Tip 15–20% of the food subtotal (before delivery fees and tax), with a few dollars minimum on small orders. Ordering in bad weather or from far away? Bump it up. For the exact math, use our food delivery tip calculator.',
+          },
+        },
+        {
+          '@type': 'Question',
+          name: 'How to calculate restaurant bill totals with tip?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'Multiply the bill by one plus the tip as a decimal: a $60 check at 20% is $60 × 1.20 = $72.00. Splitting? Divide the total by the number of people — $72.00 ÷ 3 = $24.00 each.',
+          },
+        },
+        {
+          '@type': 'Question',
+          name: 'Do you tip for takeout?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'Tipping on takeout is optional. Many people skip it or leave about 10%, since there is no table service. If the kitchen handled a large or complicated order, a few extra dollars is a nice gesture.',
+          },
+        },
+        {
+          '@type': 'Question',
+          name: 'What if my bill already includes a service charge?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'Many restaurants add an automatic 18–20% gratuity for parties of six or more, and some add a service fee to every check. A service charge on restaurant bill printouts is often that automatic gratuity — if one is already there, you don\'t need to add the full amount again, though extra for standout service is always welcome. Note that automatic gratuities legally count as service charges, not tips.',
+          },
+        },
+        {
+          '@type': 'Question',
+          name: 'Should you tip on the discounted price or the original?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'If you used a coupon or discount, the customary move is to tip on the pre-discount amount, since your server did the same work either way. Tipping on what you actually paid is also common — just remember the difference comes out of your server\'s pocket.',
+          },
+        },
+        {
+          '@type': 'Question',
+          name: 'Is tipping the same outside the United States?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'No — norms vary a lot. In much of Europe, service is included in the price (look for “service compris”) and rounding up the bill is a pleasant gesture. In Japan, tipping can be unnecessary or even awkward. A quick search before you travel beats an awkward moment at the table.',
+          },
+        },
+        {
+          '@type': 'Question',
+          name: 'How do you split a bill when everyone ordered differently?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'This calculator splits everything evenly, which is fastest for groups with similar checks. For uneven orders, either split the food cost exactly and tip evenly, or have each person tip 20% on what they ordered and round their share up to the next dollar.',
+          },
+        },
+      ],
+    },
+  ],
+});
+---
+
+<Layout title={title} description={description} path="/" jsonLd={jsonLd}>
+  <section class="hero">
+    <h1>Restaurant Tip Calculator</h1>
+    <p class="lede">
+      Enter your check, pick a percentage, split it any way you like. Tip, total, and per-person amounts update live —
+      no buttons, no sign-up, no math at the table.
+    </p>
+  </section>
+
+  <Calculator mode="dinein" />
+
+  <!-- ============ AD: BELOW CALCULATOR ============
+       728×90 desktop · 300×250 mobile. Paste your ad tag inside .ad-slot.
+       Space is pre-reserved — no CLS. -->
+  <aside class="ad ad-leaderboard ad-below" aria-label="Advertisement">
+    <p class="ad-label">Advertisement</p>
+    <div class="ad-slot" id="ad-below" data-size="728 × 90 · 300 × 250">
+      <!-- e.g. GAM slot: /XXXXXXX/rtc_below-calc -->
+    </div>
+  </aside>
+
+  <!-- ============ HOW IT WORKS ============ -->
+  <section class="section" id="how-it-works">
+    <h2>How it works</h2>
+    <ol class="steps">
+      <li>
+        <span class="step-n" aria-hidden="true">1.</span><p>
+          <strong>Enter the bill</strong> — the amount from your check. Everything updates as you type.
+        </p>
+      </li>
+      <li>
+        <span class="step-n" aria-hidden="true">2.</span><p>
+          <strong>Choose a tip</strong> — tap 15, 18, 20, or 22 percent, or type a custom percentage like 17.5.
+        </p>
+      </li>
+      <li>
+        <span class="step-n" aria-hidden="true">3.</span><p>
+          <strong>Split it</strong> — set how many people are paying and read the per-person amount.
+        </p>
+      </li>
+    </ol>
+  </section>
+
+  <!-- ============ TIPPING GUIDE ============ -->
+  <section class="section" id="tipping-guide">
+    <h2>How much should you tip?</h2>
+    <div class="guide-grid">
+      <div>
+        <p class="guide-intro">
+          In the U.S., 20% is the norm for good table service — see
+          <a href="/average-restaurant-tip/">the average restaurant tip</a> for the full data. The standard percentage
+          for tipping in restaurant settings is 15–20% of the pre-tax bill. The ranges below cover the situations
+          you'll actually run into:
+        </p>
+        <div class="menu">
+          <div class="menu-row">
+            <span class="menu-name">Table service, solid experience</span><span class="dots" aria-hidden="true"
+            ></span><span class="menu-val">15–18%</span>
+          </div>
+          <div class="menu-row">
+            <span class="menu-name">Table service, great experience</span><span class="dots" aria-hidden="true"
+            ></span><span class="menu-val">20–22%</span>
+          </div>
+          <div class="menu-row">
+            <span class="menu-name">Buffet</span><span class="dots" aria-hidden="true"></span><span class="menu-val"
+              >10% min, 15–20% full-service</span
+            >
+          </div>
+          <div class="menu-row">
+            <span class="menu-name">Counter service &amp; coffee shops</span><span class="dots" aria-hidden="true"
+            ></span><span class="menu-val">0–10%, optional</span>
+          </div>
+          <div class="menu-row">
+            <span class="menu-name">Bar drinks</span><span class="dots" aria-hidden="true"></span><span class="menu-val"
+              >$1–2 per drink, or 15–20%</span
+            >
+          </div>
+          <div class="menu-row">
+            <span class="menu-name">Food delivery</span><span class="dots" aria-hidden="true"></span><span
+              class="menu-val">15–20%</span
+            >
+          </div>
+          <div class="menu-row">
+            <span class="menu-name">Large groups (6+)</span><span class="dots" aria-hidden="true"></span><span
+              class="menu-val">often added automatically</span
+            >
+          </div>
+        </div>
+        <p class="menu-src">
+          Tips in the U.S. make up the bulk of a server's income — the tipped minimum wage can be as low as $2.13 per
+          hour before tips (<a href="https://www.dol.gov/agencies/whd/minimum-wage/tips">U.S. Department of Labor</a>).
+          Pew Research (2023) found roughly three-quarters of Americans say tipping is expected at sit-down restaurants.
+        </p>
+      </div>
+      <div>
+        <table class="worked">
+          <caption>A $60 check at each common percentage:</caption>
+          <thead>
+            <tr><th scope="col">Tip</th><th scope="col">Tip amount</th><th scope="col">Total</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>15%</td><td>$9.00</td><td>$69.00</td></tr>
+            <tr><td>18%</td><td>$10.80</td><td>$70.80</td></tr>
+            <tr><td>20%</td><td>$12.00</td><td>$72.00</td></tr>
+            <tr><td>22%</td><td>$13.20</td><td>$73.20</td></tr>
+          </tbody>
+        </table>
+        <p class="worked-note">
+          Splitting that $72.00 check three ways? <a href="#calculator">Run it through the calculator</a> — it's $24.00
+          each.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ AD: IN-CONTENT DISPLAY (lazy-load candidate) ============
+       728×90 desktop · 300×250 mobile — the required mobile in-content unit -->
+  <aside class="ad ad-leaderboard ad-inline" aria-label="Advertisement">
+    <p class="ad-label">Advertisement</p>
+    <div class="ad-slot" id="ad-content-1" data-size="728 × 90 · 300 × 250">
+      <!-- e.g. GAM slot: /XXXXXXX/rtc_in-content -->
+    </div>
+  </aside>
+
+  <!-- ============ TAX ============ -->
+  <section class="section" id="tip-on-tax">
+    <h2>Do you tip on tax, or before tax?</h2>
+    <div class="prose">
+      <p>
+        Strictly speaking, etiquette says tip on the <strong>pre-tax subtotal</strong> — the tip pays your server, not
+        the tax office. In practice, most people tip on the after-tax total because it's the number printed at the
+        bottom of the check, and the difference is small: on a $60 check with 8% sales tax, a 20% tip is <b>$12.00</b>
+        on the subtotal versus <b>$12.96</b> on the taxed total — under a dollar.
+      </p>
+      <p>
+        Pick one approach, be consistent, and don't sweat it. If you want to be precise, enter the pre-tax amount in
+        the <a href="#calculator">calculator above</a>.
+      </p>
+    </div>
+  </section>
+
+  <!-- ============ FAQ ============ -->
+  <section class="section" id="faq">
+    <h2>Tipping questions, answered</h2>
+    <div class="faq">
+      <details>
+        <summary>How much do you tip on a $50 bill?</summary>
+        <p>
+          At 18%, the tip is $9.00 for a total of $59.00. At 20%, the tip is $10.00 for a total of $60.00. Split two
+          ways, that works out to $29.50 or $30.00 per person.
+        </p>
+      </details>
+      <details>
+        <summary>What is the average restaurant tip?</summary>
+        <p>
+          A normal restaurant tip falls between 15% and 20% of the pre-tax bill: 15–18% for solid table service and
+          20–22% for great service. The standard restaurant tip most etiquette guides quote is 18–20%, and the
+          customary tip for restaurant meals has sat in that range for years.
+          <strong><a href="/average-restaurant-tip/">See the full average tip breakdown with data and examples.</a></strong>
+        </p>
+      </details>
+      <details>
+        <summary>How much should you tip a waitress or waiter?</summary>
+        <p>
+          Whether you searched “tip waitress” or “tips for waiters,” the scale is the same 15–20%: 15% for adequate
+          service, 20% or more when your waiter or waitress gets it right. U.S. servers often earn a tipped base wage
+          as low as $2.13 an hour, so the tip is most of their pay, not a bonus on top.
+          <strong><a href="/how-much-tip-waitress-waiter/">Full waiter &amp; waitress tipping guide with examples.</a></strong>
+        </p>
+      </details>
+      <details>
+        <summary>How much do you tip at a buffet?</summary>
+        <p>
+          The standard buffet tip is at least 10%, rising to 15–20% at a full-service buffet where staff bring
+          drinks, clear plates, and look after your table. No table service at all — a pure self-serve counter —
+          means a dollar or two in the tip jar is plenty.
+          <strong><a href="/buffet-tipping-guide/">Complete buffet tipping guide.</a></strong>
+        </p>
+      </details>
+      <details>
+        <summary>How much do you tip for food delivery?</summary>
+        <p>
+          Tip 15–20% of the food subtotal (before delivery fees and tax), with a few dollars minimum on small orders.
+          Ordering in bad weather or from far away? Bump it up. For the exact math, use our <a
+            href="/food-delivery-tip-calculator/">food delivery tip calculator</a
+          >.
+        </p>
+      </details>
+      <details>
+        <summary>How to calculate restaurant bill totals with tip?</summary>
+        <p>
+          Multiply the bill by one plus the tip as a decimal: a $60 check at 20% is $60 × 1.20 = $72.00. Splitting?
+          Divide the total by the number of people — $72.00 ÷ 3 = $24.00 each.
+        </p>
+      </details>
+      <details>
+        <summary>Do you tip for takeout?</summary>
+        <p>
+          Tipping on takeout is optional. Many people skip it or leave about 10%, since there is no table service. If
+          the kitchen handled a large or complicated order, a few extra dollars is a nice gesture.
+        </p>
+      </details>
+      <details>
+        <summary>What if my bill already includes a service charge?</summary>
+        <p>
+          Many restaurants add an automatic 18–20% gratuity for parties of six or more, and some add a service fee to
+          every check. A service charge on restaurant bill printouts is often that automatic gratuity — if one is
+          already there, you don't need to add the full amount again, though extra for standout service is always
+          welcome. Note that automatic
+          gratuities legally count as service charges, not tips.
+          <strong><a href="/service-charge-on-restaurant-bill/">Service charge on your bill, explained.</a></strong>
+        </p>
+      </details>
+      <details>
+        <summary>Should you tip on the discounted price or the original?</summary>
+        <p>
+          If you used a coupon or discount, the customary move is to tip on the pre-discount amount, since your server
+          did the same work either way. Tipping on what you actually paid is also common — just remember the
+          difference comes out of your server's pocket.
+        </p>
+      </details>
+      <details>
+        <summary>Is tipping the same outside the United States?</summary>
+        <p>
+          No — norms vary a lot. In much of Europe, service is included in the price (look for “service compris”) and
+          rounding up the bill is a pleasant gesture. In Japan, tipping can be unnecessary or even awkward. A quick
+          search before you travel beats an awkward moment at the table.
+        </p>
+      </details>
+      <details>
+        <summary>How do you split a bill when everyone ordered differently?</summary>
+        <p>
+          This calculator splits everything evenly, which is fastest for groups with similar checks. For uneven
+          orders, either split the food cost exactly and tip evenly, or have each person tip 20% on what they ordered
+          and round their share up to the next dollar.
+        </p>
+      </details>
+    </div>
+  </section>
+
+  <!-- ============ AD: NATIVE BANNER (lazy-load candidate) ============
+       Responsive native creative placed naturally after the supporting content.
+       Height reserved at 280px — match this value to your network's typical
+       native banner render for zero CLS. -->
+  <aside class="ad ad-native ad-inline" aria-label="Advertisement">
+    <p class="ad-label">Advertisement</p>
+    <div class="ad-slot" id="ad-native" data-size="Native banner · 280px reserved">
+      <!-- Paste the native banner tag from your ad network here -->
+    </div>
+  </aside>
+
+  <Related exclude="/" />
+</Layout>

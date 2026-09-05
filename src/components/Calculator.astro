@@ -1,0 +1,592 @@
+---
+import { calcTotals } from '../lib/tip.js';
+
+interface Props {
+  mode?: 'dinein' | 'delivery';
+}
+
+const { mode = 'dinein' } = Astro.props;
+const delivery = mode === 'delivery';
+const amountLabel = delivery ? 'Order subtotal' : 'Bill amount';
+---
+
+<section class="calc" id="calculator" aria-label="Tip calculator" data-mode={mode}>
+  <form id="calcForm" autocomplete="off" novalidate>
+    <div class="field">
+      <label class="lbl" for="bill">{amountLabel}</label>
+      <div class="money-wrap">
+        <span class="cur" aria-hidden="true">$</span>
+        <input
+          id="bill"
+          type="text"
+          inputmode="decimal"
+          enterkeyhint="done"
+          placeholder="0.00"
+          maxlength="12"
+          spellcheck="false"
+        />
+      </div>
+    </div>
+
+    {
+      delivery && (
+        <div class="field">
+          <label class="lbl" for="fee">
+            Delivery fee <span style="text-transform:none;letter-spacing:0">(not tipped)</span>
+          </label>
+          <div class="money-wrap">
+            <span class="cur" aria-hidden="true">$</span>
+            <input
+              id="fee"
+              type="text"
+              inputmode="decimal"
+              enterkeyhint="done"
+              placeholder="0.00"
+              maxlength="12"
+              spellcheck="false"
+            />
+          </div>
+        </div>
+      )
+    }
+
+    <fieldset class="field" style="border:0;padding:0;margin:0 0 26px">
+      <legend class="lbl">Tip percentage</legend>
+      <div class="chips">
+        <label class="chip"><input type="radio" name="tip" value="15" /><span class="chip-face">15%</span></label>
+        <label class="chip"><input type="radio" name="tip" value="18" /><span class="chip-face">18%</span></label>
+        <label class="chip"><input type="radio" name="tip" value="20" checked /><span class="chip-face">20%</span></label>
+        <label class="chip"><input type="radio" name="tip" value="22" /><span class="chip-face">22%</span></label>
+        <label class="chip">
+          <span class="chip-face custom" id="customFace">
+            <input
+              id="customPct"
+              type="text"
+              inputmode="decimal"
+              enterkeyhint="done"
+              placeholder="Custom"
+              maxlength="5"
+              aria-label="Custom tip percentage"
+            />
+            <span class="pct" aria-hidden="true">%</span>
+          </span>
+        </label>
+      </div>
+    </fieldset>
+
+    <div class="field split-row">
+      <label class="lbl" for="ppl" id="splitLabel">Split between</label>
+      <div class="stepper">
+        <button type="button" id="pplMinus" aria-label="One person fewer">&minus;</button>
+        <input id="ppl" type="text" inputmode="numeric" value="1" maxlength="2" aria-labelledby="splitLabel" aria-describedby="splitUnit" />
+        <button type="button" id="pplPlus" aria-label="One person more">+</button>
+      </div>
+      <span class="sr-only" id="splitUnit">people</span>
+    </div>
+
+    <label class="toggle-row">
+      <span class="switch">
+        <input type="checkbox" id="roundUp" />
+        <span class="track" aria-hidden="true"></span>
+      </span>
+      <span class="toggle-text">Round each share up to the next dollar</span>
+    </label>
+
+    <p class="hint" id="formHint">
+      {
+        delivery
+          ? 'Start with the order subtotal — tip, fees, and total fill in as you type.'
+          : 'Start with the bill amount — tip, total, and split fill in as you type.'
+      }
+    </p>
+    <p class="hint" id="noJsNote" hidden>
+      This calculator needs JavaScript. The worked example below shows the same math step by step.
+    </p>
+  </form>
+
+  <div>
+    <div class="receipt-wrap">
+      <div class="receipt">
+        <div class="r-head"><span>TIP CALCULATOR</span><span>GUEST CHECK</span></div>
+        <div class="r-sub"><span id="receiptDate"></span><span id="tableFor">TABLE FOR 1</span></div>
+
+        <div class="r-row">
+          <span class="r-lab">{delivery ? 'Subtotal' : 'Bill'}</span>
+          <span class="r-val" id="rBill">—</span>
+        </div>
+        {
+          delivery && (
+            <div class="r-row">
+              <span class="r-lab">Delivery fee</span>
+              <span class="r-val" id="rFee">—</span>
+            </div>
+          )
+        }
+        <div class="r-row">
+          <span class="r-lab">Tip <em id="rPct">@ 20%</em></span>
+          <span class="r-val" id="rTip">—</span>
+        </div>
+        <div class="r-row">
+          <span class="r-lab">Total</span>
+          <span class="r-val" id="rTotal">—</span>
+        </div>
+
+        <div class="r-rule" aria-hidden="true"></div>
+        <div class="r-row r-each">
+          <span class="r-lab">Each person</span>
+          <span class="r-val" id="rEach">—</span>
+        </div>
+        <p class="r-note" id="rNote" hidden></p>
+        {delivery && <p class="r-note" id="dNote" hidden></p>}
+      </div>
+      <!-- torn bottom edge, tile pattern -->
+      <svg class="tear" width="100%" height="10" aria-hidden="true" focusable="false">
+        <defs>
+          <pattern id="teeth" width="14" height="10" patternUnits="userSpaceOnUse">
+            <path d="M0 0 L14 0 L7 10 Z" fill="var(--card)"></path>
+          </pattern>
+        </defs>
+        <rect width="100%" height="10" fill="url(#teeth)"></rect>
+      </svg>
+
+      <div class="tablefig">
+        <div id="diagWrap"></div>
+        <p class="diag-cap" id="diagCap"></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  import { calcTotals } from '../lib/tip.js';
+
+  (function () {
+    'use strict';
+    var root = document.querySelector('[data-mode]');
+    var delivery = root && root.getAttribute('data-mode') === 'delivery';
+    var $ = function (id) {
+      return document.getElementById(id);
+    };
+    var reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+    var dash = '—';
+    var fmt2 = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' });
+    var fmt0 = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 });
+
+    var billEl = $('bill'),
+      feeEl = $('fee'),
+      customEl = $('customPct'),
+      customFace = $('customFace'),
+      pplEl = $('ppl'),
+      roundEl = $('roundUp'),
+      rBill = $('rBill'),
+      rFee = $('rFee'),
+      rTip = $('rTip'),
+      rPct = $('rPct'),
+      rTotal = $('rTotal'),
+      rEach = $('rEach'),
+      rNote = $('rNote'),
+      dNote = $('dNote'),
+      tableFor = $('tableFor'),
+      receiptDate = $('receiptDate'),
+      diagWrap = $('diagWrap'),
+      diagCap = $('diagCap'),
+      hint = $('formHint'),
+      announceEl = $('announce');
+    if (!billEl || !rEach) return;
+
+    var PRESETS = Array.prototype.slice.call(document.querySelectorAll('input[name="tip"]'));
+    var lastPreset = PRESETS.filter(function (r) {
+      return r.checked;
+    })[0] || PRESETS[2];
+
+    var store = {
+      get: function (k) {
+        try {
+          return JSON.parse(localStorage.getItem(k));
+        } catch (e) {
+          return null;
+        }
+      },
+      set: function (k, v) {
+        try {
+          localStorage.setItem(k, JSON.stringify(v));
+        } catch (e) {}
+      },
+    };
+
+    if (receiptDate) {
+      receiptDate.textContent = new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric' }).toUpperCase();
+    }
+
+    /* ---------- number tweening (skipped under reduced motion) ---------- */
+    var anims = new WeakMap();
+    function tweenText(el, to, fmt) {
+      var st = anims.get(el) || {};
+      if (st.raf) cancelAnimationFrame(st.raf);
+      var from = typeof el._v === 'number' ? el._v : to;
+      el._v = to;
+      if (reduce.matches || from === to || !isFinite(from)) {
+        el.textContent = fmt(to);
+        return;
+      }
+      var t0 = performance.now(),
+        dur = 240;
+      var step = function (t) {
+        var p = Math.min(1, (t - t0) / dur),
+          e = 1 - Math.pow(1 - p, 3);
+        el.textContent = fmt(from + (to - from) * e);
+        if (p < 1) {
+          st.raf = requestAnimationFrame(step);
+          anims.set(el, st);
+        }
+      };
+      st.raf = requestAnimationFrame(step);
+      anims.set(el, st);
+    }
+    function resetText(el) {
+      if (!el) return;
+      var st = anims.get(el);
+      if (st && st.raf) cancelAnimationFrame(st.raf);
+      el._v = null;
+      el.textContent = dash;
+    }
+
+    /* "each person" writes to both the receipt and the diagram, in lockstep */
+    var eachRaf = 0,
+      eachShown = null,
+      diagEachEl = null;
+    function writeEach(v, fmt) {
+      rEach.textContent = fmt.format(v);
+      if (diagEachEl) diagEachEl.textContent = fmt.format(v);
+    }
+    function renderEach(v, round) {
+      var fmt = round ? fmt0 : fmt2;
+      if (eachRaf) cancelAnimationFrame(eachRaf);
+      if (eachShown === null || reduce.matches || eachShown === v) {
+        eachShown = v;
+        writeEach(v, fmt);
+        return;
+      }
+      var from = eachShown;
+      eachShown = v;
+      var t0 = performance.now(),
+        dur = 240;
+      var step = function (t) {
+        var p = Math.min(1, (t - t0) / dur),
+          e = 1 - Math.pow(1 - p, 3);
+        writeEach(from + (v - from) * e, fmt);
+        if (p < 1) eachRaf = requestAnimationFrame(step);
+      };
+      eachRaf = requestAnimationFrame(step);
+    }
+    function resetEach() {
+      if (eachRaf) cancelAnimationFrame(eachRaf);
+      eachShown = null;
+      rEach.textContent = dash;
+      if (diagEachEl) diagEachEl.textContent = dash;
+    }
+
+    /* ---------- tip state ---------- */
+    /* Any non-empty numeric value counts — including 0% */
+    function customActive() {
+      return customEl.value !== '' && isFinite(parseFloat(customEl.value));
+    }
+    function setCustomClass() {
+      customFace.classList.toggle('is-active', customActive());
+    }
+    /* Label is derived from the clamped pct, so display and math can never diverge */
+    function getTip() {
+      if (customActive()) {
+        var p = Math.min(999, Math.max(0, parseFloat(customEl.value)));
+        return { pct: p, label: p + '%' };
+      }
+      var sel = PRESETS.filter(function (r) {
+        return r.checked;
+      })[0];
+      if (sel) return { pct: +sel.value, label: sel.value + '%' };
+      return { pct: +lastPreset.value, label: lastPreset.value + '%' };
+    }
+    function savePct() {
+      if (customActive()) {
+        store.set('rtc:tip', { t: 'c', v: customEl.value });
+        return;
+      }
+      var sel = PRESETS.filter(function (r) {
+        return r.checked;
+      })[0];
+      if (sel) store.set('rtc:tip', { t: 'p', v: sel.value });
+    }
+
+    /* ---------- announcements (debounced) ---------- */
+    var aTimer = 0;
+    function announce(text) {
+      if (!announceEl) return;
+      clearTimeout(aTimer);
+      aTimer = setTimeout(function () {
+        announceEl.textContent = text;
+      }, 900);
+    }
+
+    /* ---------- party size: hold the last valid count while the field is transiently empty ---------- */
+    var lastN = 1;
+    function readN() {
+      var n = parseInt(pplEl.value, 10);
+      if (isFinite(n) && n >= 1) lastN = Math.min(99, n);
+      return lastN;
+    }
+
+    /* ---------- money input: reject minus, accept comma decimals ("12,50") ---------- */
+    function sanitizeMoney(el, prev) {
+      var raw = el.value;
+      if (/-/.test(raw)) {
+        el.value = prev; // never coerce negatives into positives
+        return prev;
+      }
+      var v = raw;
+      if (v.indexOf('.') === -1) {
+        var parts = v.split(',');
+        if (parts.length === 2 && parts[1].length >= 1 && parts[1].length <= 2) v = parts[0] + '.' + parts[1];
+      }
+      v = v.replace(/,/g, '').replace(/[^\d.]/g, '');
+      var d = v.indexOf('.');
+      if (d > -1) v = v.slice(0, d + 1) + v.slice(d + 1).replace(/\./g, '').slice(0, 2);
+      var ip = v.split('.')[0];
+      if (ip.length > 9) v = ip.slice(0, 9) + v.slice(ip.length);
+      el.value = v;
+      return v;
+    }
+    function toCents(v) {
+      var f = parseFloat(v);
+      return v !== '' && isFinite(f) && f > 0 ? Math.round(f * 100) : 0;
+    }
+
+    /* ---------- round-table diagram ---------- */
+    function buildDiagram(n, each, round) {
+      var W = 320,
+        H = 180,
+        cx = 160,
+        cy = 90,
+        rx = 98,
+        ry = 56;
+      var seats = Math.min(n, 12);
+      var r = seats <= 3 ? 15 : seats <= 4 ? 14 : seats <= 6 ? 12.5 : seats <= 8 ? 11.5 : seats <= 10 ? 10.5 : 9.5;
+      var showNums = n <= 12;
+      var fmt = round ? fmt0 : fmt2;
+      var eachStr = each === null ? dash : fmt.format(each);
+      var fs = eachStr.length > 11 ? 13 : eachStr.length > 8 ? 16 : 21;
+      var s =
+        '<svg viewBox="0 0 ' +
+        W +
+        ' ' +
+        H +
+        '" role="img" aria-label="Table diagram: ' +
+        n +
+        (n === 1 ? ' person' : ' people') +
+        (each !== null ? ', each paying ' + eachStr : '') +
+        '">';
+      s += '<ellipse cx="' + cx + '" cy="' + cy + '" rx="' + rx + '" ry="' + ry + '" fill="var(--table)" stroke="#BCB09A" stroke-width="1.5"/>';
+      s += '<ellipse cx="' + cx + '" cy="' + cy + '" rx="' + (rx - 10) + '" ry="' + (ry - 9) + '" fill="none" stroke="rgba(25,21,18,.09)" stroke-width="1"/>';
+      for (var i = 0; i < seats; i++) {
+        var a = -Math.PI / 2 + (i * 2 * Math.PI) / seats;
+        var x = cx + Math.cos(a) * (rx + 17),
+          y = cy + Math.sin(a) * (ry + 13);
+        s += '<circle cx="' + x.toFixed(1) + '" cy="' + y.toFixed(1) + '" r="' + r + '" fill="var(--card)" stroke="#191512" stroke-width="1.5"/>';
+        if (showNums) {
+          s +=
+            '<text x="' +
+            x.toFixed(1) +
+            '" y="' +
+            (y + 0.5).toFixed(1) +
+            '" text-anchor="middle" dy=".35em" ' +
+            'font-size="' +
+            Math.max(9.5, r * 0.82).toFixed(1) +
+            '" font-weight="600" fill="#191512">' +
+            (i + 1) +
+            '</text>';
+        }
+      }
+      s += '<text x="' + cx + '" y="' + (cy - 8) + '" text-anchor="middle" class="d-amount" style="font-size:' + fs + 'px">' + eachStr + '</text>';
+      s += '<text x="' + cx + '" y="' + (cy + 16) + '" text-anchor="middle" class="d-cap">EACH</text>';
+      s += '</svg>';
+      diagWrap.innerHTML = s;
+      diagEachEl = diagWrap.querySelector('.d-amount');
+      diagWrap.classList.toggle('is-empty', each === null);
+      diagCap.textContent =
+        n > 12 ? 'Splitting ' + n + ' ways · showing 12 seats' : n === 1 ? 'The whole check is yours' : 'Splitting between ' + n + ' people';
+    }
+
+    /* ---------- the one recalculation ---------- */
+    function recalc() {
+      var tip = getTip();
+      var n = readN();
+      var round = roundEl.checked;
+      var billC = toCents(billEl.value);
+      var feeC = delivery && feeEl ? toCents(feeEl.value) : 0;
+      var has = billC > 0;
+
+      tableFor.textContent = 'TABLE FOR ' + n;
+      rPct.textContent = '@ ' + tip.label;
+      hint.hidden = has;
+
+      if (!has) {
+        resetText(rBill);
+        resetText(rFee);
+        resetText(rTip);
+        resetText(rTotal);
+        resetEach();
+        rNote.hidden = true;
+        if (dNote) dNote.hidden = true;
+        buildDiagram(n, null, round);
+        announce('');
+        return;
+      }
+
+      var t = calcTotals({ billCents: billC, feeCents: feeC, pct: tip.pct, people: n, roundUp: round });
+      var tipD = t.tipCents / 100,
+        totalD = t.totalCents / 100,
+        eachD = t.eachCents / 100;
+
+      tweenText(rBill, billC / 100, fmt2.format);
+      if (delivery && rFee) tweenText(rFee, feeC / 100, fmt2.format);
+      tweenText(rTip, tipD, fmt2.format);
+      tweenText(rTotal, totalD, fmt2.format);
+      buildDiagram(n, eachD, round);
+      renderEach(eachD, round);
+
+      if (t.extraCents > 0.5) {
+        rNote.hidden = false;
+        rNote.textContent = '+' + fmt2.format(t.extraCents / 100) + ' extra from rounding up';
+      } else {
+        rNote.hidden = true;
+      }
+      if (delivery && dNote) {
+        if (t.tipCents > 0 && t.tipCents < 300) {
+          dNote.hidden = false;
+          dNote.textContent = 'Drivers usually get at least $3 — consider bumping it up';
+        } else {
+          dNote.hidden = true;
+        }
+      }
+
+      announce(
+        tip.label +
+          ' tip on ' +
+          fmt2.format(billC / 100) +
+          ': tip ' +
+          fmt2.format(tipD) +
+          ', total ' +
+          fmt2.format(totalD) +
+          (n > 1 ? ', split ' + n + ' ways, ' : ', ') +
+          (round ? fmt0.format(eachD) : fmt2.format(eachD)) +
+          ' each.'
+      );
+    }
+
+    /* ---------- bill + fee inputs ---------- */
+    var prevBill = '';
+    billEl.addEventListener('input', function () {
+      prevBill = sanitizeMoney(billEl, prevBill);
+      recalc();
+    });
+    var prevFee = '';
+    if (delivery && feeEl) {
+      feeEl.addEventListener('input', function () {
+        prevFee = sanitizeMoney(feeEl, prevFee);
+        recalc();
+      });
+    }
+
+    /* ---------- custom percentage: sanitizes AND clamps ---------- */
+    customEl.addEventListener('input', function () {
+      var v = customEl.value.replace(/[^\d.]/g, '');
+      var d = v.indexOf('.');
+      if (d > -1) v = v.slice(0, d + 1) + v.slice(d + 1).replace(/\./g, '').slice(0, 2);
+      if (v.length > 5) v = v.slice(0, 5);
+      if (v !== '' && parseFloat(v) > 999) v = '999';
+      if (v !== customEl.value) customEl.value = v;
+      if (customActive()) {
+        PRESETS.forEach(function (r) {
+          r.checked = false;
+        });
+      } else {
+        lastPreset.checked = true;
+      }
+      setCustomClass();
+      savePct();
+      recalc();
+    });
+
+    /* ---------- preset radios ---------- */
+    PRESETS.forEach(function (r) {
+      r.addEventListener('change', function () {
+        if (!r.checked) return;
+        lastPreset = r;
+        customEl.value = '';
+        setCustomClass();
+        savePct();
+        recalc();
+      });
+    });
+
+    /* ---------- party size events ---------- */
+    pplEl.addEventListener('input', function () {
+      pplEl.value = pplEl.value.replace(/\D/g, '').slice(0, 2);
+      recalc();
+    });
+    pplEl.addEventListener('blur', function () {
+      pplEl.value = String(readN());
+      recalc();
+    });
+    function bump(d) {
+      pplEl.value = String(Math.min(99, Math.max(1, readN() + d)));
+      recalc();
+    }
+    $('pplMinus').addEventListener('click', function () {
+      bump(-1);
+    });
+    $('pplPlus').addEventListener('click', function () {
+      bump(1);
+    });
+
+    /* ---------- round-up toggle ---------- */
+    roundEl.addEventListener('change', function () {
+      store.set('rtc:round', roundEl.checked);
+      recalc();
+    });
+
+    /* ---------- Enter blurs ---------- */
+    $('calcForm').addEventListener('submit', function (e) {
+      e.preventDefault();
+      if (document.activeElement && document.activeElement.blur) document.activeElement.blur();
+    });
+
+    /* ---------- restore last session ---------- */
+    (function restore() {
+      var rr = store.get('rtc:round');
+      if (rr) roundEl.checked = !!rr;
+      var s = store.get('rtc:tip');
+      if (!s) return;
+      if (s.t === 'p') {
+        var r = PRESETS.filter(function (x) {
+          return x.value === String(s.v);
+        })[0];
+        if (r) {
+          r.checked = true;
+          lastPreset = r;
+        }
+      } else if (s.t === 'c') {
+        var cv = String(s.v),
+          c = parseFloat(cv);
+        if (!isFinite(c) || c < 0) return;
+        if (c > 999) cv = '999';
+        customEl.value = cv;
+        PRESETS.forEach(function (x) {
+          x.checked = false;
+        });
+      }
+      setCustomClass();
+    })();
+
+    recalc();
+  })();
+</script>

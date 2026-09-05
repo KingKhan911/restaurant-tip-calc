@@ -1,0 +1,296 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Calculator from '../components/Calculator.astro';
+import Related from '../components/Related.astro';
+
+const title = 'Food Delivery Tip Calculator: Tip Your Driver Right';
+const description =
+  'Calculate a 15–20% delivery tip on your food subtotal, add the delivery fee, and see the order total instantly. Free, no sign-up.';
+
+const nav = [
+  { href: '#calculator', label: 'Calculator' },
+  { href: '#delivery-guide', label: 'Guide' },
+  { href: '#faq', label: 'FAQ' },
+];
+
+const jsonLd = JSON.stringify({
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'BreadcrumbList',
+      '@id': 'https://restauranttipcalculator.com/food-delivery-tip-calculator/#breadcrumb',
+      itemListElement: [
+        {
+          '@type': 'ListItem',
+          position: 1,
+          name: 'Restaurant Tip Calculator',
+          item: 'https://restauranttipcalculator.com/',
+        },
+        {
+          '@type': 'ListItem',
+          position: 2,
+          name: 'Food Delivery Tip Calculator',
+          item: 'https://restauranttipcalculator.com/food-delivery-tip-calculator/',
+        },
+      ],
+    },
+    {
+      '@type': 'WebApplication',
+      '@id': 'https://restauranttipcalculator.com/food-delivery-tip-calculator/#app',
+      url: 'https://restauranttipcalculator.com/food-delivery-tip-calculator/',
+      name: 'Food Delivery Tip Calculator',
+      applicationCategory: 'UtilitiesApplication',
+      operatingSystem: 'Any',
+      browserRequirements: 'Requires JavaScript',
+      inLanguage: 'en',
+      offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+      featureList: [
+        'Tip is calculated on the food subtotal, excluding delivery fees',
+        'Delivery fee added back into the order total',
+        'Minimum-tip nudge for small orders',
+        'No sign-up; all calculations run in the browser',
+      ],
+    },
+    {
+      '@type': 'HowTo',
+      '@id': 'https://restauranttipcalculator.com/food-delivery-tip-calculator/#howto',
+      url: 'https://restauranttipcalculator.com/food-delivery-tip-calculator/#how-it-works',
+      name: 'How to use the food delivery tip calculator',
+      step: [
+        {
+          '@type': 'HowToStep',
+          name: 'Enter the food subtotal',
+          text: 'Type the menu total before fees, tax, and tip.',
+        },
+        {
+          '@type': 'HowToStep',
+          name: 'Add the delivery fee',
+          text: 'It stays out of the tip math and gets added back to your total.',
+        },
+        {
+          '@type': 'HowToStep',
+          name: 'Choose a tip',
+          text: 'Pick 15, 18, 20, or 22 percent of the subtotal, or a custom amount.',
+        },
+      ],
+    },
+    {
+      '@type': 'FAQPage',
+      '@id': 'https://restauranttipcalculator.com/food-delivery-tip-calculator/#faq',
+      url: 'https://restauranttipcalculator.com/food-delivery-tip-calculator/#faq',
+      mainEntity: [
+        {
+          '@type': 'Question',
+          name: 'Do you tip on the delivery fee?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'No — tip on the food subtotal only. The delivery fee is a separate charge that rarely reaches the driver, so tipping a percentage of it just inflates your bill without helping them.',
+          },
+        },
+        {
+          '@type': 'Question',
+          name: 'What is a good minimum tip for a small order?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'Leave at least $3–5 even when 20% works out to less. A $10 order at 20% is only $2.00, which barely covers the driver\'s trip to your door.',
+          },
+        },
+        {
+          '@type': 'Question',
+          name: 'Does the app service fee go to the driver?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'Generally no. Service fees, small-order fees, and priority fees go to the platform. If you want the driver paid, it has to be on the tip line (or cash at the door).',
+          },
+        },
+        {
+          '@type': 'Question',
+          name: 'How much extra for bad weather or a long drive?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'Start at 20% and add $2–5 for rain, snow, or distances over a few miles. Drivers take fewer orders per hour in bad conditions, so each trip needs to pay more.',
+          },
+        },
+        {
+          '@type': 'Question',
+          name: 'Should you tip in the app or with cash?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'Either works — in-app tips are tracked and reliable, while cash guarantees the driver keeps every cent immediately. If service was great, a small cash top-up on top of the app tip never hurts.',
+          },
+        },
+        {
+          '@type': 'Question',
+          name: 'How do you split a group delivery order?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'Have everyone tip 15–20% on their own food, then split the delivery fee and tax evenly. Set the people count in the calculator to see each share.',
+          },
+        },
+      ],
+    },
+  ],
+});
+---
+
+<Layout title={title} description={description} path="/food-delivery-tip-calculator/" jsonLd={jsonLd} nav={nav}>
+  <section class="hero">
+    <p class="guide-intro"><a href="/">Restaurant tip calculator</a> / Food delivery</p>
+    <h1>Food Delivery Tip Calculator</h1>
+    <p class="lede">
+      Enter your food subtotal and delivery fee, pick a percentage, and see your driver's tip plus the full order
+      total — live, with no sign-up.
+    </p>
+  </section>
+
+  <Calculator mode="delivery" />
+
+  <aside class="ad ad-leaderboard ad-below" aria-label="Advertisement">
+    <p class="ad-label">Advertisement</p>
+    <div class="ad-slot" id="ad-below" data-size="728 × 90 · 300 × 250">
+      <!-- e.g. GAM slot: /XXXXXXX/rtc_delivery_below-calc -->
+    </div>
+  </aside>
+
+  <section class="section" id="how-it-works">
+    <h2>How it works</h2>
+    <ol class="steps">
+      <li>
+        <span class="step-n" aria-hidden="true">1.</span><p>
+          <strong>Enter the food subtotal</strong> — the menu total before fees, tax, and tip.
+        </p>
+      </li>
+      <li>
+        <span class="step-n" aria-hidden="true">2.</span><p>
+          <strong>Add the delivery fee</strong> — it's kept out of the tip math and added back to your total.
+        </p>
+      </li>
+      <li>
+        <span class="step-n" aria-hidden="true">3.</span><p>
+          <strong>Choose a tip</strong> — 15, 18, 20, or 22 percent of the subtotal, or a custom amount.
+        </p>
+      </li>
+    </ol>
+  </section>
+
+  <section class="section" id="delivery-guide">
+    <h2>How much should you tip for delivery?</h2>
+    <div class="guide-grid">
+      <div>
+        <p class="guide-intro">
+          Tip 15–20% of the food subtotal — never on the delivery fee or tax. The rules that actually matter:
+        </p>
+        <div class="menu">
+          <div class="menu-row">
+            <span class="menu-name">Standard delivery</span><span class="dots" aria-hidden="true"></span><span
+              class="menu-val">15–20% of subtotal</span
+            >
+          </div>
+          <div class="menu-row">
+            <span class="menu-name">Small orders</span><span class="dots" aria-hidden="true"></span><span
+              class="menu-val">$3–5 minimum</span
+            >
+          </div>
+          <div class="menu-row">
+            <span class="menu-name">Rain, snow, or long distance</span><span class="dots" aria-hidden="true"></span><span
+              class="menu-val">20%+, add $2–5</span
+            >
+          </div>
+          <div class="menu-row">
+            <span class="menu-name">App service fees</span><span class="dots" aria-hidden="true"></span><span
+              class="menu-val">not a tip — tip anyway</span
+            >
+          </div>
+        </div>
+        <p class="menu-src">
+          Delivery fees and service fees mostly go to the app or restaurant, not your driver. The tip line is what
+          pays them for the trip — and it's a different animal from the
+          <a href="/service-charge-on-restaurant-bill/">service charge on a sit-down restaurant bill</a>, which is
+          usually an automatic gratuity.
+        </p>
+      </div>
+      <div>
+        <table class="worked">
+          <caption>A $32.00 order with a $2.99 delivery fee:</caption>
+          <thead>
+            <tr><th scope="col">Tip</th><th scope="col">Driver gets</th><th scope="col">You pay</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>15%</td><td>$4.80</td><td>$39.79</td></tr>
+            <tr><td>18%</td><td>$5.76</td><td>$40.75</td></tr>
+            <tr><td>20%</td><td>$6.40</td><td>$41.39</td></tr>
+            <tr><td>22%</td><td>$7.04</td><td>$42.03</td></tr>
+          </tbody>
+        </table>
+        <p class="worked-note">
+          Totals include the $2.99 delivery fee, before sales tax. <a href="#calculator">Run your own order</a> above.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <aside class="ad ad-leaderboard ad-inline" aria-label="Advertisement">
+    <p class="ad-label">Advertisement</p>
+    <div class="ad-slot" id="ad-content-1" data-size="728 × 90 · 300 × 250">
+      <!-- e.g. GAM slot: /XXXXXXX/rtc_delivery_in-content -->
+    </div>
+  </aside>
+
+  <section class="section" id="faq">
+    <h2>Delivery tipping questions, answered</h2>
+    <div class="faq">
+      <details>
+        <summary>Do you tip on the delivery fee?</summary>
+        <p>
+          No — tip on the food subtotal only. The delivery fee is a separate charge that rarely reaches the driver, so
+          tipping a percentage of it just inflates your bill without helping them.
+        </p>
+      </details>
+      <details>
+        <summary>What is a good minimum tip for a small order?</summary>
+        <p>
+          Leave at least $3–5 even when 20% works out to less. A $10 order at 20% is only $2.00, which barely covers
+          the driver's trip to your door. For comparison, sit-down diners never drop below the
+          <a href="/average-restaurant-tip/">standard tip</a> floor of 15% — a $10 check would still get $1.50.
+        </p>
+      </details>
+      <details>
+        <summary>Does the app service fee go to the driver?</summary>
+        <p>
+          Generally no. Service fees, small-order fees, and priority fees go to the platform. If you want the driver
+          paid, it has to be on the tip line (or cash at the door).
+        </p>
+      </details>
+      <details>
+        <summary>How much extra for bad weather or a long drive?</summary>
+        <p>
+          Start at 20% and add $2–5 for rain, snow, or distances over a few miles. Drivers take fewer orders per hour
+          in bad conditions, so each trip needs to pay more.
+        </p>
+      </details>
+      <details>
+        <summary>Should you tip in the app or with cash?</summary>
+        <p>
+          Either works — in-app tips are tracked and reliable, while cash guarantees the driver keeps every cent
+          immediately. If service was great, a small cash top-up on top of the app tip never hurts.
+        </p>
+      </details>
+      <details>
+        <summary>How do you split a group delivery order?</summary>
+        <p>
+          Have everyone tip 15–20% on their own food, then split the delivery fee and tax evenly. Set the people count
+          in the <a href="#calculator">calculator above</a> to see each share.
+        </p>
+      </details>
+    </div>
+  </section>
+
+  <aside class="ad ad-native ad-inline" aria-label="Advertisement">
+    <p class="ad-label">Advertisement</p>
+    <div class="ad-slot" id="ad-native" data-size="Native banner · 280px reserved">
+      <!-- Paste the native banner tag from your ad network here -->
+    </div>
+  </aside>
+
+  <Related exclude="/food-delivery-tip-calculator/" />
+</Layout>

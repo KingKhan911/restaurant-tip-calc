@@ -1,0 +1,235 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Related from '../components/Related.astro';
+
+const title = 'Buffet Tip: How Much Should You Tip at a Buffet? (10–20%)';
+const description =
+  'Tip 10% minimum at a full-service buffet, 15–20% when staff refill your drinks and clear plates, and $1–2 at a self-serve counter. The complete buffet tipping guide.';
+
+const nav = [
+  { href: '#guide', label: 'Guide' },
+  { href: '#faq', label: 'FAQ' },
+];
+
+const jsonLd = JSON.stringify({
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'BreadcrumbList',
+      '@id': 'https://restauranttipcalculator.com/buffet-tipping-guide/#breadcrumb',
+      itemListElement: [
+        {
+          '@type': 'ListItem',
+          position: 1,
+          name: 'Restaurant Tip Calculator',
+          item: 'https://restauranttipcalculator.com/',
+        },
+        {
+          '@type': 'ListItem',
+          position: 2,
+          name: 'Buffet Tipping Guide',
+          item: 'https://restauranttipcalculator.com/buffet-tipping-guide/',
+        },
+      ],
+    },
+    {
+      '@type': 'FAQPage',
+      '@id': 'https://restauranttipcalculator.com/buffet-tipping-guide/#faq',
+      url: 'https://restauranttipcalculator.com/buffet-tipping-guide/#faq',
+      mainEntity: [
+        {
+          '@type': 'Question',
+          name: 'How much should you tip at a buffet?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'Tip at least 10% at a buffet where staff keep drinks filled and clear plates, rising to 15–20% at a full-service buffet where a server looks after your table. At a pure self-serve counter with no table service, $1–2 in the tip jar is plenty.',
+          },
+        },
+        {
+          '@type': 'Question',
+          name: 'Do you tip at a buffet if you serve yourself?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'Yes — even self-serve buffets have staff setting up the food line, restocking dishes, and cleaning tables. 10% is the usual minimum; you can skip the percentage and leave a couple of dollars for a quick cafeteria-style stop.',
+          },
+        },
+        {
+          '@type': 'Question',
+          name: 'Why does a buffet tip start at 10% instead of 15%?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'Because a buffet server does less per guest than a full-service waiter — no taking orders, no delivering courses. 10% reflects lighter work, and 15–20% is reserved for buffets where staff refill drinks, clear plates throughout the meal, and provide table service.',
+          },
+        },
+        {
+          '@type': 'Question',
+          name: 'How much should you tip at an all-you-can-eat restaurant like Golden Corral or a casino buffet?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'At chain buffets and casino buffets with drink refills and plate clearing, 10–15% is standard, with most regulars landing around 10–12%. The percentage should also cover any server who carries your plates or brings drinks.',
+          },
+        },
+        {
+          '@type': 'Question',
+          name: 'Do you tip more at a fancy, expensive buffet?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'Yes — high-end seafood and brunch buffets with carving stations, cocktail service, and busier table maintenance earn 15–20%. The percentage matters more than the check total, since large-plate dining means fewer, bigger sittings per server.',
+          },
+        },
+      ],
+    },
+  ],
+});
+---
+
+<Layout title={title} description={description} path="/buffet-tipping-guide/" jsonLd={jsonLd} nav={nav}>
+  <section class="hero">
+    <p class="guide-intro"><a href="/">Restaurant tip calculator</a> / Buffet tipping guide</p>
+    <h1>Buffet Tip: How Much Should You Tip at a Buffet?</h1>
+    <p class="lede">
+      The short answer: <strong>10% minimum</strong>, 15–20% when staff actually wait on you, and <strong>$1–2 at a
+      self-serve counter</strong>. Here's when each number applies.
+    </p>
+  </section>
+
+  <!-- ============ GUIDE ============ -->
+  <section class="section" id="guide">
+    <h2>The buffet tip scale</h2>
+    <div class="guide-grid">
+      <div>
+        <p class="guide-intro">
+          Buffet tipping is about how much the staff actually does for you:
+        </p>
+        <div class="menu">
+          <div class="menu-row">
+            <span class="menu-name">Self-serve counter, tip jar</span><span class="dots" aria-hidden="true"
+            ></span><span class="menu-val">$1–2</span>
+          </div>
+          <div class="menu-row">
+            <span class="menu-name">Standard buffet, basic table care</span><span class="dots" aria-hidden="true"
+            ></span><span class="menu-val">10%</span>
+          </div>
+          <div class="menu-row">
+            <span class="menu-name">Drink refills + plate clearing</span><span class="dots" aria-hidden="true"
+            ></span><span class="menu-val">10–15%</span>
+          </div>
+          <div class="menu-row">
+            <span class="menu-name">Full-service buffet (server assigned)</span><span class="dots" aria-hidden="true"
+            ></span><span class="menu-val">15–20%</span>
+          </div>
+          <div class="menu-row">
+            <span class="menu-name">Casino / upscale brunch buffet</span><span class="dots" aria-hidden="true"
+            ></span><span class="menu-val">15–20%</span>
+          </div>
+        </div>
+        <p class="menu-src">
+          If a server carried your first plate or refilled your drinks, tip like a normal table — 15–20%. The
+          <a href="/">restaurant tip calculator</a> does the math for any check size.
+        </p>
+      </div>
+      <div>
+        <table class="worked">
+          <caption>Buffet tip on a $25 meal (typical per person):</caption>
+          <thead>
+            <tr><th scope="col">Scenario</th><th scope="col">Tip</th><th scope="col">Total</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Tip jar, self-serve</td><td>$1.50</td><td>$26.50</td></tr>
+            <tr><td>Standard buffet · 10%</td><td>$2.50</td><td>$27.50</td></tr>
+            <tr><td>Good table care · 15%</td><td>$3.75</td><td>$28.75</td></tr>
+            <tr><td>Full service · 20%</td><td>$5.00</td><td>$30.00</td></tr>
+          </tbody>
+        </table>
+        <p class="worked-note">
+          On a higher-end $50 buffet, the same percentages are $5, $7.50, or $10 — still a fair share for the work
+          involved.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ DETAILS ============ -->
+  <section class="section" id="details">
+    <h2>Buffet tipping, edge cases</h2>
+    <div class="prose">
+      <h3>Kids' pricing</h3>
+      <p>
+        Buffets often charge children a reduced rate but their table care costs the same. Tip on the full bill,
+        including the kids' meals, or split the difference and round up.
+      </p>
+      <h3>Drinks-only service</h3>
+      <p>
+        If a server only brings drinks and never returns, $1–2 per drink or 10% is fine — they're doing bar work on a
+        buffet floor.
+      </p>
+      <h3>Sushi and hot-pot buffets</h3>
+      <p>
+        These look like buffets but are often order-as-you-go: staff bring every plate. That's full wait service —
+        treat it like a regular restaurant and tip 15–20%.
+      </p>
+      <h3>Already included?</h3>
+      <p>
+        Upscale hotel and resort buffets sometimes add an automatic 18–20% service charge per person. Check the check —
+        if it's there, you've already tipped. See
+        <a href="/service-charge-on-restaurant-bill/">the service charge on your restaurant bill</a> to be sure.
+      </p>
+    </div>
+  </section>
+
+  <!-- ============ FAQ ============ -->
+  <section class="section" id="faq">
+    <h2>Buffet tip questions, answered</h2>
+    <div class="faq">
+      <details>
+        <summary>How much should you tip at a buffet?</summary>
+        <p>
+          Tip at least 10% at a buffet where staff keep drinks filled and clear plates, rising to 15–20% at a
+          full-service buffet where a server looks after your table. At a pure self-serve counter with no table
+          service, $1–2 in the tip jar is plenty.
+        </p>
+      </details>
+      <details>
+        <summary>Do you tip at a buffet if you serve yourself?</summary>
+        <p>
+          Yes — even self-serve buffets have staff setting up the food line, restocking dishes, and cleaning tables.
+          10% is the usual minimum; you can skip the percentage and leave a couple of dollars for a quick
+          cafeteria-style stop.
+        </p>
+      </details>
+      <details>
+        <summary>Why does a buffet tip start at 10% instead of 15%?</summary>
+        <p>
+          Because a buffet server does less per guest than a full-service waiter — no taking orders, no delivering
+          courses. 10% reflects lighter work, and 15–20% is reserved for buffets where staff refill drinks, clear
+          plates throughout the meal, and provide table service.
+        </p>
+      </details>
+      <details>
+        <summary>How much should you tip at an all-you-can-eat restaurant like Golden Corral or a casino buffet?</summary>
+        <p>
+          At chain buffets and casino buffets with drink refills and plate clearing, 10–15% is standard, with most
+          regulars landing around 10–12%. The percentage should also cover any server who carries your plates or
+          brings drinks.
+        </p>
+      </details>
+      <details>
+        <summary>Do you tip more at a fancy, expensive buffet?</summary>
+        <p>
+          Yes — high-end seafood and brunch buffets with carving stations, cocktail service, and busier table
+          maintenance earn 15–20%. The percentage matters more than the check total, since large-plate dining means
+          fewer, bigger sittings per server.
+        </p>
+      </details>
+    </div>
+  </section>
+
+  <aside class="ad ad-native ad-inline" aria-label="Advertisement">
+    <p class="ad-label">Advertisement</p>
+    <div class="ad-slot" id="ad-native" data-size="Native banner · 280px reserved">
+      <!-- Paste the native banner tag from your ad network here -->
+    </div>
+  </aside>
+
+  <Related exclude="/buffet-tipping-guide/" />
+</Layout>
