@@ -1,0 +1,181 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Related from '../components/Related.astro';
+import { RESEARCH_REVIEW_DATE, SOURCES } from '../lib/editorial.js';
+
+const title = 'Methodology: Calculator Math, Sources & Research Standards';
+const description =
+  'How Restaurant Tip Calculator handles percentages, tax, fees, splitting and rounding, plus how tipping data and etiquette sources are selected and reviewed.';
+
+const nav = [
+  { href: '#calculator-method', label: 'Calculator math' },
+  { href: '#research-method', label: 'Research' },
+  { href: '#sources', label: 'Sources' },
+];
+
+const jsonLd = JSON.stringify({
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  '@id': 'https://restauranttipcalculator.com/methodology/#breadcrumb',
+  itemListElement: [
+    {
+      '@type': 'ListItem',
+      position: 1,
+      name: 'Restaurant Tip Calculator',
+      item: 'https://restauranttipcalculator.com/',
+    },
+    {
+      '@type': 'ListItem',
+      position: 2,
+      name: 'Methodology',
+      item: 'https://restauranttipcalculator.com/methodology/',
+    },
+  ],
+});
+---
+
+<Layout title={title} description={description} path="/methodology/" jsonLd={jsonLd} nav={nav}>
+  <section class="hero">
+    <p class="guide-intro"><a href="/">Restaurant tip calculator</a> / Methodology</p>
+    <h1>Methodology: How the Calculator and Research Work</h1>
+    <p class="lede">
+      This page explains what the calculator actually computes, how cents are rounded and split, and how the site's
+      research separates measured data from survey answers and etiquette recommendations.
+    </p>
+    <p class="menu-src">Research last reviewed: {RESEARCH_REVIEW_DATE}.</p>
+  </section>
+
+  <section class="section" id="calculator-method">
+    <h2>How the calculator computes your bill</h2>
+    <div class="prose">
+      <h3>Bill, tax, and fees</h3>
+      <p>
+        The bill amount is the default basis for a percentage tip. Tax can be entered separately. If
+        <strong>Include tax in percentage tip basis</strong> is off, the tip percentage applies only to the bill
+        amount; if it is on, the percentage applies to bill plus entered tax. Other fees and delivery fees are added
+        to the payable total but are not included in the percentage tip basis.
+      </p>
+
+      <h3>Percentage tips</h3>
+      <p>
+        Percentage input is stored to two decimal places of percentage precision. The calculator multiplies the tip
+        basis by the selected percentage and rounds the resulting tip to the nearest cent using deterministic
+        half-up rounding.
+      </p>
+
+      <h3>Custom dollar tips</h3>
+      <p>
+        A custom dollar tip bypasses percentage calculation. The exact entered tip amount, in cents, is added to the
+        bill along with any tax and fees.
+      </p>
+
+      <h3>Payable total</h3>
+      <p>
+        The total shown is the sum of the entered bill, entered tax, entered other fees, any entered delivery fee, and
+        the calculated or custom tip. The calculator can only know amounts you enter; it does not claim to know a
+        restaurant's final card charge or any unentered surcharge.
+      </p>
+    </div>
+
+    <table class="worked">
+      <caption>Example: $60 bill, $4.80 tax, 20% tip</caption>
+      <thead>
+        <tr><th scope="col">Tip basis choice</th><th scope="col">Tip</th><th scope="col">Total with entered tax</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Tax excluded from tip basis</td><td>$12.00</td><td>$76.80</td></tr>
+        <tr><td>Tax included in tip basis</td><td>$12.96</td><td>$77.76</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section class="section" id="splitting">
+    <h2>How exact splitting and round-up differ</h2>
+    <div class="prose">
+      <h3>Exact cent-reconciled split</h3>
+      <p>
+        The calculator first divides the payable total into whole cents. When the cents do not divide evenly, the
+        remainder is distributed as one additional cent to the required number of shares. The displayed shares always
+        add back to the exact payable total.
+      </p>
+      <p>
+        Example: $10.00 split three ways becomes one share of $3.34 and two shares of $3.33. Those shares total exactly
+        $10.00.
+      </p>
+
+      <h3>Whole-dollar round-up</h3>
+      <p>
+        Round-up is intentionally different. It raises each person's share to the next whole dollar. That can collect
+        more than the exact payable total, so the calculator shows both the amount collected and the extra amount
+        created by rounding. It does not silently treat that extra money as part of the restaurant bill.
+      </p>
+    </div>
+  </section>
+
+  <section class="section" id="research-method">
+    <h2>How tipping research is selected and described</h2>
+    <div class="prose">
+      <h3>Source hierarchy</h3>
+      <p>
+        For laws, wage rules, and federal tax treatment, the site prefers primary government sources such as the U.S.
+        Department of Labor and Internal Revenue Service. For population or transaction statistics, it prefers the
+        original research organization or platform that produced the dataset. Etiquette recommendations are sourced
+        to established etiquette guidance and are labeled as recommendations.
+      </p>
+
+      <h3>Three evidence types are kept separate</h3>
+      <p>
+        <strong>Observed behavior</strong> is what a transaction dataset records. <strong>Stated behavior</strong> is
+        what survey respondents say they do or would do. <strong>Etiquette guidance</strong> is advice about what
+        someone should or may choose to do. A recommendation is not presented as an average, and a survey answer is not
+        presented as an observed transaction.
+      </p>
+
+      <h3>Freshness</h3>
+      <p>
+        Research-heavy pages show a real review date rather than automatically displaying today's date. During a
+        review, the site checks the publication date, underlying data period, methodology, and whether a newer primary
+        source is available. An old survey does not become "2026 data" merely because this site reviewed it in 2026.
+      </p>
+
+      <h3>Limits and local variation</h3>
+      <p>
+        Restaurant policies, platform compensation rules, state wage laws, and local consumer rules can vary and
+        change. The site avoids turning a national calculator into individualized legal advice and does not infer who
+        receives a restaurant fee solely from its label or percentage.
+      </p>
+    </div>
+  </section>
+
+  <section class="section" id="sources">
+    <h2>Core research sources used in the September 2026 review</h2>
+    <ul class="prose">
+      <li>
+        <a href={SOURCES.toastTipping}>Toast — Restaurant Tipping Trends</a>
+        — Q1 2026 platform transaction data; card and digital tips, with cash excluded.
+      </li>
+      <li>
+        <a href={SOURCES.pewTipping}>Pew Research Center — Services Americans do and don't tip for, and how much</a>
+        — November 2023 survey research.
+      </li>
+      <li>
+        <a href={SOURCES.dolFactSheet15}>U.S. Department of Labor — Fact Sheet #15</a>
+        — federal tipped-employee and tip-credit framework.
+      </li>
+      <li>
+        <a href={SOURCES.dolTippedWages}>U.S. Department of Labor — Minimum Wages for Tipped Employees</a>
+        — state-by-state tipped wage rules.
+      </li>
+      <li>
+        <a href={SOURCES.irsTips}>Internal Revenue Service — Tip recordkeeping and reporting</a>
+        — federal tax distinction between voluntary tips and mandatory service charges.
+      </li>
+      <li>
+        <a href={SOURCES.emilyPost}>Emily Post — General Tipping Guide</a>
+        — etiquette recommendations for sit-down service, buffet service, delivery and other contexts.
+      </li>
+    </ul>
+  </section>
+
+  <Related />
+</Layout>
