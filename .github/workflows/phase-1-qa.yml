@@ -9,6 +9,7 @@ on:
       - phase-4/audit-corrections
       - phase-4.2/ad-placeholders-default
       - phase-4.3/responsive-ad-rail
+      - phase-4.4/delivery-quick-answer
   workflow_dispatch:
 
 jobs:
