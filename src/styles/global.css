@@ -254,7 +254,7 @@
     .table-scroll{
       width:100%;max-width:680px;overflow-x:auto;-webkit-overflow-scrolling:touch;
     }
-    .table-scroll .worked-wide{width:100%;min-width:680px;max-width:none}
+    .table-scroll .worked-wide{width:100%;min-width:640px;max-width:none}
     .worked caption{caption-side:top;text-align:left;font-size:.9rem;color:var(--ink-soft);padding-bottom:10px}
     .worked th{font:600 .7rem var(--font-body);letter-spacing:.12em;text-transform:uppercase;color:var(--ink-soft);text-align:right;padding:8px 0;border-bottom:1.5px solid var(--ink)}
     .worked td{font:500 .98rem var(--font-mono);text-align:right;padding:9px 0;border-bottom:1px solid var(--line-soft);font-variant-numeric:tabular-nums}
