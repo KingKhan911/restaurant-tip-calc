@@ -95,10 +95,10 @@ export function formatMoneyInput(cents) {
 export function moneyErrorMessage(reason) {
   switch (reason) {
     case 'too_large':
-      return 'Enter an amount below $1 billion.';
+      return 'Enter an amount below 1 billion.';
     case 'empty':
       return '';
     default:
-      return 'Enter a valid non-negative dollar amount.';
+      return 'Enter a valid non-negative amount.';
   }
 }
