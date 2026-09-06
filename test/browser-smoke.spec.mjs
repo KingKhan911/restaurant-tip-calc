@@ -13,7 +13,7 @@ const routes = [
   '/about/',
   '/privacy/',
 ];
-const widths = [320, 390, 768, 1024, 1240, 1440];
+const widths = [320, 390, 768, 1024, 1240, 1280, 1366, 1440, 1536];
 
 function captureConsole(page, errors) {
   page.on('pageerror', (error) => errors.push(`pageerror: ${error.message}`));
@@ -110,7 +110,7 @@ test('complex comparison tables scroll internally instead of crushing columns on
 });
 
 test('complex comparison tables fit without internal scrolling at tablet and desktop widths', async ({ browser }) => {
-  for (const width of [768, 1024, 1440]) {
+  for (const width of [768, 1024, 1240, 1280, 1366, 1440, 1536]) {
     const context = await browser.newContext({ viewport: { width, height: 900 } });
     const page = await context.newPage();
 

@@ -5,7 +5,7 @@ const routes = ['/', '/food-delivery-tip-calculator/', '/about/', '/privacy/'];
 
 for (const route of routes) {
   test(`${route} hides all placeholders when PUBLIC_ADS_ENABLED=false`, async ({ browser }) => {
-    for (const width of [390, 1440]) {
+    for (const width of [390, 1280, 1366, 1440]) {
       const context = await browser.newContext({ viewport: { width, height: 900 } });
       const page = await context.newPage();
       const response = await page.goto(base + route, { waitUntil: 'networkidle' });
@@ -14,6 +14,11 @@ for (const route of routes) {
       await expect(page.locator('[data-ad-slot]')).toHaveCount(0);
       expect(await page.evaluate(() => parseFloat(getComputedStyle(document.body).paddingBottom))).toBe(0);
       expect(await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth)).toBeLessThanOrEqual(1);
+      const shellLayout = await page.locator('.shell').evaluate((shell) => ({
+        display: getComputedStyle(shell).display,
+        columnGap: getComputedStyle(shell).columnGap,
+      }));
+      expect(shellLayout.display).not.toBe('grid');
       await context.close();
     }
   });

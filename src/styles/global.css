@@ -193,17 +193,21 @@
       body.ads-enabled.anchor-closed{padding-bottom:0}
     }
 
-    /* Sticky ad rail: only when there is genuine room beside the 1040px column.
-       The 1440px threshold avoids squeezing the calculator merely to make room for advertising.
-       align-self:stretch makes the rail span the full page height — REQUIRED for
-       position:sticky to keep the unit pinned while the user scrolls. */
-    @media (min-width:1440px){
-      body.ads-enabled .shell{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:48px}
+    /* Sticky ad rail: 1240px is the tested minimum that keeps the calculator comfortable
+       beside a full-size 300px creative. Intermediate desktops use a tighter 24px gap;
+       wide desktops restore the original 48px spacing. align-self:stretch makes the rail
+       span the full page height — REQUIRED for position:sticky to keep the unit pinned
+       while the user scrolls. */
+    @media (min-width:1240px){
+      body.ads-enabled .shell{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:24px}
       body.ads-enabled .rail{display:block;align-self:stretch}
       .rail-sticky{position:sticky;top:20px}
       /* Primary unit: 300×250. To run a half-page 300×600 instead,
          change height here AND in your ad server's slot size. */
       .ad-rail .ad-slot{width:300px;height:250px}
+    }
+    @media (min-width:1440px){
+      body.ads-enabled .shell{gap:48px}
     }
 
     /* ============ MOBILE STICKY ANCHOR (≤779px only) ============ */

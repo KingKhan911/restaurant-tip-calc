@@ -15,7 +15,13 @@ const pages = [
 const views = [
   ['mobile-320', 320, 900],
   ['mobile-390', 390, 900],
+  ['tablet-768', 768, 900],
+  ['desktop-1024', 1024, 900],
+  ['desktop-1240', 1240, 900],
+  ['desktop-1280', 1280, 900],
+  ['desktop-1366', 1366, 900],
   ['desktop-1440', 1440, 1000],
+  ['desktop-1536', 1536, 1000],
 ];
 
 await mkdir('visual-qa', { recursive: true });

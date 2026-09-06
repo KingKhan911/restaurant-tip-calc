@@ -2,37 +2,135 @@ import { test, expect } from '@playwright/test';
 
 const base = process.env.RTC_BASE_URL || 'http://127.0.0.1:4322';
 
-test('desktop rail appears only when there is genuinely enough width', async ({ browser }) => {
-  const narrow = await browser.newContext({ viewport: { width: 1240, height: 900 } });
-  const narrowPage = await narrow.newPage();
-  await narrowPage.goto(base + '/');
-  await expect(narrowPage.locator('#ad-rail')).toBeHidden();
-  expect(await narrowPage.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth)).toBeLessThanOrEqual(1);
-  await narrow.close();
+test('desktop rail boundary, common widths, geometry, and spacing stay safe', async ({ browser }) => {
+  const breakpoint = 1240;
+  const widths = [1180, 1200, 1239, 1240, 1260, 1280, 1366, 1439, 1440, 1536];
+  const screenshotWidths = new Set([1239, 1240, 1280, 1366, 1440, 1536]);
 
-  const wide = await browser.newContext({ viewport: { width: 1440, height: 900 } });
-  const page = await wide.newPage();
-  await page.goto(base + '/');
-  await expect(page.locator('#ad-rail')).toBeVisible();
-  const box = await page.locator('#ad-rail').boundingBox();
-  expect(box?.width).toBe(300);
-  expect(box?.height).toBe(250);
-  const railLabelStyle = await page.locator('.rail .ad-label').evaluate((element) => {
-    const style = getComputedStyle(element);
-    return { color: style.color, fontSize: parseFloat(style.fontSize) };
+  for (const width of widths) {
+    const context = await browser.newContext({ viewport: { width, height: 900 } });
+    const page = await context.newPage();
+    await page.goto(base + '/', { waitUntil: 'networkidle' });
+
+    const rail = page.locator('.rail');
+    const creative = page.locator('#ad-rail');
+    if (width < breakpoint) {
+      await expect(rail).toBeHidden();
+      await expect(creative).toBeHidden();
+    } else {
+      await expect(rail).toBeVisible();
+      await expect(creative).toBeVisible();
+
+      const geometry = await page.evaluate(() => {
+        const shell = document.querySelector('.shell');
+        const wrap = document.querySelector('.wrap');
+        const rail = document.querySelector('.rail');
+        const creative = document.querySelector('#ad-rail');
+        const calc = document.querySelector('.calc');
+        const form = calc?.children[0];
+        const receiptColumn = calc?.children[1];
+        const receipt = document.querySelector('.receipt-wrap');
+        const rect = (element) => element?.getBoundingClientRect();
+        const shellStyle = getComputedStyle(shell);
+        return {
+          viewportWidth: document.documentElement.clientWidth,
+          documentOverflow: document.documentElement.scrollWidth - document.documentElement.clientWidth,
+          shellGap: parseFloat(shellStyle.columnGap),
+          wrap: rect(wrap),
+          rail: rect(rail),
+          creative: rect(creative),
+          form: rect(form),
+          receiptColumn: rect(receiptColumn),
+          receipt: rect(receipt),
+        };
+      });
+
+      expect(geometry.creative?.width).toBe(300);
+      expect(geometry.creative?.height).toBe(250);
+      expect(geometry.creative.left).toBeGreaterThanOrEqual(-1);
+      expect(geometry.creative.right).toBeLessThanOrEqual(geometry.viewportWidth + 1);
+      expect(geometry.wrap.right).toBeLessThanOrEqual(geometry.rail.left + 1);
+      expect(geometry.documentOverflow).toBeLessThanOrEqual(1);
+      expect(geometry.shellGap).toBe(width >= 1440 ? 48 : 24);
+
+      if ([1240, 1280, 1366].includes(width)) {
+        expect(geometry.form.width).toBeGreaterThanOrEqual(389);
+        expect(geometry.receiptColumn.width).toBeGreaterThanOrEqual(350);
+        expect(geometry.receipt.width).toBeGreaterThanOrEqual(350);
+      }
+    }
+
+    if (screenshotWidths.has(width)) {
+      await page.screenshot({
+        path: `visual-qa/ad-enabled--home-${width}.jpg`,
+        fullPage: true,
+        type: 'jpeg',
+        quality: 58,
+      });
+    }
+
+    await context.close();
+  }
+});
+
+test('intermediate desktop rail stays sticky on a long guide without colliding with footer', async ({ browser }) => {
+  const context = await browser.newContext({ viewport: { width: 1280, height: 700 } });
+  const page = await context.newPage();
+  await page.goto(base + '/average-restaurant-tip/', { waitUntil: 'networkidle' });
+  const rail = page.locator('.rail');
+  const sticky = page.locator('.rail-sticky');
+  const footer = page.locator('.site-foot');
+  await expect(rail).toBeVisible();
+
+  const initial = await sticky.boundingBox();
+  expect(initial).not.toBeNull();
+  await page.evaluate(() => window.scrollTo(0, 900));
+  await page.waitForTimeout(100);
+  const scrolled = await sticky.boundingBox();
+  expect(scrolled).not.toBeNull();
+  expect(scrolled.y).toBeGreaterThanOrEqual(19);
+  expect(scrolled.y).toBeLessThanOrEqual(21);
+
+  const overlap = await page.evaluate(() => {
+    const sticky = document.querySelector('.rail-sticky').getBoundingClientRect();
+    const footer = document.querySelector('.site-foot').getBoundingClientRect();
+    const horizontalOverlap = Math.max(0, Math.min(sticky.right, footer.right) - Math.max(sticky.left, footer.left));
+    return {
+      horizontalOverlap,
+      overflow: document.documentElement.scrollWidth - document.documentElement.clientWidth,
+    };
   });
-  expect(railLabelStyle.color).toBe('rgb(99, 90, 76)');
-  expect(railLabelStyle.fontSize).toBeGreaterThanOrEqual(10.5);
-  expect(await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth)).toBeLessThanOrEqual(1);
+  expect(overlap.horizontalOverlap).toBe(0);
+  expect(overlap.overflow).toBeLessThanOrEqual(1);
+
   await page.screenshot({
-    path: 'visual-qa/ad-enabled--desktop-1440.jpg',
+    path: 'visual-qa/ad-enabled--guide-1280-sticky.jpg',
     fullPage: true,
     type: 'jpeg',
     quality: 58,
   });
-  await wide.close();
+  await context.close();
 });
 
+test('table-heavy guide pages remain coherent beside the rail at 1280 and 1366', async ({ browser }) => {
+  for (const width of [1280, 1366]) {
+    const context = await browser.newContext({ viewport: { width, height: 900 } });
+    const page = await context.newPage();
+
+    for (const route of ['/average-restaurant-tip/', '/service-charge-on-restaurant-bill/']) {
+      await page.goto(base + route, { waitUntil: 'networkidle' });
+      await expect(page.locator('.rail')).toBeVisible();
+      const tableState = await page.locator('.table-scroll').evaluateAll((wrappers) => ({
+        allFit: wrappers.every((wrapper) => wrapper.scrollWidth - wrapper.clientWidth <= 1),
+        documentOverflow: document.documentElement.scrollWidth - document.documentElement.clientWidth,
+      }));
+      expect(tableState.allFit).toBe(true);
+      expect(tableState.documentOverflow).toBeLessThanOrEqual(1);
+    }
+
+    await context.close();
+  }
+});
 test('mobile anchor reserves space, remains closable, and does not cover focused fields', async ({ browser }) => {
   const context = await browser.newContext({ viewport: { width: 390, height: 760 } });
   const page = await context.newPage();

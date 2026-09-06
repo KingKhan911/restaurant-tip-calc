@@ -8,6 +8,7 @@ on:
       - phase-3/launch-readiness
       - phase-4/audit-corrections
       - phase-4.2/ad-placeholders-default
+      - phase-4.3/responsive-ad-rail
   workflow_dispatch:
 
 jobs:
