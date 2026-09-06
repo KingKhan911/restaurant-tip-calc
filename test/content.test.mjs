@@ -109,7 +109,7 @@ test('tipped-wage copy includes the federal floor, make-up obligation, and state
 
 test('research review date is a maintained literal, not a dynamic today value', async () => {
   const source = await read('src/lib/editorial.js');
-  assert.ok(source.includes("RESEARCH_REVIEW_DATE = 'September 5, 2026'"));
+  assert.ok(source.includes("RESEARCH_REVIEW_DATE = 'September 6, 2026'"));
   assert.equal(source.includes('new Date('), false);
 });
 
@@ -168,4 +168,45 @@ test('robots policy remains simple and does not block OAI-SearchBot', async () =
   assert.match(robots, /User-agent:\s*\*/);
   assert.match(robots, /Allow:\s*\//);
   assert.equal(/User-agent:\s*OAI-SearchBot[\s\S]*?Disallow:\s*\//i.test(robots), false);
+});
+
+
+test('homepage is the single universal English calculator with sourced country context', async () => {
+  const source = await read('src/pages/index.astro');
+  for (const required of [
+    '<Calculator mode="dinein" currencySelector />',
+    'Currency changes display only; no exchange-rate conversion',
+    'Tipping customs vary by country',
+    'United States',
+    'Canada',
+    'United Kingdom',
+    'Australia',
+    'New Zealand',
+    'South Africa',
+    'SOURCES.canadaGratuities',
+    'SOURCES.visitBritain',
+    'SOURCES.tourismAustralia',
+    'SOURCES.tourismNewZealand',
+    'SOURCES.southAfricanTourism',
+  ]) {
+    assert.ok(source.includes(required), `Universal homepage is missing: ${required}`);
+  }
+  assert.equal(source.includes('custom dollar amount, add tax and fees'), false);
+});
+
+test('country clones, translated public routes, and premature hreflang are absent', async () => {
+  const site = await read('src/lib/site.js');
+  const layout = await read('src/layouts/Layout.astro');
+  for (const route of ['/ca/', '/uk/', '/au/', '/nz/', '/za/', '/de/', '/fr/', '/it/', '/es/', '/pt/']) {
+    assert.equal(site.includes(`'${route}'`), false, `Unexpected public route: ${route}`);
+  }
+  assert.equal(/hreflang/i.test(layout), false, 'hreflang must wait for real alternate-language pages');
+});
+
+test('homepage static dollar examples are explicitly scoped as USD examples', async () => {
+  const source = await read('src/pages/index.astro');
+  assert.ok(source.includes('USD example: a $60 bill'));
+  assert.ok(source.includes('USD example: on a $60 bill'));
+  assert.ok(source.includes('In this USD example, a 15% tip is $7.50'));
+  assert.ok(source.includes('In this USD example, if $10.00 is split three ways'));
 });
