@@ -96,6 +96,23 @@ for (const [viewName, width, height] of views) {
   }
 }
 
+const currencyVisualCases = ['GBP', 'EUR', 'INR', 'ZAR', 'AED'];
+for (const code of currencyVisualCases) {
+  const context = await browser.newContext({ viewport: { width: 390, height: 1600 } });
+  const page = await context.newPage();
+  await page.goto(base + '/', { waitUntil: 'networkidle' });
+  await page.locator('#currency').selectOption(code);
+  await page.locator('#bill').fill('100.00');
+  await page.waitForTimeout(300);
+  await page.screenshot({
+    path: `visual-qa/home-currency-${code}--mobile-390.jpg`,
+    fullPage: false,
+    type: 'jpeg',
+    quality: 72,
+  });
+  await context.close();
+}
+
 await browser.close();
 await writeFile('visual-qa/metrics.json', JSON.stringify(metrics, null, 2) + '\n');
 console.log(JSON.stringify(metrics, null, 2));
