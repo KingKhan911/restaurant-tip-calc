@@ -7,6 +7,7 @@ on:
       - phase-2/content-truth-seo
       - phase-3/launch-readiness
       - phase-4/audit-corrections
+      - phase-4.2/ad-placeholders-default
   workflow_dispatch:
 
 jobs:
@@ -56,6 +57,11 @@ jobs:
       - name: Browser, responsive, accessibility, metadata, and console QA
         run: npx playwright test test/browser-smoke.spec.mjs --reporter=line
 
+      - name: Default placeholder layout QA
+        env:
+          RTC_BASE_URL: http://127.0.0.1:4321
+        run: npx playwright test test/ad-enabled.spec.mjs --reporter=line
+
       - name: Capture visual QA set and performance metrics
         run: node test/visual-capture.mjs
 
@@ -67,39 +73,42 @@ jobs:
           retention-days: 1
           if-no-files-found: error
 
+      - name: Upload default placeholder visual QA artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: phase-4-default-ad-visual-qa-${{ github.sha }}
+          path: visual-qa/ad-enabled--*.jpg
+          retention-days: 1
+          if-no-files-found: error
+
       - name: Stop default preview
         if: always()
         run: npx astro preview stop || true
 
-      - name: Build ad-enabled simulation
-        run: PUBLIC_ADS_ENABLED=true npm run build
+      - name: Build explicit ads-disabled state
+        run: PUBLIC_ADS_ENABLED=false npm run build
 
-      - name: Start ad-enabled preview
+      - name: Audit explicit ads-disabled built output
+        run: npm run test:dist
+
+      - name: Start ads-disabled preview
         run: |
-          npm run preview -- --host 127.0.0.1 --port 4322 --force > /tmp/rtc-ad-preview.log 2>&1 &
-          echo $! > /tmp/rtc-ad-preview.pid
+          npm run preview -- --host 127.0.0.1 --port 4322 --force > /tmp/rtc-ad-disabled-preview.log 2>&1 &
+          echo $! > /tmp/rtc-ad-disabled-preview.pid
           for i in {1..30}; do
             if curl -fsS http://127.0.0.1:4322/ > /dev/null; then
               exit 0
             fi
             sleep 1
           done
-          cat /tmp/rtc-ad-preview.log
+          cat /tmp/rtc-ad-disabled-preview.log
           exit 1
 
-      - name: Ad-enabled layout simulation
+      - name: Explicit ads-disabled layout regression
         env:
           RTC_BASE_URL: http://127.0.0.1:4322
-        run: npx playwright test test/ad-enabled.spec.mjs --reporter=line
+        run: npx playwright test test/ad-disabled.spec.mjs --reporter=line
 
-      - name: Upload ad-enabled visual QA artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: phase-4-ad-visual-qa-${{ github.sha }}
-          path: visual-qa/ad-enabled--*.jpg
-          retention-days: 1
-          if-no-files-found: error
-
-      - name: Stop ad-enabled preview
+      - name: Stop ads-disabled preview
         if: always()
         run: npx astro preview stop || true

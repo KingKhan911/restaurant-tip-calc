@@ -87,10 +87,16 @@ test('in-content slots reserve their declared dimensions', async ({ browser }) =
   await expect(native).toBeVisible();
   const nativeBox = await native.boundingBox();
   expect(nativeBox?.height).toBe(280);
+
+  const labels = page.locator('.ad-label');
+  expect(await labels.count()).toBeGreaterThanOrEqual(2);
+  for (let index = 0; index < await labels.count(); index += 1) {
+    await expect(labels.nth(index)).toHaveText('Advertisement');
+  }
   await desktop.close();
 });
 
-test('404 never renders ad slots even in ad-enabled simulation', async ({ page }) => {
+test('404 never renders ad slots even when placeholders are enabled', async ({ page }) => {
   const response = await page.goto(base + '/this-page-does-not-exist/');
   expect(response?.status()).toBe(404);
   await expect(page.locator('[data-ad-slot]')).toHaveCount(0);

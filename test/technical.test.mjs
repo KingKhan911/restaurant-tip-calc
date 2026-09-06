@@ -33,9 +33,9 @@ test('shared layout contains one complete social metadata set and brand assets',
   assert.equal((layout.match(/property="og:title"/g) || []).length, 1);
 });
 
-test('ads are disabled by default and no live ad or analytics vendor is installed', async () => {
+test('ad placeholders are visible by default, explicitly disableable, and no live ad or analytics vendor is installed', async () => {
   const site = await read('src/lib/site.js');
-  assert.ok(site.includes("PUBLIC_ADS_ENABLED === 'true'"));
+  assert.ok(site.includes("PUBLIC_ADS_ENABLED !== 'false'"));
   const combined = (await Promise.all([
     read('src/layouts/Layout.astro'),
     read('src/components/AdSlot.astro'),
@@ -61,7 +61,7 @@ test('package and README are project-specific', async () => {
   const readme = await read('README.md');
   assert.equal(pkg.name, 'restaurant-tip-calculator');
   assert.equal(readme.includes('Astro Starter Kit'), false);
-  assert.ok(readme.includes('PUBLIC_ADS_ENABLED=true'));
+  assert.ok(readme.includes('PUBLIC_ADS_ENABLED=false'));
 });
 
 test('tracking parameters and javascript URLs are absent from site source', async () => {

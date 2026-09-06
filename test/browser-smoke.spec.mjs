@@ -325,7 +325,7 @@ test('default calculator stays simple and optional rows stay hidden until used',
   await expect(page.locator('#rOtherFeeRow')).toBeHidden();
 });
 
-test('mobile money inputs keep decimal keyboards and default build has no ad chrome', async ({ browser }) => {
+test('mobile money inputs keep decimal keyboards and default build includes reserved ad chrome', async ({ browser }) => {
   const context = await browser.newContext({ viewport: { width: 320, height: 700 } });
   const page = await context.newPage();
   await page.goto(base + '/');
@@ -333,8 +333,13 @@ test('mobile money inputs keep decimal keyboards and default build has no ad chr
   expect(await bill.getAttribute('inputmode')).toBe('decimal');
   const fontSize = await bill.evaluate((element) => parseFloat(getComputedStyle(element).fontSize));
   expect(fontSize).toBeGreaterThanOrEqual(16);
-  await expect(page.locator('[data-ad-slot]')).toHaveCount(0);
-  expect(await page.evaluate(() => parseFloat(getComputedStyle(document.body).paddingBottom))).toBe(0);
+  await expect(page.locator('body')).toHaveClass(/ads-enabled/);
+  const anchor = page.locator('#ad-anchor');
+  await expect(anchor).toBeVisible();
+  await expect(page.locator('[data-ad-slot]')).not.toHaveCount(0);
+  const bodyPaddingBottom = await page.evaluate(() => parseFloat(getComputedStyle(document.body).paddingBottom));
+  const anchorHeight = await anchor.evaluate((element) => element.getBoundingClientRect().height);
+  expect(bodyPaddingBottom).toBeGreaterThanOrEqual(anchorHeight);
   await context.close();
 });
 

@@ -14,4 +14,4 @@ export const INDEXABLE_ROUTES = Object.freeze([
   '/privacy/',
 ]);
 
-export const ADS_ENABLED = import.meta.env?.PUBLIC_ADS_ENABLED === 'true';
+export const ADS_ENABLED = import.meta.env?.PUBLIC_ADS_ENABLED !== 'false';

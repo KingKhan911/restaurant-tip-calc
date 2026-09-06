@@ -32,13 +32,15 @@ Important public routes are the calculator, five focused tipping guides, Methodo
 
 ## Advertising configuration
 
-Live ads are **disabled by default**. The shared `AdSlot` component and reserved-size CSS can be exercised in a development/test build with:
+The existing ad placeholders are **visible by default** in normal development and production builds. They are design/development placeholders only; no real advertising vendor is connected.
+
+To hide the placeholder layout explicitly when needed:
 
 ```sh
-PUBLIC_ADS_ENABLED=true npm run build
+PUBLIC_ADS_ENABLED=false npm run dev
 ```
 
-That switch only exposes the ad-ready layout. No ad vendor script, publisher ID, or zone ID is installed.
+The same flag can be used with `npm run build`. No ad vendor script, publisher ID, zone ID, analytics platform, or tracking code is installed.
 
 Before enabling a real ad or analytics vendor, update `/privacy/` and add any consent mechanism actually required for the vendor and jurisdictions served.
 
