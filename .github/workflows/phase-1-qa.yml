@@ -11,6 +11,7 @@ on:
       - phase-4.3/responsive-ad-rail
       - phase-4.4/delivery-quick-answer
       - phase-4.5/citation-cleanup
+      - phase-5/universal-english
   workflow_dispatch:
 
 jobs:
