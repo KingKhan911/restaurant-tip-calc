@@ -7,7 +7,7 @@ import { RESEARCH_REVIEW_DATE, SOURCES } from '../lib/editorial.js';
 
 const title = 'Restaurant Tip Calculator: Tip, Total & Split the Bill';
 const description =
-  'Calculate a restaurant tip by percentage or custom dollar amount, add tax and fees, split the bill exactly, and optionally round each share up.';
+  'Calculate a restaurant tip by percentage or custom amount, add tax and fees, split the bill exactly, and use your preferred supported currency.';
 
 const jsonLd = JSON.stringify({
   '@context': 'https://schema.org',
@@ -31,11 +31,13 @@ const jsonLd = JSON.stringify({
       isPartOf: { '@id': 'https://restauranttipcalculator.com/#website' },
       offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
       featureList: [
-        'Percentage presets, custom percentage, and custom dollar tip',
+        'Percentage presets, custom percentage, and custom tip amount',
+        'User-selected display currency: USD, CAD, GBP, EUR, AUD, NZD, ZAR, INR, AED',
+        'Currency changes display only; no exchange-rate conversion',
         'Tax and other fee inputs',
         'Optional choice to include entered tax in the percentage tip basis',
         'Exact cent-reconciled bill splitting for up to 99 people',
-        'Optional whole-dollar round-up with the extra amount shown',
+        'Optional whole-currency-unit round-up with the extra amount shown',
         'No sign-up; calculations run in the browser',
       ],
     },
@@ -47,12 +49,13 @@ const jsonLd = JSON.stringify({
   <section class="hero">
     <h1>Restaurant Tip Calculator</h1>
     <p class="lede">
-      Enter your check, choose a percentage or exact dollar tip, and split the total. Add tax or other fees when they
-      apply; the calculator shows the tip, payable total, and exact per-person shares as you type.
+      Enter your check, choose a percentage or custom tip amount, select a supported currency, and split the total.
+      The arithmetic is the same in every supported currency; tipping customs vary by country, so local etiquette
+      should be checked separately.
     </p>
   </section>
 
-  <Calculator mode="dinein" />
+  <Calculator mode="dinein" currencySelector />
 
   <AdSlot format="leaderboard" position="below" id="ad-below" />
 
@@ -67,17 +70,64 @@ const jsonLd = JSON.stringify({
       </li>
       <li>
         <span class="step-n" aria-hidden="true">2.</span><p>
-          <strong>Choose the tip.</strong> Use 15%, 18%, 20%, 22%, a custom percentage, or an exact custom dollar tip.
+          <strong>Choose the tip.</strong> Use 15%, 18%, 20%, 22%, a custom percentage, or an exact custom tip amount.
           Percentage tips exclude entered tax by default; you can choose to include tax in the tip basis.
         </p>
       </li>
       <li>
         <span class="step-n" aria-hidden="true">3.</span><p>
           <strong>Split the bill.</strong> Set 1–99 people. If the total cannot divide evenly to the cent, the
-          calculator shows exactly how many people pay each cent-reconciled share. Whole-dollar round-up is optional.
+          calculator shows exactly how many people pay each cent-reconciled share. Whole-currency-unit round-up is optional.
         </p>
       </li>
     </ol>
+  </section>
+
+
+  <section class="section" id="country-guidance">
+    <h2>Tipping customs vary by country</h2>
+    <p class="guide-intro">
+      The calculator works the same way in every supported currency, but restaurant tipping expectations are local.
+      Check the bill for any service charge and use country-specific guidance rather than assuming one worldwide tip
+      percentage.
+    </p>
+    <div class="table-scroll">
+      <table class="worked worked-wide country-table">
+        <caption>Restaurant tipping context in major English-language markets</caption>
+        <thead>
+          <tr><th scope="col">Country</th><th scope="col">Restaurant tipping context</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>United States</td>
+            <td><a href={SOURCES.emilyPost}>Emily Post</a> recommends 15–20% of the pre-tax bill for sit-down wait service.</td>
+          </tr>
+          <tr>
+            <td>Canada</td>
+            <td><a href={SOURCES.canadaGratuities}>Canada Revenue Agency</a> says tips or service charges are not usually added to a bill and customers generally tip a percentage; the amount depends on the customer.</td>
+          </tr>
+          <tr>
+            <td>United Kingdom</td>
+            <td><a href={SOURCES.visitBritain}>VisitBritain</a> says tipping is not necessary; if no service charge is added and service was good, 10–15% is well received.</td>
+          </tr>
+          <tr>
+            <td>Australia</td>
+            <td><a href={SOURCES.tourismAustralia}>Tourism Australia</a> says tipping is always your choice; in upmarket restaurants, 10% is common for good service.</td>
+          </tr>
+          <tr>
+            <td>New Zealand</td>
+            <td><a href={SOURCES.tourismNewZealand}>Tourism New Zealand</a> says tipping is not obligatory, tipping for good service is discretionary, and hotels and restaurants do not add service charges.</td>
+          </tr>
+          <tr>
+            <td>South Africa</td>
+            <td><a href={SOURCES.southAfricanTourism}>South African Tourism</a> says 10–20% is acceptable in restaurants and notes a 10% service charge for tables of more than six guests.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="menu-src">
+      Research last reviewed: {RESEARCH_REVIEW_DATE}. These are country-specific orientation points, not a universal tipping rule.
+    </p>
   </section>
 
   <section class="section" id="tipping-guide">
@@ -106,7 +156,7 @@ const jsonLd = JSON.stringify({
       </div>
       <div>
         <table class="worked">
-          <caption>A $60 bill at common calculator percentages</caption>
+          <caption>USD example: a $60 bill at common calculator percentages</caption>
           <thead>
             <tr><th scope="col">Tip</th><th scope="col">Tip amount</th><th scope="col">Bill + tip</th></tr>
           </thead>
@@ -143,8 +193,8 @@ const jsonLd = JSON.stringify({
         applied to bill plus tax. Other fees remain outside the percentage tip basis.
       </p>
       <p>
-        Example: on a $60 bill with $4.80 tax, a 20% pre-tax tip is $12.00. If tax is included in the tip basis, the
-        same 20% becomes $12.96. The final payable total also includes the $4.80 tax in either case.
+        USD example: on a $60 bill with $4.80 tax, a 20% pre-tax tip is $12.00. If tax is included in the tip basis,
+        the same 20% becomes $12.96. The final payable total also includes the $4.80 tax in either case.
       </p>
     </div>
   </section>
@@ -171,8 +221,8 @@ const jsonLd = JSON.stringify({
       <details>
         <summary>How much do you tip on a $50 restaurant bill?</summary>
         <p>
-          A 15% tip is $7.50, 18% is $9.00, and 20% is $10.00. Before tax or other fees, those produce totals of
-          $57.50, $59.00, and $60.00 respectively.
+          In this USD example, a 15% tip is $7.50, 18% is $9.00, and 20% is $10.00. Before tax or other fees, those
+          produce totals of $57.50, $59.00, and $60.00 respectively.
         </p>
       </details>
       <details>
@@ -202,17 +252,17 @@ const jsonLd = JSON.stringify({
       <details>
         <summary>How much should you tip for food delivery?</summary>
         <p>
-          Emily Post recommends 10–15% for delivery and gives $2–5 as pizza-delivery guidance depending on order size
-          and difficulty. The <a href="/food-delivery-tip-calculator/">delivery calculator</a> accepts any percentage
-          or custom dollar amount and keeps delivery fees separate from the percentage tip basis.
+          For U.S. delivery, Emily Post recommends 10–15% and gives $2–5 as pizza-delivery guidance depending on order
+          size and difficulty. The <a href="/food-delivery-tip-calculator/">delivery calculator</a> accepts any
+          percentage or custom tip amount and keeps delivery fees separate from the percentage tip basis.
         </p>
       </details>
       <details>
         <summary>How do you split a restaurant bill when the cents do not divide evenly?</summary>
         <p>
-          The calculator reconciles the exact total to the cent. For example, if $10.00 is split three ways, one person
-          pays $3.34 and two pay $3.33. The optional round-up mode is different: it raises each share to a whole dollar
-          and clearly shows the extra money collected.
+          The calculator reconciles the exact total to the cent. In this USD example, if $10.00 is split three ways,
+          one person pays $3.34 and two pay $3.33. The optional round-up mode is different: it raises each share to the
+          next whole currency unit and clearly shows the extra money collected.
         </p>
       </details>
     </div>
@@ -221,9 +271,10 @@ const jsonLd = JSON.stringify({
   <section class="section" id="research">
     <h2>Research behind the guidance</h2>
     <ul class="prose">
-      <li><a href={SOURCES.emilyPost}>Emily Post — General Tipping Guide</a> for etiquette recommendations.</li>
-      <li><a href={SOURCES.toastTipping}>Toast — Restaurant Tipping Trends</a> for Q1 2026 observed card/digital restaurant tipping data.</li>
-      <li><a href={SOURCES.pewTipping}>Pew Research Center — 2023 tipping survey</a> for stated consumer behavior.</li>
+      <li><a href={SOURCES.emilyPost}>Emily Post — General Tipping Guide</a> for U.S. etiquette recommendations.</li>
+      <li>The country comparison above links each international claim directly to the relevant government or official national tourism source.</li>
+      <li><a href={SOURCES.toastTipping}>Toast — Restaurant Tipping Trends</a> for Q1 2026 observed U.S. card/digital restaurant tipping data.</li>
+      <li><a href={SOURCES.pewTipping}>Pew Research Center — 2023 tipping survey</a> for stated U.S. consumer behavior.</li>
     </ul>
     <p class="menu-src">
       See <a href="/methodology/">Methodology</a> for calculation rules, source hierarchy, research freshness, and
