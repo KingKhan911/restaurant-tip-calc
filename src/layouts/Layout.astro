@@ -70,6 +70,10 @@ const canonical = new URL(path, SITE_ORIGIN).href;
 const socialImage = new URL(DEFAULT_SOCIAL_IMAGE_PATH, SITE_ORIGIN).href;
 const adsEnabled = ADS_ENABLED && ads;
 const currentYear = new Date().getFullYear();
+const footerCurrencyNote =
+  path === '/'
+    ? 'Supports user-selected display currencies; no exchange-rate conversion.'
+    : 'Amounts in US dollars.';
 ---
 
 <!doctype html>
@@ -162,7 +166,7 @@ const currentYear = new Date().getFullYear();
                 </div>
               ))}
             </nav>
-            <p class="foot-copy">© {currentYear} {SITE_NAME}. Amounts in US dollars.</p>
+            <p class="foot-copy">© {currentYear} {SITE_NAME}. {footerCurrencyNote}</p>
           </div>
         </footer>
       </div>
