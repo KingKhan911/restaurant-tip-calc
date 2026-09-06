@@ -6,6 +6,7 @@ on:
       - phase-1/calculator-correctness
       - phase-2/content-truth-seo
       - phase-3/launch-readiness
+      - phase-4/audit-corrections
   workflow_dispatch:
 
 jobs:
@@ -36,7 +37,7 @@ jobs:
 
       - name: Install browser QA runner
         run: |
-          npm install --no-save --package-lock=false @playwright/test@1.55.0
+          npm install --no-save --package-lock=false @playwright/test@1.63.0
           npx playwright install --with-deps chromium
 
       - name: Start built preview

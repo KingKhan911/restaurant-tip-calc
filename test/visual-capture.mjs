@@ -13,6 +13,7 @@ const pages = [
   ['404', '/this-page-does-not-exist/'],
 ];
 const views = [
+  ['mobile-320', 320, 900],
   ['mobile-390', 390, 900],
   ['desktop-1440', 1440, 1000],
 ];

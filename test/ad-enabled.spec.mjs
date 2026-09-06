@@ -17,6 +17,12 @@ test('desktop rail appears only when there is genuinely enough width', async ({ 
   const box = await page.locator('#ad-rail').boundingBox();
   expect(box?.width).toBe(300);
   expect(box?.height).toBe(250);
+  const railLabelStyle = await page.locator('.rail .ad-label').evaluate((element) => {
+    const style = getComputedStyle(element);
+    return { color: style.color, fontSize: parseFloat(style.fontSize) };
+  });
+  expect(railLabelStyle.color).toBe('rgb(99, 90, 76)');
+  expect(railLabelStyle.fontSize).toBeGreaterThanOrEqual(10.5);
   expect(await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth)).toBeLessThanOrEqual(1);
   await wide.close();
 });
@@ -27,6 +33,12 @@ test('mobile anchor reserves space, remains closable, and does not cover focused
   await page.goto(base + '/');
   const anchor = page.locator('#ad-anchor');
   await expect(anchor).toBeVisible();
+  const anchorLabelStyle = await page.locator('.anchor-label').evaluate((element) => {
+    const style = getComputedStyle(element);
+    return { color: style.color, fontSize: parseFloat(style.fontSize) };
+  });
+  expect(anchorLabelStyle.color).toBe('rgb(99, 90, 76)');
+  expect(anchorLabelStyle.fontSize).toBeGreaterThanOrEqual(10.4);
 
   const bodyPaddingBottom = await page.evaluate(() => parseFloat(getComputedStyle(document.body).paddingBottom));
   const anchorHeight = await anchor.evaluate((element) => element.getBoundingClientRect().height);

@@ -64,6 +64,75 @@ test.describe('all routes and representative widths', () => {
   }
 });
 
+const complexTableRoutes = [
+  { route: '/average-restaurant-tip/', expectedTables: 1 },
+  { route: '/service-charge-on-restaurant-bill/', expectedTables: 2 },
+];
+
+test('complex comparison tables scroll internally instead of crushing columns on narrow screens', async ({ browser }) => {
+  for (const width of [320, 390]) {
+    const context = await browser.newContext({ viewport: { width, height: 900 } });
+    const page = await context.newPage();
+
+    for (const { route, expectedTables } of complexTableRoutes) {
+      await page.goto(base + route, { waitUntil: 'networkidle' });
+      const wrappers = page.locator('.table-scroll');
+      await expect(wrappers).toHaveCount(expectedTables);
+
+      for (let index = 0; index < expectedTables; index += 1) {
+        const state = await wrappers.nth(index).evaluate((wrapper) => {
+          const table = wrapper.querySelector('table.worked-wide');
+          const wrapperRect = wrapper.getBoundingClientRect();
+          const tableRect = table?.getBoundingClientRect();
+          return {
+            hasNativeTable: Boolean(table && table.tagName === 'TABLE'),
+            clientWidth: wrapper.clientWidth,
+            scrollWidth: wrapper.scrollWidth,
+            tableWidth: tableRect?.width ?? 0,
+            wrapperLeft: wrapperRect.left,
+            wrapperRight: wrapperRect.right,
+            viewportWidth: document.documentElement.clientWidth,
+            documentOverflow: document.documentElement.scrollWidth - document.documentElement.clientWidth,
+          };
+        });
+
+        expect(state.hasNativeTable).toBe(true);
+        expect(state.scrollWidth).toBeGreaterThan(state.clientWidth);
+        expect(state.tableWidth).toBeGreaterThan(state.clientWidth);
+        expect(state.wrapperLeft).toBeGreaterThanOrEqual(-1);
+        expect(state.wrapperRight).toBeLessThanOrEqual(state.viewportWidth + 1);
+        expect(state.documentOverflow).toBeLessThanOrEqual(1);
+      }
+    }
+
+    await context.close();
+  }
+});
+
+test('complex comparison tables fit without internal scrolling at tablet and desktop widths', async ({ browser }) => {
+  for (const width of [768, 1024, 1440]) {
+    const context = await browser.newContext({ viewport: { width, height: 900 } });
+    const page = await context.newPage();
+
+    for (const { route, expectedTables } of complexTableRoutes) {
+      await page.goto(base + route, { waitUntil: 'networkidle' });
+      const wrappers = page.locator('.table-scroll');
+      await expect(wrappers).toHaveCount(expectedTables);
+
+      for (let index = 0; index < expectedTables; index += 1) {
+        const state = await wrappers.nth(index).evaluate((wrapper) => ({
+          overflow: wrapper.scrollWidth - wrapper.clientWidth,
+          documentOverflow: document.documentElement.scrollWidth - document.documentElement.clientWidth,
+        }));
+        expect(state.overflow).toBeLessThanOrEqual(1);
+        expect(state.documentOverflow).toBeLessThanOrEqual(1);
+      }
+    }
+
+    await context.close();
+  }
+});
+
 test('global skip link targets main content on every route', async ({ page }) => {
   for (const route of routes) {
     await page.goto(base + route);
