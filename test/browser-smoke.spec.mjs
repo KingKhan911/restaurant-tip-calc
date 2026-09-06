@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test';
+import { CURRENCIES, CURRENCY_CODES, formatCurrency } from '../src/lib/currency.js';
 
 const base = 'http://127.0.0.1:4321';
 const canonicalBase = 'https://restauranttipcalculator.com';
@@ -672,4 +673,45 @@ test('currency selector stays usable without horizontal overflow at the full Pha
     expect(geometry.selectWidth).toBeLessThanOrEqual(geometry.formWidth);
     await context.close();
   }
+});
+
+
+test('full supported-currency browser matrix keeps arithmetic fixed while presentation changes', async ({ page }) => {
+  await page.goto(base + '/');
+
+  for (const code of CURRENCY_CODES) {
+    const config = CURRENCIES[code];
+    await page.locator('#currency').selectOption(code);
+    await page.locator('#bill').fill('100.00');
+    await page.locator('input[name="tipPreset"][value="20"]').check();
+    await page.locator('#ppl').fill('3');
+
+    await expect(page.locator('#rTip')).toHaveText(formatCurrency(2000, code));
+    await expect(page.locator('#rTotal')).toHaveText(formatCurrency(12000, code));
+    await expect(page.locator('#rEach')).toHaveText(formatCurrency(4000, code));
+    await expect(page.locator('.money-wrap .cur').first()).toHaveText(config.inputSymbol);
+    await expect(page.locator('#customTip')).toHaveAttribute('aria-label', 'Custom tip amount in ' + config.name);
+    expect(await page.evaluate(() => localStorage.getItem('rtc:currency'))).toBe(JSON.stringify(code));
+
+    await page.locator('#customTip').fill('20.00');
+    await expect(page.locator('#rTip')).toHaveText(formatCurrency(2000, code));
+    await expect(page.locator('#rTotal')).toHaveText(formatCurrency(12000, code));
+
+    await page.locator('#roundUp').check();
+    await expect(page.locator('#rEach')).toHaveText(formatCurrency(4000, code, { wholeUnits: true }));
+    await expect(page.locator('#rNote')).toContainText(formatCurrency(12000, code));
+    await page.locator('#roundUp').uncheck();
+
+    await page.locator('#customTip').fill('');
+    await page.locator('input[name="tipPreset"][value="20"]').check();
+  }
+});
+
+test('homepage footer is currency-neutral while U.S.-specific guides retain USD scope', async ({ page }) => {
+  await page.goto(base + '/');
+  await expect(page.locator('.foot-copy')).toContainText('Supports user-selected display currencies; no exchange-rate conversion.');
+  await expect(page.locator('.foot-copy')).not.toContainText('Amounts in US dollars.');
+
+  await page.goto(base + '/average-restaurant-tip/');
+  await expect(page.locator('.foot-copy')).toContainText('Amounts in US dollars.');
 });
