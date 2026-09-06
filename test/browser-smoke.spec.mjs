@@ -288,7 +288,7 @@ test('debounced live region announces exact split reconciliation', async ({ page
   await page.locator('#customTip').fill('0');
   await page.locator('#ppl').fill('3');
   await expect(page.locator('#announce')).toContainText(
-    '1 person pays $3.34 and 2 people pay $3.33',
+    '1 person pays 3.34 US dollars and 2 people pay 3.33 US dollars',
     { timeout: 2500 },
   );
 });
@@ -558,4 +558,118 @@ test('social preview raster has the declared 1200 by 630 dimensions', async ({ p
     image.src = src;
   }), '/social/restaurant-tip-calculator-og.png');
   expect(dimensions).toEqual([1200, 630]);
+});
+
+
+test('homepage currency selector exposes all supported currencies and no-FX helper text', async ({ page }) => {
+  await page.goto(base + '/');
+  const select = page.locator('#currency');
+  await expect(select).toBeVisible();
+  await expect(select).toHaveValue('USD');
+  const options = await select.locator('option').evaluateAll((items) => items.map((item) => [item.value, item.textContent.trim()]));
+  expect(options.map(([value]) => value)).toEqual(['USD', 'CAD', 'GBP', 'EUR', 'AUD', 'NZD', 'ZAR', 'INR', 'AED']);
+  await expect(page.locator('#currencyHelp')).toContainText('Currency changes display only; no exchange-rate conversion is performed.');
+  await expect(page.locator('#customTip')).toHaveAttribute('aria-label', 'Custom tip amount in US Dollar');
+});
+
+test('currency switching changes presentation only and preserves calculator state', async ({ page }) => {
+  await page.goto(base + '/');
+  await page.locator('#bill').fill('100.00');
+  await page.locator('#ppl').fill('3');
+  await expect(page.locator('#rTip')).toHaveText('$20.00');
+  await expect(page.locator('#rTotal')).toHaveText('$120.00');
+  await expect(page.locator('#rEach')).toHaveText('$40.00');
+
+  await page.locator('#currency').selectOption('GBP');
+  await expect(page.locator('#bill')).toHaveValue('100.00');
+  await expect(page.locator('#ppl')).toHaveValue('3');
+  await expect(page.locator('input[name="tipPreset"][value="20"]')).toBeChecked();
+  await expect(page.locator('#rTip')).toHaveText('£20.00');
+  await expect(page.locator('#rTotal')).toHaveText('£120.00');
+  await expect(page.locator('#rEach')).toHaveText('£40.00');
+  await expect(page.locator('.money-wrap .cur').first()).toHaveText('£');
+
+  await page.locator('#currency').selectOption('INR');
+  await expect(page.locator('#rTip')).toHaveText('₹20.00');
+  await expect(page.locator('#rTotal')).toHaveText('₹120.00');
+  await expect(page.locator('#customTip')).toHaveAttribute('aria-label', 'Custom tip amount in Indian Rupee');
+});
+
+test('custom tip, split, tax and whole-unit round-up use selected currency without changing arithmetic', async ({ page }) => {
+  await page.goto(base + '/');
+  await page.locator('#currency').selectOption('EUR');
+  await page.locator('#bill').fill('60');
+  await page.locator('#customTip').fill('12');
+  await page.locator('.more-options summary').click();
+  await page.locator('#tax').fill('4.80');
+  await page.locator('#ppl').fill('3');
+  await expect(page.locator('#rTip')).toHaveText('€12.00');
+  await expect(page.locator('#rTotal')).toHaveText('€76.80');
+  await expect(page.locator('#rEach')).toHaveText('€25.60');
+
+  await page.locator('#roundUp').check();
+  await expect(page.locator('#rEach')).toHaveText('€26');
+  await expect(page.locator('#rNote')).toContainText('€78.00');
+  await expect(page.locator('#rNote')).toContainText('€1.20 extra');
+});
+
+test('currency preference persists and malformed or unsupported stored values fall back to USD', async ({ page }) => {
+  await page.goto(base + '/');
+  await page.locator('#currency').selectOption('GBP');
+  expect(await page.evaluate(() => localStorage.getItem('rtc:currency'))).toBe('"GBP"');
+  await page.reload();
+  await expect(page.locator('#currency')).toHaveValue('GBP');
+
+  await page.evaluate(() => localStorage.setItem('rtc:currency', 'not-json'));
+  await page.reload();
+  await expect(page.locator('#currency')).toHaveValue('USD');
+
+  await page.evaluate(() => localStorage.setItem('rtc:currency', JSON.stringify('JPY')));
+  await page.reload();
+  await expect(page.locator('#currency')).toHaveValue('USD');
+});
+
+test('calculator survives unavailable localStorage and still switches currency for the current page', async ({ browser }) => {
+  const context = await browser.newContext({ viewport: { width: 390, height: 900 } });
+  await context.addInitScript(() => {
+    Object.defineProperty(Storage.prototype, 'getItem', { configurable: true, value() { throw new Error('blocked'); } });
+    Object.defineProperty(Storage.prototype, 'setItem', { configurable: true, value() { throw new Error('blocked'); } });
+  });
+  const page = await context.newPage();
+  await page.goto(base + '/');
+  await expect(page.locator('#currency')).toHaveValue('USD');
+  await page.locator('#currency').selectOption('GBP');
+  await page.locator('#bill').fill('100');
+  await expect(page.locator('#rTotal')).toHaveText('£120.00');
+  await context.close();
+});
+
+test('U.S.-specific supporting calculator instances stay in USD mode without the universal selector', async ({ page }) => {
+  await page.goto(base + '/how-much-tip-waitress-waiter/');
+  await expect(page.locator('#currency')).toHaveCount(0);
+  await page.locator('#bill').fill('100');
+  await expect(page.locator('#rTotal')).toHaveText('$120.00');
+
+  await page.goto(base + '/food-delivery-tip-calculator/');
+  await expect(page.locator('#currency')).toHaveCount(0);
+  await page.locator('#bill').fill('100');
+  await expect(page.locator('#rTotal')).toHaveText('$120.00');
+});
+
+test('currency selector stays usable without horizontal overflow at the full Phase 5 viewport matrix', async ({ browser }) => {
+  for (const width of [320, 390, 768, 1024, 1240, 1280, 1366, 1440, 1536]) {
+    const context = await browser.newContext({ viewport: { width, height: 900 } });
+    const page = await context.newPage();
+    await page.goto(base + '/');
+    await expect(page.locator('#currency')).toBeVisible();
+    const geometry = await page.evaluate(() => ({
+      scrollWidth: document.documentElement.scrollWidth,
+      clientWidth: document.documentElement.clientWidth,
+      selectWidth: document.querySelector('#currency').getBoundingClientRect().width,
+      formWidth: document.querySelector('#calcForm').getBoundingClientRect().width,
+    }));
+    expect(geometry.scrollWidth, `horizontal overflow at ${width}px`).toBeLessThanOrEqual(geometry.clientWidth);
+    expect(geometry.selectWidth).toBeLessThanOrEqual(geometry.formWidth);
+    await context.close();
+  }
 });
