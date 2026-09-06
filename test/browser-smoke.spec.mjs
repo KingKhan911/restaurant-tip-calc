@@ -420,7 +420,7 @@ test('research-heavy pages expose visible source links and review context', asyn
   await page.goto(base + '/average-restaurant-tip/');
   await expect(page.locator('#sources')).toBeVisible();
   expect(await page.locator('#sources a[href^="https://"]').count()).toBeGreaterThanOrEqual(5);
-  await expect(page.locator('body')).toContainText('Research last reviewed: September 5, 2026');
+  await expect(page.locator('body')).toContainText('Research last reviewed: September 6, 2026');
 
   await page.goto(base + '/methodology/');
   await expect(page.locator('#research-method')).toBeVisible();
