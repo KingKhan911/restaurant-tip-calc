@@ -68,6 +68,27 @@ test('average-tip evidence keeps observed, stated, and recommended evidence dist
   }
 });
 
+test('delivery page surfaces its sourced etiquette quick answer before the calculator', async () => {
+  const source = await read('src/pages/food-delivery-tip-calculator.astro');
+  const quickAnswerIndex = source.indexOf('<strong>Quick answer:</strong>');
+  const calculatorIndex = source.indexOf('<Calculator mode="delivery" />');
+
+  assert.ok(quickAnswerIndex >= 0, 'Delivery page is missing the quick answer');
+  assert.ok(calculatorIndex >= 0, 'Delivery page is missing the delivery calculator');
+  assert.ok(quickAnswerIndex < calculatorIndex, 'Delivery quick answer must appear before the calculator');
+
+  const earlyAnswer = source.slice(quickAnswerIndex, calculatorIndex);
+  for (const required of [
+    '10–15%',
+    'SOURCES.emilyPost',
+    'etiquette guidance',
+    'not a measured national average or universal rule',
+    'custom dollar',
+  ]) {
+    assert.ok(earlyAnswer.includes(required), `Delivery quick answer is missing: ${required}`);
+  }
+});
+
 test('service-charge page does not infer gratuity status from fee percentage', async () => {
   const source = await read('src/pages/service-charge-on-restaurant-bill.astro');
   assert.ok(source.includes('The percentage is not a reliable shortcut.'));
