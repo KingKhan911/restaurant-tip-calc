@@ -1,19 +1,48 @@
 ---
+import { CURRENCIES, CURRENCY_CODES, DEFAULT_CURRENCY } from '../lib/currency.js';
+
 interface Props {
   mode?: 'dinein' | 'delivery';
+  currencySelector?: boolean;
 }
 
-const { mode = 'dinein' } = Astro.props;
+const { mode = 'dinein', currencySelector = false } = Astro.props;
 const delivery = mode === 'delivery';
 const amountLabel = delivery ? 'Order subtotal' : 'Bill amount';
+const currencyOptions = CURRENCY_CODES.map((code) => CURRENCIES[code]);
 ---
 
-<section class="calc" id="calculator" aria-label="Tip calculator" data-tip-calculator data-mode={mode}>
+<section
+  class="calc"
+  id="calculator"
+  aria-label="Tip calculator"
+  data-tip-calculator
+  data-mode={mode}
+  data-currency-selector={currencySelector ? 'true' : 'false'}
+>
   <form id="calcForm" autocomplete="off" novalidate>
+    {
+      currencySelector && (
+        <div class="field currency-field">
+          <label class="lbl" for="currency">Currency</label>
+          <select class="currency-select" id="currency" aria-describedby="currencyHelp">
+            {currencyOptions.map((currency) => (
+              <option value={currency.code} selected={currency.code === DEFAULT_CURRENCY}>
+                {currency.code} — {currency.name}
+              </option>
+            ))}
+          </select>
+          <p class="currency-help" id="currencyHelp">
+            Currency changes display only; no exchange-rate conversion is performed.
+          </p>
+        </div>
+      )
+    }
+
     <div class="field">
       <label class="lbl" for="bill">{amountLabel}</label>
       <div class="money-wrap">
-        <span class="cur" aria-hidden="true">$</span>
+        <span class="cur" data-currency-symbol aria-hidden="true">$</span>
         <input
           class="money-input"
           id="bill"
@@ -36,7 +65,7 @@ const amountLabel = delivery ? 'Order subtotal' : 'Bill amount';
             Delivery fee <span class="label-note">(not tipped)</span>
           </label>
           <div class="money-wrap">
-            <span class="cur" aria-hidden="true">$</span>
+            <span class="cur" data-currency-symbol aria-hidden="true">$</span>
             <input
               class="money-input"
               id="deliveryFee"
@@ -78,7 +107,7 @@ const amountLabel = delivery ? 'Order subtotal' : 'Bill amount';
         </span>
         <span class="chip custom-chip">
           <span class="chip-face custom custom-dollar" id="customTipFace">
-            <span class="custom-cur" aria-hidden="true">$</span>
+            <span class="custom-cur" data-currency-symbol aria-hidden="true">$</span>
             <input
               id="customTip"
               type="text"
@@ -86,7 +115,7 @@ const amountLabel = delivery ? 'Order subtotal' : 'Bill amount';
               enterkeyhint="done"
               placeholder="Custom"
               maxlength="16"
-              aria-label="Custom tip amount in dollars"
+              aria-label={currencySelector ? 'Custom tip amount' : 'Custom tip amount in dollars'}
               aria-describedby="tipError"
             />
           </span>
@@ -112,7 +141,7 @@ const amountLabel = delivery ? 'Order subtotal' : 'Bill amount';
           <div class="option-field">
             <label class="lbl" for="tax">Sales tax</label>
             <div class="money-wrap money-wrap-small">
-              <span class="cur" aria-hidden="true">$</span>
+              <span class="cur" data-currency-symbol aria-hidden="true">$</span>
               <input
                 class="money-input"
                 id="tax"
@@ -130,7 +159,7 @@ const amountLabel = delivery ? 'Order subtotal' : 'Bill amount';
           <div class="option-field">
             <label class="lbl" for="otherFee">Other fees / service charge</label>
             <div class="money-wrap money-wrap-small">
-              <span class="cur" aria-hidden="true">$</span>
+              <span class="cur" data-currency-symbol aria-hidden="true">$</span>
               <input
                 class="money-input"
                 id="otherFee"
@@ -154,7 +183,11 @@ const amountLabel = delivery ? 'Order subtotal' : 'Bill amount';
           </span>
           <span class="toggle-text">Include tax in tip calculation</span>
         </label>
-        <p class="option-help">Off by default. Percentage tips use the bill or food subtotal only; this setting does not change a custom dollar tip.</p>
+        <p class="option-help">
+          {currencySelector
+            ? 'Off by default. Percentage tips use the bill or food subtotal only; this setting does not change a custom tip amount.'
+            : 'Off by default. Percentage tips use the bill or food subtotal only; this setting does not change a custom dollar tip.'}
+        </p>
         <p class="option-help" id="feeHelp">
           Other fees are added to the payable total. They are not automatically treated as a gratuity or subtracted from your selected tip; check the restaurant bill or policy if you are unsure.
         </p>
@@ -167,7 +200,9 @@ const amountLabel = delivery ? 'Order subtotal' : 'Bill amount';
         <input type="checkbox" id="roundUp" />
         <span class="track" aria-hidden="true"></span>
       </span>
-      <span class="toggle-text">Round each share up to the next dollar</span>
+      <span class="toggle-text">
+        {currencySelector ? 'Round each share up to the next whole currency unit' : 'Round each share up to the next dollar'}
+      </span>
     </label>
 
     <p class="hint" id="formHint">
@@ -234,17 +269,21 @@ const amountLabel = delivery ? 'Order subtotal' : 'Bill amount';
 <script>
   import { calcTotals, parsePercentInput } from '../lib/tip.js';
   import { formatMoneyInput, moneyErrorMessage, parseMoneyInput } from '../lib/money.js';
+  import { CURRENCIES, DEFAULT_CURRENCY, isSupportedCurrency } from '../lib/currency.js';
 
   (function () {
     'use strict';
     var root = document.querySelector('[data-tip-calculator]');
     if (!root) return;
     var delivery = root.getAttribute('data-mode') === 'delivery';
+    var currencyEnabled = root.getAttribute('data-currency-selector') === 'true';
     var byId = function (id) { return root.querySelector('#' + id) || document.getElementById(id); };
     var reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
     var dash = '—';
-    var fmt2 = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' });
-    var fmt0 = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 });
+    var currentCurrency = DEFAULT_CURRENCY;
+    var fmt2;
+    var fmt0;
+    var fmtAccessible;
 
     var billEl = byId('bill');
     var deliveryFeeEl = byId('deliveryFee');
@@ -252,6 +291,7 @@ const amountLabel = delivery ? 'Order subtotal' : 'Bill amount';
     var otherFeeEl = byId('otherFee');
     var customPctEl = byId('customPct');
     var customTipEl = byId('customTip');
+    var currencySelect = byId('currency');
     var customPctFace = byId('customPctFace');
     var customTipFace = byId('customTipFace');
     var pplEl = byId('ppl');
@@ -287,6 +327,40 @@ const amountLabel = delivery ? 'Order subtotal' : 'Bill amount';
         try { localStorage.setItem(key, JSON.stringify(value)); } catch (e) {}
       },
     };
+
+    function configureCurrency(code) {
+      currentCurrency = isSupportedCurrency(code) ? code : DEFAULT_CURRENCY;
+      var config = CURRENCIES[currentCurrency];
+      var locale = config.displayLocale || config.locale;
+      fmt2 = new Intl.NumberFormat(locale, {
+        style: 'currency',
+        currency: currentCurrency,
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      });
+      fmt0 = new Intl.NumberFormat(locale, {
+        style: 'currency',
+        currency: currentCurrency,
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0,
+      });
+      fmtAccessible = new Intl.NumberFormat(config.locale, {
+        style: 'currency',
+        currency: currentCurrency,
+        currencyDisplay: 'name',
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      });
+      root.querySelectorAll('[data-currency-symbol]').forEach(function (element) {
+        element.textContent = config.inputSymbol;
+      });
+      if (customTipEl) {
+        customTipEl.setAttribute(
+          'aria-label',
+          currencyEnabled ? 'Custom tip amount in ' + config.name : 'Custom tip amount in dollars',
+        );
+      }
+    }
 
     if (receiptDate) {
       receiptDate.textContent = new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric' }).toUpperCase();
@@ -435,7 +509,7 @@ const amountLabel = delivery ? 'Order subtotal' : 'Bill amount';
         return {
           main: fmt0.format(result.roundUp.roundedShareCents / 100),
           note: 'Collecting ' + fmt2.format(result.roundUp.roundedCollectedCents / 100) + ' · ' + fmt2.format(result.roundUp.extraCents / 100) + ' extra from rounding up',
-          accessible: 'rounded share ' + fmt2.format(result.roundUp.roundedShareCents / 100) + ' per person, collecting ' + fmt2.format(result.roundUp.roundedCollectedCents / 100) + ', ' + fmt2.format(result.roundUp.extraCents / 100) + ' extra from rounding',
+          accessible: 'rounded share ' + fmtAccessible.format(result.roundUp.roundedShareCents / 100) + ' per person, collecting ' + fmtAccessible.format(result.roundUp.roundedCollectedCents / 100) + ', ' + fmtAccessible.format(result.roundUp.extraCents / 100) + ' extra from rounding',
         };
       }
       var split = result.split;
@@ -443,7 +517,7 @@ const amountLabel = delivery ? 'Order subtotal' : 'Bill amount';
         return {
           main: fmt2.format(split.lowShareCents / 100),
           note: '',
-          accessible: result.people + (result.people === 1 ? ' person pays ' : ' people each pay ') + fmt2.format(split.lowShareCents / 100),
+          accessible: result.people + (result.people === 1 ? ' person pays ' : ' people each pay ') + fmtAccessible.format(split.lowShareCents / 100),
         };
       }
       var low = fmt2.format(split.lowShareCents / 100);
@@ -453,7 +527,7 @@ const amountLabel = delivery ? 'Order subtotal' : 'Bill amount';
       return {
         main: low + '–' + high,
         note: split.highShareCount + ' ' + highVerb + ' ' + high + ' · ' + split.lowShareCount + ' ' + lowVerb + ' ' + low,
-        accessible: split.highShareCount + (split.highShareCount === 1 ? ' person pays ' : ' people pay ') + high + ' and ' + split.lowShareCount + (split.lowShareCount === 1 ? ' person pays ' : ' people pay ') + low,
+        accessible: split.highShareCount + (split.highShareCount === 1 ? ' person pays ' : ' people pay ') + fmtAccessible.format(split.highShareCents / 100) + ' and ' + split.lowShareCount + (split.lowShareCount === 1 ? ' person pays ' : ' people pay ') + fmtAccessible.format(split.lowShareCents / 100),
       };
     }
 
@@ -549,9 +623,9 @@ const amountLabel = delivery ? 'Order subtotal' : 'Bill amount';
 
       buildDiagram(people, split.main, split.accessible);
       var tipAnnouncement = tip.method === 'amount'
-        ? 'Custom tip ' + fmt2.format(result.tipCents / 100)
-        : formatPercent(tip.hundredths) + '% tip on ' + fmt2.format(result.tipBasisCents / 100) + ', tip ' + fmt2.format(result.tipCents / 100);
-      announce(tipAnnouncement + ', total ' + fmt2.format(result.totalCents / 100) + '. ' + split.accessible + '.');
+        ? 'Custom tip ' + fmtAccessible.format(result.tipCents / 100)
+        : formatPercent(tip.hundredths) + '% tip on ' + fmtAccessible.format(result.tipBasisCents / 100) + ', tip ' + fmtAccessible.format(result.tipCents / 100);
+      announce(tipAnnouncement + ', total ' + fmtAccessible.format(result.totalCents / 100) + '. ' + split.accessible + '.');
     }
 
     function connectMoneyInput(el, errorId) {
@@ -625,6 +699,15 @@ const amountLabel = delivery ? 'Order subtotal' : 'Bill amount';
 
     roundEl.addEventListener('change', function () { store.set('rtc:round', roundEl.checked); recalc(); });
     includeTaxEl.addEventListener('change', function () { store.set('rtc:includeTax', includeTaxEl.checked); recalc(); });
+    if (currencyEnabled && currencySelect) {
+      currencySelect.addEventListener('change', function () {
+        var nextCurrency = isSupportedCurrency(currencySelect.value) ? currencySelect.value : DEFAULT_CURRENCY;
+        configureCurrency(nextCurrency);
+        currencySelect.value = nextCurrency;
+        store.set('rtc:currency', nextCurrency);
+        recalc();
+      });
+    }
 
     byId('calcForm').addEventListener('submit', function (event) {
       event.preventDefault();
@@ -632,6 +715,15 @@ const amountLabel = delivery ? 'Order subtotal' : 'Bill amount';
     });
 
     (function restore() {
+      if (currencyEnabled && currencySelect) {
+        var savedCurrency = store.get('rtc:currency');
+        var restoredCurrency = isSupportedCurrency(savedCurrency) ? savedCurrency : DEFAULT_CURRENCY;
+        currencySelect.value = restoredCurrency;
+        configureCurrency(restoredCurrency);
+      } else {
+        configureCurrency(DEFAULT_CURRENCY);
+      }
+
       roundEl.checked = store.get('rtc:round') === true;
       includeTaxEl.checked = store.get('rtc:includeTax') === true;
       var saved = store.get('rtc:tip');
