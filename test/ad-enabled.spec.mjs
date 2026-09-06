@@ -24,6 +24,12 @@ test('desktop rail appears only when there is genuinely enough width', async ({ 
   expect(railLabelStyle.color).toBe('rgb(99, 90, 76)');
   expect(railLabelStyle.fontSize).toBeGreaterThanOrEqual(10.5);
   expect(await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth)).toBeLessThanOrEqual(1);
+  await page.screenshot({
+    path: 'visual-qa/ad-enabled--desktop-1440.jpg',
+    fullPage: true,
+    type: 'jpeg',
+    quality: 58,
+  });
   await wide.close();
 });
 
@@ -39,6 +45,12 @@ test('mobile anchor reserves space, remains closable, and does not cover focused
   });
   expect(anchorLabelStyle.color).toBe('rgb(99, 90, 76)');
   expect(anchorLabelStyle.fontSize).toBeGreaterThanOrEqual(10.4);
+  await page.screenshot({
+    path: 'visual-qa/ad-enabled--mobile-390.jpg',
+    fullPage: true,
+    type: 'jpeg',
+    quality: 58,
+  });
 
   const bodyPaddingBottom = await page.evaluate(() => parseFloat(getComputedStyle(document.body).paddingBottom));
   const anchorHeight = await anchor.evaluate((element) => element.getBoundingClientRect().height);

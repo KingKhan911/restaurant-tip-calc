@@ -92,6 +92,14 @@ jobs:
           RTC_BASE_URL: http://127.0.0.1:4322
         run: npx playwright test test/ad-enabled.spec.mjs --reporter=line
 
+      - name: Upload ad-enabled visual QA artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: phase-4-ad-visual-qa-${{ github.sha }}
+          path: visual-qa/ad-enabled--*.jpg
+          retention-days: 1
+          if-no-files-found: error
+
       - name: Stop ad-enabled preview
         if: always()
         run: npx astro preview stop || true
